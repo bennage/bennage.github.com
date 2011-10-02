@@ -41,7 +41,7 @@ I’ll sum up these two thoughts:
 None of this is new. In fact, you see pretty much the same things preached all over. I hear it in [XP](http://www.extremeprogramming.org/rules/early.html "eXtreme Programming"), I hear it in Agile, I hear it in StarCraft.
 
 ### Epilogue
-I’m reminded of this passage::
+I’m reminded of this passage:
 
 {% blockquote G. K. Chesterton http://www.gutenberg.org/cache/epub/1718/pg1718.html Manalive %}
 “Well,” said the girl solidly, “what is there to wake up to?”
