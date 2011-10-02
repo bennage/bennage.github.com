@@ -10,7 +10,7 @@ categories: [javascript,nodejs]
 The simplest answer, albeit a _simplistic_ answer, is that Node (or Node.js) is JavaScript on the server. Actually, it’s a more than just that, but you can read about the _more_ in [other places](http://www.nodejs.org/#about "Official NodeJS site"). This is a good enough answer for us n00bs.
 
 Unless you’ve been living in in cave, you might have noticed that JavaScript is all the rage now. It’s the new [assembly language](http://www.hanselman.com/blog/JavaScriptIsAssemblyLanguageForTheWebPart2MadnessOrJustInsanity.aspx "the assorted ramblings of Hanselman") of the Web. (It’s even for the [enterprise](http://enterprise-js.com/ "this isn't serious btw").) With Node, you can now take that webby clienty goodness to your server applications.
-
+<!--more-->
 The reason I’m brining all this up is because there’s now a version of Node.js for Windows. It’s currently the unstable release only, but it’s a sign of coolness to come. Furthermore, Microsoft has partnered with Joyent and Rackspace to make it happen. You can read about it [here](http://blogs.msdn.com/b/interoperability/archive/2011/06/23/microsoft-working-with-joyent-and-the-node-community-to-bring-node-js-to-windows.aspx "Microsoft and Node") and [here](http://blog.nodejs.org/2011/06/23/porting-node-to-windows-with-microsoft%E2%80%99s-help/ "More about Node and Windows"). The ultimate goal (according to the posts) is for Node.js to run on both Windows and Azure.
 
 Now, I want to be clear too, since I have been [newly assimilated](http://devlicious.com/blogs/christopher_bennage/archive/2011/04/06/a-punctuated-life.aspx "moving to Microsoft"), Node is not a Microsoft product..
