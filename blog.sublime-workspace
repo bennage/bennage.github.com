@@ -1,0 +1,513 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"add",
+				"address: <address>"
+			],
+			[
+				"service",
+				"service  (function)"
+			],
+			[
+				"ser",
+				"service  (function)"
+			],
+			[
+				"function",
+				"function  (keyword)"
+			],
+			[
+				"debugger",
+				"debugger  (keyword)"
+			],
+			[
+				"ret",
+				"return  (keyword)"
+			],
+			[
+				"cam",
+				"campaign"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 297.0,
+		"selected_items":
+		[
+			[
+				"dis",
+				"Package Control: Disable Package"
+			],
+			[
+				"in",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"add",
+				"Package Control: Add Repository"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"ind",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"inde",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"ena",
+				"Package Control: Enable Package"
+			],
+			[
+				"disc",
+				"Package Control: Discover Packages"
+			],
+			[
+				"go",
+				"Set Syntax: Go"
+			],
+			[
+				"",
+				"Indentation: Convert to Spaces"
+			]
+		],
+		"width": 467.0
+	},
+	"console":
+	{
+		"height": 278.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": true,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/bennage/dev/ruby-learn/math.rb",
+		"/home/bennage/dev/ruby-learn/hangman.rb",
+		"/media/OS/projects/goodeats/src/Alton.Web/Controllers/SignupController.cs",
+		"/home/bennage/dev/alton/specs/test.js",
+		"/media/OS/projects/goodeats/src/Alton.Web/Views/Signup/CreateAccount.haml",
+		"/media/OS/projects/goodeats/src/Alton.Specifications/The_web_page_for/signup/restaurant_location.cs",
+		"/media/OS/projects/goodeats/src/Alton.Specifications/The_workflow_for/signup/registration.cs",
+		"/home/bennage/dev/alton/public/stylesheets/style.styl",
+		"/home/bennage/dev/alton/public/stylesheets/style.css",
+		"/home/bennage/dev/alton/autotest.rb",
+		"/home/bennage/dev/alton/bootstrapper.js",
+		"/home/bennage/dev/alton/app.coffee",
+		"/home/bennage/dev/alton/bootstrapper.coffee",
+		"/home/bennage/dev/alton/public/images/default-profile-pic.jpg",
+		"/home/bennage/dev/alton/alton.sublime-workspace",
+		"/home/bennage/dev/blog/README.md",
+		"/home/bennage/.config/sublime-text-2/Packages/User/Global.sublime-settings",
+		"/home/bennage/.config/sublime-text-2/Packages/User/Default (Linux).sublime-keymap",
+		"/home/bennage/.config/sublime-text-2/Packages/Default/Base File.sublime-settings",
+		"/home/bennage/.config/sublime-text-2/Packages/User/Base File.sublime-settings",
+		"/home/bennage/dev/tabula/controllers/scene.js",
+		"/home/bennage/dev/tabula/controllers/campaign.js",
+		"/home/bennage/dev/tabula/bootstrapper.js",
+		"/home/bennage/dev/tabula/helper.js",
+		"/home/bennage/dev/tabula/models/schema.js",
+		"/home/bennage/dev/tabula/auth.js",
+		"/home/bennage/dev/tabula/views/layout.jade",
+		"/home/bennage/dev/tabula/controllers/post.js",
+		"/home/bennage/dev/tabula/models/Post.js",
+		"/home/bennage/dev/tabula/views/index.jade",
+		"/home/bennage/dev/tabula/public/javascripts/tabula.js",
+		"/home/bennage/dev/tabula/public/stylesheets/style.styl",
+		"/home/bennage/dev/tabula/config.js",
+		"/home/bennage/dev/tabula/public/stylesheets/jquery.lightbox-0.5.styl",
+		"/home/bennage/dev/tabula/specs/controller_for_posts.js",
+		"/home/bennage/dev/tabula/specs/mockModel.js",
+		"/home/bennage/dev/tabula/node_modules/expresso/bin/expresso",
+		"/home/bennage/dev/tabula/package.json",
+		"/home/bennage/dev/tabula/public/stylesheets/post.styl",
+		"/home/bennage/dev/tabula/views/campaign/new.jade",
+		"/home/bennage/dev/tabula/viewHelpers.js",
+		"/home/bennage/dev/tabula/public/stylesheets/mixins.styl",
+		"/home/bennage/dev/tabula/public/stylesheets/roll.styl",
+		"/home/bennage/dev/tabula/public/stylesheets/notification.styl",
+		"/home/bennage/dev/tabula/views/character/new.jade",
+		"/home/bennage/dev/tabula/views/scene/new.jade",
+		"/home/bennage/dev/tabula/public/stylesheets/normalize.styl",
+		"/home/bennage/dev/tabula/public/stylesheets/notification-animations.css",
+		"/home/bennage/dev/tabula/models/Scene.js",
+		"/home/bennage/dev/tabula/specs/dice.js",
+		"/home/bennage/dev/tabula/views/character/show.jade",
+		"/home/bennage/dev/tabula/controllers/app.js",
+		"/home/bennage/dev/tabula/views/campaign/show.jade",
+		"/home/bennage/dev/tabula/views/campaign/index.jade",
+		"/home/bennage/dev/tabula/controllers/character.js",
+		"/home/bennage/dev/tabula/models/dice.js",
+		"/home/bennage/dev/tabula/public/javascripts/jquery.prettydate.js",
+		"/home/bennage/dev/tabula/specs/routes.js",
+		"/home/bennage/dev/tabula/public/javascripts/Modernizr.js",
+		"/home/bennage/dev/tabula/specs/model_for_a_Post.js",
+		"/home/bennage/dev/tabula/specs/dice",
+		"/home/bennage/dev/sandbox/test.js",
+		"/home/bennage/dev/sandbox/mod.js",
+		"/home/bennage/dev/tabula/public/stylesheets/reset.styl",
+		"/home/bennage/dev/tabula/boot.js",
+		"/home/bennage/dev/tabula/controllers/controller_for_posts.js",
+		"/home/bennage/dev/tabula/controllers/main.js",
+		"/home/bennage/dev/tabula/app.js",
+		"/home/bennage/dev/tabula/routes/main.js",
+		"/home/bennage/dev/tabula/routes/post.js",
+		"/home/bennage/dev/tabula/mvc.js",
+		"/home/bennage/dev/tabula/tabula.sublime-project",
+		"/home/bennage/dev/tabula/autotest.rb",
+		"/home/bennage/dev/tabula/specs/the_model_for_a_Post.js",
+		"/home/bennage/dev/tabula/test.txt",
+		"/home/bennage/dev/tabula/autotest.watchr",
+		"/home/bennage/dev/tabula/specs/tests.js",
+		"/home/bennage/dev/tabula/.gitignore",
+		"/home/bennage/dev/tabula/run_tests",
+		"/home/bennage/dev/tabula/run_tests.sh",
+		"/home/bennage/dev/tabula/UserProvider.js",
+		"/home/bennage/dev/tabula/PostProvider.js",
+		"/home/bennage/dev/tabula/Repository.js",
+		"/home/bennage/dev/tabula/models/Schema.js",
+		"/home/bennage/dev/tabula/models/Schema",
+		"/home/bennage/dev/tabula/node_modules/mongodb/lib/mongodb/db.js",
+		"/home/bennage/dev/tabula/Procfile",
+		"/home/bennage/dev/tabula/.hgignore",
+		"/home/bennage/dev/tabula/views/login.jade",
+		"/home/bennage/dev/everyauth/package.json",
+		"/etc/hosts",
+		"/home/bennage/.config/sublime-text-2/Packages/User/coffee-script.sublime-build",
+		"/home/bennage/.config/sublime-text-2/Packages/User/jslint.sublime-build",
+		"/home/bennage/dev/tabula/PostProvider2.js",
+		"/home/bennage/dev/tabula/PostProvider2.coffee",
+		"/home/bennage/dev/tabula/test.coffee",
+		"/home/bennage/dev/tabula/PostProvider.coffee",
+		"/home/bennage/.config/sublime-text-2/Packages/CoffeeScript/README.markdown",
+		"/home/bennage/dev/tabula/public/stylesheets/style.css",
+		"/home/bennage/.config/sublime-text-2/Packages/Go/Go.tmLanguage",
+		"/home/bennage/.config/sublime-text-2/Packages/Jade/jade-tmbundle/README.md",
+		"/home/bennage/.config/sublime-text-2/Packages/Jade/jade-tmbundle/Syntaxes/Jade.tmLanguage",
+		"/home/bennage/dev/tabula/views/post_new.jade",
+		"/home/bennage/.config/sublime-text-2/Packages/User/sample.py",
+		"/home/bennage/.config/sublime-text-2/Packages/D/D.sublime-build",
+		"/home/bennage/dev/mensa/views/index.jade",
+		"/home/bennage/dev/mensa/views/layout.jade",
+		"/home/bennage/dev/mensa/app.js"
+	],
+	"find":
+	{
+		"height": 33.0
+	},
+	"find_in_files":
+	{
+		"height": 87.0,
+		"include_history":
+		[
+			"*.js",
+			"*.seed"
+		],
+		"location_history":
+		[
+			"/home/bennage/dev/tabula",
+			"<open folders>"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"workflow",
+			"-u low -t 100",
+			"===",
+			"//",
+			")",
+			"(",
+			"then",
+			"case",
+			"],",
+			",",
+			"(",
+			"function()",
+			"}",
+			"{",
+			"tabula",
+			";",
+			"var ",
+			"tabula",
+			"character",
+			"facebookId",
+			"id",
+			"Sign in with ",
+			"configig",
+			"googleUser",
+			"fbUserMetadata",
+			"accessTokenExtra",
+			"sess",
+			"conf",
+			"fbUserMetadata",
+			"->",
+			"prototype",
+			".prototype",
+			"title",
+			"done",
+			"serial",
+			"setup",
+			"User",
+			"controller.index[1]",
+			"shadow",
+			"40px",
+			"#fff",
+			":",
+			";  ",
+			"p.thought",
+			";",
+			"; ",
+			":",
+			" {",
+			"#talkbubble",
+			";",
+			":",
+			"\"",
+			"roll",
+			"campaign",
+			"Campaign",
+			"campaign",
+			"Campaign",
+			"campaign",
+			"Campaign",
+			"campaign",
+			"Campaign",
+			"imageUrl",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character",
+			"Character",
+			"character"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			"'"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 29.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"help",
+				"helper.js"
+			],
+			[
+				"sche",
+				"models/schema.js"
+			],
+			[
+				"lay",
+				"views/layout.jade"
+			],
+			[
+				"au",
+				"auth.js"
+			],
+			[
+				"conf",
+				"config.js"
+			],
+			[
+				"post",
+				"public/stylesheets/post.styl"
+			],
+			[
+				"tab",
+				"public/javascripts/tabula.js"
+			],
+			[
+				"boot",
+				"bootstrapper.js"
+			],
+			[
+				"new",
+				"views/campaign/new.jade"
+			],
+			[
+				"styl",
+				"public/stylesheets/style.styl"
+			],
+			[
+				"chara",
+				"controllers/character.js"
+			],
+			[
+				"layou",
+				"views/layout.jade"
+			],
+			[
+				"style",
+				"public/stylesheets/style.styl"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 245.0,
+	"status_bar_visible": true
+}
