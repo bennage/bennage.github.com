@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Node.js on Windows (or JavaScript for the backend)"
-date: 2011-07-28 04:04
+date: 2011-07-28 16:04
 comments: true
 categories: [javascript,nodejs]
 ---
