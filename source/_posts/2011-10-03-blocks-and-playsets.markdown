@@ -4,7 +4,7 @@ title: "Blocks and Playsets"
 date: 2011-10-03 13:40
 comments: true
 categories: 
-publish: false
+published: false
 ---
 
 I've found recently that I favor blocks over playsets. If we're talking about toys, then of course the canonical example of blocks is Legos. You can build nearly anything with them. They are useful, vertasile, and inviting. 

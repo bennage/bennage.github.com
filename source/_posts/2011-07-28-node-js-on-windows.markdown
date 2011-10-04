@@ -28,14 +28,12 @@ You’ll be presented with a prompt and you can start writing JavaScript in para
 
 Now, let’s say you want to create a web server. We’ll begin by yanking the ‘hello world’ snippet from [nodejs.org](http://www.nodejs.org/ "hello world!").
 
-``` javascript
-var http = require('http');  
-http.createServer(function (req, res) {  
-  res.writeHead(200, {'Content-Type': 'text/plain'});  
-  res.end('Hello World\n');  
-}).listen(8124, "127.0.0.1");  
-console.log('Server running at <a href="http://127.0.0.1:8124/'">http://127.0.0.1:8124/'</a>);  
-```
+	var http = require('http');  
+	http.createServer(function (req, res) {  
+	  res.writeHead(200, {'Content-Type': 'text/plain'});  
+	  res.end('Hello World\n');  
+	}).listen(8124, "127.0.0.1");  
+	console.log('Server running at <a href="http://127.0.0.1:8124/'">http://127.0.0.1:8124/'</a>);  
 
 I saved this snippet into a file named `server.js`. Then from a PowerShell prompt, I ran
 

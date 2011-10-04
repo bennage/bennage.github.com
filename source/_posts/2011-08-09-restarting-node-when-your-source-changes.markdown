@@ -15,20 +15,18 @@ So I wondered if Node had something built-in for monitoring changes to the file.
 ### Looking for Some Change
 In .NET, there is a class `System.IO.FileSystemWatcher`. With an instance of this class you can monitor the files in a directory for changes. I set it up like this:
 
-``` csharp 
-var watcher = new FileSystemWatcher(); 
-watcher.Path = @"C:\node.js\stuff"; 
-watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName; 
-watcher.Filter = "*.js"; 
+	var watcher = new FileSystemWatcher(); 
+	watcher.Path = @"C:\node.js\stuff"; 
+	watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName; 
+	watcher.Filter = "*.js"; 
 
-watcher.Changed += Changed; 
-watcher.Created += Changed; 
-watcher.Deleted += Changed; 
-watcher.Renamed += Renamed; 
+	watcher.Changed += Changed; 
+	watcher.Created += Changed; 
+	watcher.Deleted += Changed; 
+	watcher.Renamed += Renamed; 
 
-// Begin watching 
-watcher.EnableRaisingEvents = true;
-```
+	// Begin watching 
+	watcher.EnableRaisingEvents = true;
 
 The `NotifyFilter` property allows you to specify the sort of changes you are interested in. You can check out the full list here. You’ll also notice that I used the `Filter` property to narrow it down just to js files.
 
@@ -42,50 +40,47 @@ Now whenever a significant change occurs, it’ll be time to restart Node. For t
 First, I’ll need to get a reference to the Node process. I noticed in Task Manager that the process name was “node”. So I used `Process.GetProcessesByName("node")`.  
 
 This returns an array of processes, and so I did this:
-``` csharp
-var matches = Process.GetProcessesByName("node");  
-  
-matches.ToList().ForEach(match => {  
-    Console.WriteLine("attempting to close node.js [" + match.Id + "]");  
-    match.Kill();  
-    match.WaitForExit(300); // it shouldn’t take this long, we’re just being cautious  
-    Console.WriteLine("successfully closed");  
-});
-```
+
+	var matches = Process.GetProcessesByName("node");  
+	  
+	matches.ToList().ForEach(match => {  
+	    Console.WriteLine("attempting to close node.js [" + match.Id + "]");  
+	    match.Kill();  
+	    match.WaitForExit(300); // it shouldn’t take this long, we’re just being cautious  
+	    Console.WriteLine("successfully closed");  
+	});
 
 Admittedly, this is hitting it with a hammer. It’s okay, because this is just a quick and dirty helper tool for me and not a production application.
 
 After killing the process, I’ll want to start another one. Now, I don’t care for another console window to pop up each time I restart, instead I’d like to simply redirect the input and output to my little helper app. This can be a little tricky, and I had to do some experimentation to find the right combination in order keep things from hanging. If you find it misbehaving, I recommend searching StackOverflow. I found several useful questions there. One of the keys that came up more than once was capturing and closing the stream for the standard input.
 
-``` csharp
-var start = new ProcessStartInfo();  
-start.FileName = @"C:\node.js\node.exe";  
-// start the process directly, as opposed to going thu the shell  
-start.UseShellExecute = false; 
-// we don’t want a new window  
-start.CreateNoWindow = true; 
-start.RedirectStandardOutput = true;  
-start.RedirectStandardInput = true;  
-start.Arguments = Path.Combine(@"C:\node.js\stuff", @"server.js");  
-  
-var node = new Process();  
-node.EnableRaisingEvents = true;  
-node.OutputDataReceived += OutputHandler;  
-node.StartInfo = start;  
-node.Start();  
+	var start = new ProcessStartInfo();  
+	start.FileName = @"C:\node.js\node.exe";  
+	// start the process directly, as opposed to going thu the shell  
+	start.UseShellExecute = false; 
+	// we don’t want a new window  
+	start.CreateNoWindow = true; 
+	start.RedirectStandardOutput = true;  
+	start.RedirectStandardInput = true;  
+	start.Arguments = Path.Combine(@"C:\node.js\stuff", @"server.js");  
+	  
+	var node = new Process();  
+	node.EnableRaisingEvents = true;  
+	node.OutputDataReceived += OutputHandler;  
+	node.StartInfo = start;  
+	node.Start();  
 
-// refresh the metadata stored in the instance of Process   
-node.Refresh();
-Console.WriteLine(node.ProcessName);  
-Console.WriteLine("[" + node.Id + "] node.exe started");  
-  
-// close the input, we won't use it  
-var input = node.StandardInput;  
-input.Close();  
-  
-// and now for the output  
-node.BeginOutputReadLine();  
-```
+	// refresh the metadata stored in the instance of Process   
+	node.Refresh();
+	Console.WriteLine(node.ProcessName);  
+	Console.WriteLine("[" + node.Id + "] node.exe started");  
+	  
+	// close the input, we won't use it  
+	var input = node.StandardInput;  
+	input.Close();  
+	  
+	// and now for the output  
+	node.BeginOutputReadLine();  
 
 First we create an object that contains the configuration for starting an instance of Node. Notice that we are passing in the server.js file as an argument.
 
