@@ -36,18 +36,10 @@
 	"buffers":
 	[
 		{
-			"file": "source/_posts/2011-01-30-what-i-learned-playing-starcraft.markdown",
+			"file": "source/About/index.markdown",
 			"settings":
 			{
-				"buffer_size": 4574,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "source/about/index.markdown",
-			"settings":
-			{
-				"buffer_size": 322,
+				"buffer_size": 310,
 				"line_ending": "Unix"
 			}
 		}
@@ -55,9 +47,17 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 69.0,
+		"height": 202.0,
 		"selected_items":
 		[
+			[
+				"set sass",
+				"Set Syntax: SASS"
+			],
+			[
+				"set s css",
+				"Set Syntax: CSS"
+			],
 			[
 				"lowe",
 				"Convert Case: Lower Case"
@@ -135,7 +135,7 @@
 				"Indentation: Convert to Spaces"
 			]
 		],
-		"width": 575.0
+		"width": 620.0
 	},
 	"console":
 	{
@@ -152,17 +152,25 @@
 	},
 	"file_history":
 	[
-		"/home/bennage/dev/bennage.github.com/source/abou/index.markdown",
+		"/home/bennage/dev/bennage.github.com/source/_includes/custom/navigation.html",
+		"/home/bennage/dev/bennage.github.com/_config.yml",
+		"/home/bennage/dev/bennage.github.com/sass/custom/_colors.scss",
 		"/home/bennage/dev/bennage.github.com/sass/custom/_styles.scss",
-		"/home/bennage/dev/bennage.github.com/source/_posts/2011-04-06-a-punctuated-life.markdown",
-		"/home/bennage/dev/bennage.github.com/plugins/category_generator.rb",
-		"/home/bennage/dev/bennage.github.com/source/_posts/2011-01-30-what-i-learned-playing-starcraft.markdown",
-		"/home/bennage/dev/bennage.github.com/source/_posts/2011-07-28-node-js-on-windows.markdown",
+		"/home/bennage/dev/bennage.github.com/public/about/index.html",
 		"/home/bennage/dev/bennage.github.com/public/stylesheets/screen.css",
+		"/home/bennage/dev/tabula/autotest.rb",
+		"/home/bennage/dev/bennage.github.com/Rakefile",
+		"/home/bennage/dev/bennage.github.com/source/_posts/2011-08-09-restarting-node-when-your-source-changes.markdown",
+		"/home/bennage/dev/bennage.github.com/source/_posts/2011-07-28-node-js-on-windows.markdown",
+		"/home/bennage/dev/bennage.github.com/source/_posts/2011-04-06-a-punctuated-life.markdown",
+		"/home/bennage/dev/bennage.github.com/source/_posts/2011-01-30-what-i-learned-playing-starcraft.markdown",
+		"/home/bennage/dev/bennage.github.com/source/_posts/2011-10-04-finding-the-pulse.markdown",
+		"/home/bennage/dev/bennage.github.com/source/about/index.markdown",
+		"/home/bennage/dev/bennage.github.com/source/abou/index.markdown",
+		"/home/bennage/dev/bennage.github.com/plugins/category_generator.rb",
 		"/home/bennage/dev/bennage.github.com/source/_posts/2011-10-02-what-i-learned-playing-starcraft.markdown",
 		"/home/bennage/dev/bennage.github.com/source/_posts/2011-07-28-node-dot-js-on-windows.markdown",
 		"/home/bennage/dev/bennage.github.com/source/About/index.markdown",
-		"/home/bennage/dev/bennage.github.com/_config.yml",
 		"/home/bennage/dev/bennage.github.com/source/_posts/2011-10-01-restarting-node-dot-js-when-your-source-changes.markdown",
 		"/home/bennage/dev/bennage.github.com/source/_posts/2011-10-01-node-dot-js-on-windows.markdown",
 		"/home/bennage/dev/bennage.github.com/.gitignore",
@@ -238,7 +246,6 @@
 		"/home/bennage/dev/tabula/routes/post.js",
 		"/home/bennage/dev/tabula/mvc.js",
 		"/home/bennage/dev/tabula/tabula.sublime-project",
-		"/home/bennage/dev/tabula/autotest.rb",
 		"/home/bennage/dev/tabula/specs/the_model_for_a_Post.js",
 		"/home/bennage/dev/tabula/test.txt",
 		"/home/bennage/dev/tabula/autotest.watchr",
@@ -272,8 +279,7 @@
 		"/home/bennage/.config/sublime-text-2/Packages/User/sample.py",
 		"/home/bennage/.config/sublime-text-2/Packages/D/D.sublime-build",
 		"/home/bennage/dev/mensa/views/index.jade",
-		"/home/bennage/dev/mensa/views/layout.jade",
-		"/home/bennage/dev/mensa/app.js"
+		"/home/bennage/dev/mensa/views/layout.jade"
 	],
 	"find":
 	{
@@ -299,6 +305,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"0",
+			"127",
+			"0",
+			"$title-color",
+			"255",
+			"gsub",
+			"### ",
+			"###",
 			"c#",
 			"javascript",
 			"java",
@@ -418,14 +432,6 @@
 			"character",
 			"Character",
 			"character",
-			"Character",
-			"character",
-			"Character",
-			"character",
-			"Character",
-			"character",
-			"Character",
-			"character",
 			"Character"
 		],
 		"highlight": true,
@@ -446,49 +452,23 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "source/_posts/2011-01-30-what-i-learned-playing-starcraft.markdown",
+					"file": "source/About/index.markdown",
 					"settings":
 					{
-						"buffer_size": 4574,
+						"buffer_size": 310,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4021,
-								4021
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1060.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "source/about/index.markdown",
-					"settings":
-					{
-						"buffer_size": 322,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								322,
-								322
+								16,
+								16
 							]
 						],
 						"settings":
@@ -545,6 +525,14 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"index",
+				"source/About/index.markdown"
+			],
+			[
+				"_con",
+				"_config.yml"
+			],
 			[
 				"help",
 				"helper.js"
@@ -616,6 +604,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 310.0,
+	"side_bar_width": 421.0,
 	"status_bar_visible": true
 }

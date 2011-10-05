@@ -8,3 +8,10 @@ footer: true
 ---
 
 I'm a Software Developer working at Microsoft.
+
+## Places to find me
+
+* [Speaker Rate](http://speakerrate.com/bennage)
+* [CodePlex](http://www.codeplex.com/site/users/view/bennage)
+* [GitHub]()
+* [Twitter]()
