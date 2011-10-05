@@ -12,7 +12,7 @@ In my last post, I showed you how to spin up a quick web app using Node. As I wa
 <!--more-->
 So I wondered if Node had something built-in for monitoring changes to the file. I didn’t see anything useful from `node.exe –help` and researching it on the Web is just so tedious, so I decided to write my own solution.
 
-### Looking for Some Change
+## Looking for Some Change
 In .NET, there is a class `System.IO.FileSystemWatcher`. With an instance of this class you can monitor the files in a directory for changes. I set it up like this:
 
 	var watcher = new FileSystemWatcher(); 
@@ -34,7 +34,7 @@ Next, there are a number of events to wire to respond to changes. I reused the s
 
 It’s also important to set `EnableRaisingEvents`. If you don’t, then the (guess what) no event are raised.
 
-### Kill, Kill, Kill
+## Kill, Kill, Kill
 Now whenever a significant change occurs, it’ll be time to restart Node. For this I used `System.Diagnostics.Process`. This is a bit of a tricky classs, with a number of not-so-obvious knobs to turn.
 
 First, I’ll need to get a reference to the Node process. I noticed in Task Manager that the process name was “node”. So I used `Process.GetProcessesByName("node")`.  
@@ -90,5 +90,5 @@ Finally, I handled the redirection of the input and output.
 
 The complete code for the app is available at <https://gist.github.com/1108727>.
 
-### Epilogue
+## Epilogue
 This is very much a hack and I am not an expert on the proper usage of these classes. Please feel free to offer improvements.

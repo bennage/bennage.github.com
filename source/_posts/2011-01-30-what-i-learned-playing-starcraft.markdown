@@ -18,21 +18,21 @@ A few months ago, StarCraft 2 was released. While there wasn’t as personal cer
 
 This time around I decided to _really_ learn how to play the game. In case you are unaware, StarCraft is huge. There are [televised tournaments, professional players, and so on](http://en.wikipedia.org/wiki/StarCraft_professional_competition "seriously"). In many ways, it’s analogous to chess. As I began to learn more about it, I found that there are certain tenets of gameplay and, as I mused on these, I found that they extend to life in general (though I’ll limit them here to a professional context).
 
-### The First Lesson
+## The First Lesson
 In the game, there are a dizziness amount of options. Your opponent can overwhelm you with astounding ease if you are unprepared for their particular tactic. So you might be inclined to try and prepare for all contingencies. But guess what? You can’t. You will end up spending all of your resources ‘preparing’. You think that this aligns with your overarching goal, but in reality it is a distraction.
 
 Professionally, we are given a goal: build software that will do *X*. As developers we typically and immediately begin thinking about all the ‘what ifs’. Usually because we’ve been burned by them in the past. *X* is still in sight, but there is a long road to get to there, because we have to deal with *Y* and *Z* and so many other things. We have to be prepared.
 
 The truth is that you _cannot_ be prepared for everything. It is actually a waste of energy and a distraction from your real goal. In the game of StarCraft, if you try to prepare for everything, you _will_ lose. Instead, you must choose your battles.
 
-### The Second Lesson
+## The Second Lesson
 How do you know which battles to choose? Surely a battle is coming. There are always problems in every project. You can’t simply be _unprepared_. That’s suicide.
 
 In StarCraft, the answer is scouting. That is, you gather intelligence about what the enemy is doing. Once you know, then you can prepare properly and efficiently.
 
 Recently, I was asked about some performance concerns at the start of a project. Now, I have been seriously burned by performance issues. In fact, one of the worst software disasters I was a part of was a performance issue. Nevertheless, the concerns raised with granular and premature. As Donald Knuth said “[premature optimization is the root of all evil](http://c2.com/cgi/wiki?PrematureOptimization)”. Now, I am most emphatically _not_ saying to avoid optimization. What I am saying is to scout, gathering intelligence and responding accordingly.
 
-### A Summary
+## A Summary
 I’ll sum up these two thoughts:
 
 * Don’t waste time on things you don’t need.
@@ -40,7 +40,7 @@ I’ll sum up these two thoughts:
 
 None of this is new. In fact, you see pretty much the same things preached all over. I hear it in [XP](http://www.extremeprogramming.org/rules/early.html "eXtreme Programming"), I hear it in Agile, I hear it in StarCraft.
 
-### Epilogue
+## Epilogue
 I’m reminded of this passage:
 
 {% blockquote G. K. Chesterton http://www.gutenberg.org/cache/epub/1718/pg1718.html Manalive %}

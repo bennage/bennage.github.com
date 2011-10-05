@@ -6,7 +6,7 @@ comments: true
 categories: [javascript,nodejs]
 ---
 
-### What is Node?
+## What is Node?
 The simplest answer, albeit a _simplistic_ answer, is that Node (or Node.js) is JavaScript on the server. Actually, it’s a more than just that, but you can read about the _more_ in [other places](http://www.nodejs.org/#about "Official NodeJS site"). This is a good enough answer for us n00bs.
 
 Unless you’ve been living in in cave, you might have noticed that JavaScript is all the rage now. It’s the new [assembly language](http://www.hanselman.com/blog/JavaScriptIsAssemblyLanguageForTheWebPart2MadnessOrJustInsanity.aspx "the assorted ramblings of Hanselman") of the Web. (It’s even for the [enterprise](http://enterprise-js.com/ "this isn't serious btw").) With Node, you can now take that webby clienty goodness to your server applications.
@@ -15,7 +15,7 @@ The reason I’m brining all this up is because there’s now a version of Node.
 
 Now, I want to be clear too, since I have been [newly assimilated](http://devlicious.com/blogs/christopher_bennage/archive/2011/04/06/a-punctuated-life.aspx "moving to Microsoft"), Node is not a Microsoft product..
 
-### Tutorial
+## Tutorial
 I want to show you how easy it is to try out Node.
 
 First, [download the exe](http://www.nodejs.org/#download). I grabbed v0.5.2.
