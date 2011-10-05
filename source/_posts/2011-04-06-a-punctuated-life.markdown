@@ -6,7 +6,7 @@ comments: true
 categories: [personal, opinion]
 ---
 
-### Chapter XXXVI
+## Chapter XXXVI
 
 My time with [Blue Spire](http://www.bluespire.com/ "Blue Spire Consulting") has officially ended. I have accepted a position with Microsoft on the [Patterns & Practices](http://msdn.microsoft.com/en-us/practices/default.aspx) team. My start date is April 18th.
 
