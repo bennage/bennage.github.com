@@ -10,7 +10,10 @@ body {
 
 html {
 	background-image: url('/images/bg.jpg');
-	background-size: contain;
+	background-attachment: fixed;
+	background-size: 100% 100%;
+	// background-size: contain;
+
 }
 
 body > header {
