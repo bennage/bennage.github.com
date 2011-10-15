@@ -36,20 +36,24 @@
 	"buffers":
 	[
 		{
-			"file": "source/About/index.markdown",
+			"file": "source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
 			"settings":
 			{
-				"buffer_size": 310,
-				"line_ending": "Unix"
+				"buffer_size": 1619,
+				"line_ending": "Windows"
 			}
 		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 202.0,
+		"height": 244.0,
 		"selected_items":
 		[
+			[
+				"set ru",
+				"Set Syntax: Ruby"
+			],
 			[
 				"set sass",
 				"Set Syntax: SASS"
@@ -69,10 +73,6 @@
 			[
 				"set mark",
 				"Set Syntax: Markdown"
-			],
-			[
-				"set ru",
-				"Set Syntax: Ruby"
 			],
 			[
 				"set ma",
@@ -135,7 +135,7 @@
 				"Indentation: Convert to Spaces"
 			]
 		],
-		"width": 620.0
+		"width": 400.0
 	},
 	"console":
 	{
@@ -152,6 +152,13 @@
 	},
 	"file_history":
 	[
+		"/C/dev/bennage.github.com/blog.sublime-project",
+		"/C/dev/bennage.github.com/plugins/tag_cloud.rb",
+		"/C/dev/bennage.github.com/source/_includes/asides/tag_cloud.html",
+		"/C/dev/bennage.github.com/_config.yml",
+		"/C/dev/bennage.github.com/source/about/index.markdown",
+		"/C/dev/bennage.github.com/source/_includes/asides/recent_commentes.html",
+		"/C/dev/bennage.github.com/source/About/index.markdown",
 		"/home/bennage/dev/bennage.github.com/source/_includes/custom/navigation.html",
 		"/home/bennage/dev/bennage.github.com/_config.yml",
 		"/home/bennage/dev/bennage.github.com/sass/custom/_colors.scss",
@@ -272,14 +279,7 @@
 		"/home/bennage/dev/tabula/PostProvider.coffee",
 		"/home/bennage/.config/sublime-text-2/Packages/CoffeeScript/README.markdown",
 		"/home/bennage/dev/tabula/public/stylesheets/style.css",
-		"/home/bennage/.config/sublime-text-2/Packages/Go/Go.tmLanguage",
-		"/home/bennage/.config/sublime-text-2/Packages/Jade/jade-tmbundle/README.md",
-		"/home/bennage/.config/sublime-text-2/Packages/Jade/jade-tmbundle/Syntaxes/Jade.tmLanguage",
-		"/home/bennage/dev/tabula/views/post_new.jade",
-		"/home/bennage/.config/sublime-text-2/Packages/User/sample.py",
-		"/home/bennage/.config/sublime-text-2/Packages/D/D.sublime-build",
-		"/home/bennage/dev/mensa/views/index.jade",
-		"/home/bennage/dev/mensa/views/layout.jade"
+		"/home/bennage/.config/sublime-text-2/Packages/Go/Go.tmLanguage"
 	],
 	"find":
 	{
@@ -457,18 +457,18 @@
 			[
 				{
 					"buffer": 0,
-					"file": "source/About/index.markdown",
+					"file": "source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
 					"settings":
 					{
-						"buffer_size": 310,
+						"buffer_size": 1619,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16,
-								16
+								1525,
+								1525
 							]
 						],
 						"settings":
@@ -595,7 +595,7 @@
 		[
 			[
 				"",
-				"/home/bennage/dev/alton/alton.sublime-project"
+				"/C/dev/liike.github.com/liike.sublime-project"
 			]
 		],
 		"width": 380.0
@@ -604,6 +604,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 421.0,
+	"side_bar_width": 304.0,
 	"status_bar_visible": true
 }
