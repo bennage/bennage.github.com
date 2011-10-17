@@ -36,18 +36,10 @@
 	"buffers":
 	[
 		{
-			"file": "source/_posts/2011-10-17-blocks-and-playsets.markdown",
+			"file": "source/_posts/2011-10-20-mobile-developent-and-device-detection.markdown",
 			"settings":
 			{
-				"buffer_size": 3699,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
-			"settings":
-			{
-				"buffer_size": 1636,
+				"buffer_size": 2601,
 				"line_ending": "Windows"
 			}
 		}
@@ -160,12 +152,14 @@
 	},
 	"file_history":
 	[
+		"/C/dev/bennage.github.com/_config.yml",
+		"/C/dev/bennage.github.com/source/_includes/asides/recent_comments.html",
 		"/C/dev/bennage.github.com/source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2011-10-17-blocks-and-playsets.markdown",
 		"/C/dev/bennage.github.com/source/_posts/2011-10-03-blocks-and-playsets.markdown",
 		"/C/dev/bennage.github.com/blog.sublime-project",
 		"/C/dev/bennage.github.com/plugins/tag_cloud.rb",
 		"/C/dev/bennage.github.com/source/_includes/asides/tag_cloud.html",
-		"/C/dev/bennage.github.com/_config.yml",
 		"/C/dev/bennage.github.com/source/about/index.markdown",
 		"/C/dev/bennage.github.com/source/_includes/asides/recent_commentes.html",
 		"/C/dev/bennage.github.com/source/About/index.markdown",
@@ -285,9 +279,7 @@
 		"/home/bennage/.config/sublime-text-2/Packages/User/jslint.sublime-build",
 		"/home/bennage/dev/tabula/PostProvider2.js",
 		"/home/bennage/dev/tabula/PostProvider2.coffee",
-		"/home/bennage/dev/tabula/test.coffee",
-		"/home/bennage/dev/tabula/PostProvider.coffee",
-		"/home/bennage/.config/sublime-text-2/Packages/CoffeeScript/README.markdown"
+		"/home/bennage/dev/tabula/test.coffee"
 	],
 	"find":
 	{
@@ -465,45 +457,18 @@
 			[
 				{
 					"buffer": 0,
-					"file": "source/_posts/2011-10-17-blocks-and-playsets.markdown",
+					"file": "source/_posts/2011-10-20-mobile-developent-and-device-detection.markdown",
 					"settings":
 					{
-						"buffer_size": 3699,
+						"buffer_size": 2601,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2283,
-								2283
-							]
-						],
-						"settings":
-						{
-							"spell_check": true,
-							"syntax": "Packages/Markdown/Markdown.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 780.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
-					"settings":
-					{
-						"buffer_size": 1636,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								136,
-								112
+								153,
+								153
 							]
 						],
 						"settings":
@@ -511,7 +476,7 @@
 							"syntax": "Packages/Markdown/Markdown.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 156.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -639,6 +604,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 154.0,
+	"side_bar_width": 266.0,
 	"status_bar_visible": true
 }
