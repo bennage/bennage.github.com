@@ -4,6 +4,7 @@ title: "Mobile Developent: Detecting Devices & Features"
 date: 2011-10-14 16:51
 comments: true
 categories: [mobile,web]
+published: false
 ---
 
 Just in case you're completely new to web development. Whenver a browser makes a request, it includes a string identifying itself to the server. We commonly refer to this as the `user agent`. This string identifies the browser and  platform and version and a great deal more nonsense.
