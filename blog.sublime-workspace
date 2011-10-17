@@ -36,10 +36,18 @@
 	"buffers":
 	[
 		{
+			"file": "source/_posts/2011-10-17-blocks-and-playsets.markdown",
+			"settings":
+			{
+				"buffer_size": 3699,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
 			"settings":
 			{
-				"buffer_size": 1619,
+				"buffer_size": 1636,
 				"line_ending": "Windows"
 			}
 		}
@@ -152,6 +160,8 @@
 	},
 	"file_history":
 	[
+		"/C/dev/bennage.github.com/source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2011-10-03-blocks-and-playsets.markdown",
 		"/C/dev/bennage.github.com/blog.sublime-project",
 		"/C/dev/bennage.github.com/plugins/tag_cloud.rb",
 		"/C/dev/bennage.github.com/source/_includes/asides/tag_cloud.html",
@@ -277,9 +287,7 @@
 		"/home/bennage/dev/tabula/PostProvider2.coffee",
 		"/home/bennage/dev/tabula/test.coffee",
 		"/home/bennage/dev/tabula/PostProvider.coffee",
-		"/home/bennage/.config/sublime-text-2/Packages/CoffeeScript/README.markdown",
-		"/home/bennage/dev/tabula/public/stylesheets/style.css",
-		"/home/bennage/.config/sublime-text-2/Packages/Go/Go.tmLanguage"
+		"/home/bennage/.config/sublime-text-2/Packages/CoffeeScript/README.markdown"
 	],
 	"find":
 	{
@@ -457,18 +465,45 @@
 			[
 				{
 					"buffer": 0,
-					"file": "source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
+					"file": "source/_posts/2011-10-17-blocks-and-playsets.markdown",
 					"settings":
 					{
-						"buffer_size": 1619,
+						"buffer_size": 3699,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1525,
-								1525
+								2283,
+								2283
+							]
+						],
+						"settings":
+						{
+							"spell_check": true,
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 780.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
+					"settings":
+					{
+						"buffer_size": 1636,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								136,
+								112
 							]
 						],
 						"settings":
@@ -604,6 +639,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 304.0,
+	"side_bar_width": 154.0,
 	"status_bar_visible": true
 }
