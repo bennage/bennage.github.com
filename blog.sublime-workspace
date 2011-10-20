@@ -36,10 +36,18 @@
 	"buffers":
 	[
 		{
-			"file": "source/_posts/2011-10-20-mobile-developent-and-device-detection.markdown",
+			"file": "/C/dev/rn/app.js",
 			"settings":
 			{
-				"buffer_size": 2601,
+				"buffer_size": 534,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "source/_posts/2011-10-19-mobile-developent-and-device-detection.markdown",
+			"settings":
+			{
+				"buffer_size": 4420,
 				"line_ending": "Windows"
 			}
 		}
@@ -47,9 +55,17 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 244.0,
+		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"pac",
+				"Package Control: Enable Package"
+			],
+			[
+				"dis",
+				"Package Control: Disable Package"
+			],
 			[
 				"set ru",
 				"Set Syntax: Ruby"
@@ -77,10 +93,6 @@
 			[
 				"set ma",
 				"Set Syntax: Markdown"
-			],
-			[
-				"dis",
-				"Package Control: Disable Package"
 			],
 			[
 				"in",
@@ -135,7 +147,7 @@
 				"Indentation: Convert to Spaces"
 			]
 		],
-		"width": 400.0
+		"width": 512.0
 	},
 	"console":
 	{
@@ -152,6 +164,8 @@
 	},
 	"file_history":
 	[
+		"/C/dev/bennage.github.com/source/_posts/2011-10-20-mobile-developent-and-device-detection.markdown",
+		"/C/Users/christb/Desktop/RavenDB-Build-499/Server/Raven.Server.exe.config",
 		"/C/dev/bennage.github.com/_config.yml",
 		"/C/dev/bennage.github.com/source/_includes/asides/recent_comments.html",
 		"/C/dev/bennage.github.com/source/_posts/2011-10-14-mobile-developent-and-device-detection.markdown",
@@ -277,9 +291,7 @@
 		"/etc/hosts",
 		"/home/bennage/.config/sublime-text-2/Packages/User/coffee-script.sublime-build",
 		"/home/bennage/.config/sublime-text-2/Packages/User/jslint.sublime-build",
-		"/home/bennage/dev/tabula/PostProvider2.js",
-		"/home/bennage/dev/tabula/PostProvider2.coffee",
-		"/home/bennage/dev/tabula/test.coffee"
+		"/home/bennage/dev/tabula/PostProvider2.js"
 	],
 	"find":
 	{
@@ -452,23 +464,49 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "source/_posts/2011-10-20-mobile-developent-and-device-detection.markdown",
+					"file": "/C/dev/rn/app.js",
 					"settings":
 					{
-						"buffer_size": 2601,
+						"buffer_size": 534,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								153,
-								153
+								500,
+								500
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "source/_posts/2011-10-19-mobile-developent-and-device-detection.markdown",
+					"settings":
+					{
+						"buffer_size": 4420,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								4420
 							]
 						],
 						"settings":
@@ -476,7 +514,7 @@
 							"syntax": "Packages/Markdown/Markdown.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 156.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

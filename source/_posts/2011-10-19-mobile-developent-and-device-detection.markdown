@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Mobile Development: Detecting Devices & Features"
+title: "Mobile Development: Detecting Devices &amp; Features"
 date: 2011-10-19 16:01
 comments: true
 categories: [mobile,web]
