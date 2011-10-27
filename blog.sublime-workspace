@@ -44,10 +44,37 @@
 			}
 		},
 		{
-			"file": "source/_posts/2011-10-19-mobile-developent-and-device-detection.markdown",
+			"file": "/C/Users/christb/Desktop/test.htm",
 			"settings":
 			{
-				"buffer_size": 4420,
+				"buffer_size": 280,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/dev/depcheck/.hgignore",
+			"settings":
+			{
+				"buffer_size": 216,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "rem echo Usage: updateSetupFolder.cmd (Source-folder-path) (Destination-folder-path)\n\n@echo off\n%~d0\n\nIF \"%1%\"==\"\" goto EXIT\nIF \"%2%\"==\"\" goto EXIT\nSET srcFolderPath=%1%\nSET destFolderPath=%2%\n\ncd \"%destFolderPath%\"\ndel DependencyChecker.exe\ndel Microsoft.Web.Deployment.dll\ndel Microsoft.Web.PlatformInstaller.dll\nrem del Dependencies.xml\n\ncd \"%~dp0\"\n\ncd \"%srcFolderPath%\"\nxcopy DependencyChecker.exe \"%destFolderPath%\"\nxcopy Microsoft.Web.Deployment.dll \"%destFolderPath%\"\nxcopy Microsoft.Web.PlatformInstaller.dll \"%destFolderPath%\"\nrem xcopy Dependencies.xml \"%destFolderPath%\"\n\necho Done\nGOTO EXIT\n\n:EXIT\ncd \"%~dp0\"",
+			"file": "/C/dev/depcheck/DependencyChecker/post-build-script/updateSetupFolder.cmd",
+			"file_size": 648,
+			"file_write_time": 129612678440000000,
+			"settings":
+			{
+				"buffer_size": 620,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/dev/depcheck/DependencyChecker/bin/Debug/DependencyChecker.exe.config",
+			"settings":
+			{
+				"buffer_size": 9088,
 				"line_ending": "Windows"
 			}
 		}
@@ -164,6 +191,10 @@
 	},
 	"file_history":
 	[
+		"/C/dev/depcheck/DependencyChecker/bin/Debug/DependencyChecker.exe.config",
+		"/C/dev/depcheck/hgignore",
+		"/C/dev/bennage.github.com/source/_posts/2011-10-19-mobile-developent-and-device-detection.markdown",
+		"/C/dev/liike.github.com/source/_posts/2011-10-19-mobile-developent-and-device-detection.markdown",
 		"/C/dev/bennage.github.com/source/_posts/2011-10-20-mobile-developent-and-device-detection.markdown",
 		"/C/Users/christb/Desktop/RavenDB-Build-499/Server/Raven.Server.exe.config",
 		"/C/dev/bennage.github.com/_config.yml",
@@ -287,11 +318,7 @@
 		"/home/bennage/dev/tabula/Procfile",
 		"/home/bennage/dev/tabula/.hgignore",
 		"/home/bennage/dev/tabula/views/login.jade",
-		"/home/bennage/dev/everyauth/package.json",
-		"/etc/hosts",
-		"/home/bennage/.config/sublime-text-2/Packages/User/coffee-script.sublime-build",
-		"/home/bennage/.config/sublime-text-2/Packages/User/jslint.sublime-build",
-		"/home/bennage/dev/tabula/PostProvider2.js"
+		"/home/bennage/dev/everyauth/package.json"
 	],
 	"find":
 	{
@@ -464,7 +491,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -485,7 +512,9 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2.0,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -495,10 +524,63 @@
 				},
 				{
 					"buffer": 1,
-					"file": "source/_posts/2011-10-19-mobile-developent-and-device-detection.markdown",
+					"file": "/C/Users/christb/Desktop/test.htm",
 					"settings":
 					{
-						"buffer_size": 4420,
+						"buffer_size": 280,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								196,
+								196
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/dev/depcheck/.hgignore",
+					"settings":
+					{
+						"buffer_size": 216,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								134,
+								134
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/dev/depcheck/DependencyChecker/post-build-script/updateSetupFolder.cmd",
+					"settings":
+					{
+						"buffer_size": 620,
 						"regions":
 						{
 						},
@@ -506,12 +588,40 @@
 						[
 							[
 								0,
-								4420
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/dev/depcheck/DependencyChecker/bin/Debug/DependencyChecker.exe.config",
+					"settings":
+					{
+						"buffer_size": 9088,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2.0,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
