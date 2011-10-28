@@ -71,7 +71,7 @@ However the browser isn't the only environment. For the troglodytes amongst us, 
 Each of these concepts deserves a post (or more) on their own, so I won't go into details. 
 
 * It's a _dynamic_ language. JavaScript is squishy and that's good.
-* It has many [_functional_](/blog/2010/09/06/what-is-functional-programing/) characteristics.
+* It has many [_functional_](/blog/2010/09/06/what-is-functional-programming/) characteristics.
 * It favors [_asynchronous patterns_](http://msdn.microsoft.com/en-us/library/windows/apps/hh464930%28v=VS.85%29.aspx).
 
 ### K.I.S.S.
