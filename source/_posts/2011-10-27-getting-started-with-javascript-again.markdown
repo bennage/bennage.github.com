@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Getting Started with JavaScript&hellip; again"
+title: "Getting Started with JavaScript... again"
 date: 2011-10-27 11:56
 comments: true
 categories: [javascript]
 ---
 
-I've alluded before that did a large chunk of my development in some form of [ECMAScript](http://en.wikipedia.org/wiki/ECMAScript) for the first ten years of my professional life. Now, it's cool again for the first time. Everyone wants to learn it.
+I've alluded before that I did a large chunk of my development in some form of [ECMAScript](http://en.wikipedia.org/wiki/ECMAScript) for the first ten years of my professional life. Now, JavaScript is cool again for the first time. Everyone wants to learn it.
 
 So, like me, you probably already kinda maybe knew JavaScript. But times have changed and now it's a serious language. How do you get up to speed? Here's what I did.
 

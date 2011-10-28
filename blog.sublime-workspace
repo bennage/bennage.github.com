@@ -36,45 +36,26 @@
 	"buffers":
 	[
 		{
-			"file": "/C/dev/rn/app.js",
+			"file": "source/_posts/2010-09-14-what-is-functional-programming-part-3-recursion.markdown",
 			"settings":
 			{
-				"buffer_size": 534,
+				"buffer_size": 7243,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/christb/Desktop/test.htm",
+			"file": "source/_posts/2010-10-05-what-is-functional-programming-part-5-bindings.markdown",
 			"settings":
 			{
-				"buffer_size": 280,
+				"buffer_size": 2539,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/dev/depcheck/.hgignore",
+			"file": "source/_posts/2010-09-22-what-is-functional-programming-part-4-linq.markdown",
 			"settings":
 			{
-				"buffer_size": 216,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "rem echo Usage: updateSetupFolder.cmd (Source-folder-path) (Destination-folder-path)\n\n@echo off\n%~d0\n\nIF \"%1%\"==\"\" goto EXIT\nIF \"%2%\"==\"\" goto EXIT\nSET srcFolderPath=%1%\nSET destFolderPath=%2%\n\ncd \"%destFolderPath%\"\ndel DependencyChecker.exe\ndel Microsoft.Web.Deployment.dll\ndel Microsoft.Web.PlatformInstaller.dll\nrem del Dependencies.xml\n\ncd \"%~dp0\"\n\ncd \"%srcFolderPath%\"\nxcopy DependencyChecker.exe \"%destFolderPath%\"\nxcopy Microsoft.Web.Deployment.dll \"%destFolderPath%\"\nxcopy Microsoft.Web.PlatformInstaller.dll \"%destFolderPath%\"\nrem xcopy Dependencies.xml \"%destFolderPath%\"\n\necho Done\nGOTO EXIT\n\n:EXIT\ncd \"%~dp0\"",
-			"file": "/C/dev/depcheck/DependencyChecker/post-build-script/updateSetupFolder.cmd",
-			"file_size": 648,
-			"file_write_time": 129612678440000000,
-			"settings":
-			{
-				"buffer_size": 620,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/dev/depcheck/DependencyChecker/bin/Debug/DependencyChecker.exe.config",
-			"settings":
-			{
-				"buffer_size": 9088,
+				"buffer_size": 4938,
 				"line_ending": "Windows"
 			}
 		}
@@ -85,6 +66,10 @@
 		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"pa",
+				"Package Control: Discover Packages"
+			],
 			[
 				"pac",
 				"Package Control: Enable Package"
@@ -191,7 +176,19 @@
 	},
 	"file_history":
 	[
+		"/C/dev/bennage.github.com/source/_posts/2010-09-14-what-is-functional-programming-part-4-linq.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2010-09-06-what-is-functional-programing.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2011-10-27-getting-started-with-javascript-again.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2010-09-14-what-is-functional-programming-part-3-recursion.markdown",
+		"/C/dev/rn/app.js",
+		"/C/dev/bennage.github.com/source/_posts/2010-09-09-what-is-functional-programming-part-2-currying.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2010-09-26-what-is-functional-programing.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2011-10-27-getting-started-with-javascript-dot-dot-dot-again.markdown",
+		"/C/Users/christb/Desktop/test.htm",
+		"/C/dev/depcheck/.hgignore",
+		"/C/dev/depcheck/DependencyChecker/post-build-script/updateSetupFolder.cmd",
 		"/C/dev/depcheck/DependencyChecker/bin/Debug/DependencyChecker.exe.config",
+		"/C/Users/christb/Mercurial.ini",
 		"/C/dev/depcheck/hgignore",
 		"/C/dev/bennage.github.com/source/_posts/2011-10-19-mobile-developent-and-device-detection.markdown",
 		"/C/dev/liike.github.com/source/_posts/2011-10-19-mobile-developent-and-device-detection.markdown",
@@ -306,19 +303,7 @@
 		"/home/bennage/dev/tabula/test.txt",
 		"/home/bennage/dev/tabula/autotest.watchr",
 		"/home/bennage/dev/tabula/specs/tests.js",
-		"/home/bennage/dev/tabula/.gitignore",
-		"/home/bennage/dev/tabula/run_tests",
-		"/home/bennage/dev/tabula/run_tests.sh",
-		"/home/bennage/dev/tabula/UserProvider.js",
-		"/home/bennage/dev/tabula/PostProvider.js",
-		"/home/bennage/dev/tabula/Repository.js",
-		"/home/bennage/dev/tabula/models/Schema.js",
-		"/home/bennage/dev/tabula/models/Schema",
-		"/home/bennage/dev/tabula/node_modules/mongodb/lib/mongodb/db.js",
-		"/home/bennage/dev/tabula/Procfile",
-		"/home/bennage/dev/tabula/.hgignore",
-		"/home/bennage/dev/tabula/views/login.jade",
-		"/home/bennage/dev/everyauth/package.json"
+		"/home/bennage/dev/tabula/.gitignore"
 	],
 	"find":
 	{
@@ -344,6 +329,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"http://devlicio.us/blogs/christopher_bennage/archive",
+			"devl",
+			" target=\"_blank\"",
+			".aspx",
+			"http://devlicio.us/blogs/christopher_bennage/archive",
+			"devl",
+			"programing",
+			"devl",
 			"0",
 			"127",
 			"0",
@@ -463,14 +456,6 @@
 			"character",
 			"Character",
 			"character",
-			"Character",
-			"character",
-			"Character",
-			"character",
-			"Character",
-			"character",
-			"Character",
-			"character",
 			"Character"
 		],
 		"highlight": true,
@@ -491,57 +476,56 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/C/dev/rn/app.js",
+					"file": "source/_posts/2010-09-14-what-is-functional-programming-part-3-recursion.markdown",
 					"settings":
 					{
-						"buffer_size": 534,
+						"buffer_size": 7243,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								500,
-								500
+								76,
+								77
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2.0,
+							"syntax": "Packages/Markdown/Markdown.tmLanguage",
+							"tab_size": 4.0,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2627.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "/C/Users/christb/Desktop/test.htm",
+					"file": "source/_posts/2010-10-05-what-is-functional-programming-part-5-bindings.markdown",
 					"settings":
 					{
-						"buffer_size": 280,
+						"buffer_size": 2539,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								196,
-								196
+								919,
+								919
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -551,76 +535,24 @@
 				},
 				{
 					"buffer": 2,
-					"file": "/C/dev/depcheck/.hgignore",
+					"file": "source/_posts/2010-09-22-what-is-functional-programming-part-4-linq.markdown",
 					"settings":
 					{
-						"buffer_size": 216,
+						"buffer_size": 4938,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								134,
-								134
+								502,
+								505
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/C/dev/depcheck/DependencyChecker/post-build-script/updateSetupFolder.cmd",
-					"settings":
-					{
-						"buffer_size": 620,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/C/dev/depcheck/DependencyChecker/bin/Debug/DependencyChecker.exe.config",
-					"settings":
-					{
-						"buffer_size": 9088,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"tab_size": 2.0,
+							"syntax": "Packages/Markdown/Markdown.tmLanguage",
+							"tab_size": 4.0,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -752,6 +684,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 266.0,
+	"side_bar_width": 529.0,
 	"status_bar_visible": true
 }
