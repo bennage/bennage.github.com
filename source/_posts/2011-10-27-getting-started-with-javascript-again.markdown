@@ -20,7 +20,7 @@ Did I mention that it's free?
 
 ### [JavaScript: The Good Parts](http://shop.oreilly.com/product/9780596517748.do)
 
-An essential read for modern JavaScript development. It's short and terse and easy to read. Douglas Crockford is highly regarded, though he can get occasionally [harsh some mellow](http://anton.kovalyov.net/2011/02/20/why-i-forked-jslint-to-jshint/). He's the <strike>supreme overlord</strike> author of [JSlint](http://jslint.com/), a nifty tool that's useful for detecting the _not so good_ parts in your own JavaScript. The information in this book is foundational and I recommend reading it soon.
+An essential read for modern JavaScript development. It's short and terse and easy to read. Douglas Crockford is highly regarded, though he can get occasionally [harsh some mellow](http://anton.kovalyov.net/2011/02/20/why-i-forked-jslint-to-jshint/). He's the <strike>supreme overlord</strike> author of [JSLint](http://jslint.com/), a nifty tool that's useful for detecting the _not so good_ parts in your own JavaScript. The information in this book is foundational and I recommend reading it soon.
 
 ### [JavaScript Patterns](http://shop.oreilly.com/product/9780596806767.do)
 
