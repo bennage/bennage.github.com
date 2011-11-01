@@ -35,30 +35,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "source/_posts/2010-09-14-what-is-functional-programming-part-3-recursion.markdown",
-			"settings":
-			{
-				"buffer_size": 7243,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "source/_posts/2010-10-05-what-is-functional-programming-part-5-bindings.markdown",
-			"settings":
-			{
-				"buffer_size": 2539,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "source/_posts/2010-09-22-what-is-functional-programming-part-4-linq.markdown",
-			"settings":
-			{
-				"buffer_size": 4938,
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -176,10 +152,12 @@
 	},
 	"file_history":
 	[
+		"/C/dev/bennage.github.com/source/_posts/2010-09-14-what-is-functional-programming-part-3-recursion.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2010-10-05-what-is-functional-programming-part-5-bindings.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2010-09-22-what-is-functional-programming-part-4-linq.markdown",
+		"/C/dev/bennage.github.com/source/_posts/2011-10-27-getting-started-with-javascript-again.markdown",
 		"/C/dev/bennage.github.com/source/_posts/2010-09-14-what-is-functional-programming-part-4-linq.markdown",
 		"/C/dev/bennage.github.com/source/_posts/2010-09-06-what-is-functional-programing.markdown",
-		"/C/dev/bennage.github.com/source/_posts/2011-10-27-getting-started-with-javascript-again.markdown",
-		"/C/dev/bennage.github.com/source/_posts/2010-09-14-what-is-functional-programming-part-3-recursion.markdown",
 		"/C/dev/rn/app.js",
 		"/C/dev/bennage.github.com/source/_posts/2010-09-09-what-is-functional-programming-part-2-currying.markdown",
 		"/C/dev/bennage.github.com/source/_posts/2010-09-26-what-is-functional-programing.markdown",
@@ -301,9 +279,7 @@
 		"/home/bennage/dev/tabula/tabula.sublime-project",
 		"/home/bennage/dev/tabula/specs/the_model_for_a_Post.js",
 		"/home/bennage/dev/tabula/test.txt",
-		"/home/bennage/dev/tabula/autotest.watchr",
-		"/home/bennage/dev/tabula/specs/tests.js",
-		"/home/bennage/dev/tabula/.gitignore"
+		"/home/bennage/dev/tabula/autotest.watchr"
 	],
 	"find":
 	{
@@ -476,91 +452,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "source/_posts/2010-09-14-what-is-functional-programming-part-3-recursion.markdown",
-					"settings":
-					{
-						"buffer_size": 7243,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								76,
-								77
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage",
-							"tab_size": 4.0,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2627.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "source/_posts/2010-10-05-what-is-functional-programming-part-5-bindings.markdown",
-					"settings":
-					{
-						"buffer_size": 2539,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								919,
-								919
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "source/_posts/2010-09-22-what-is-functional-programming-part-4-linq.markdown",
-					"settings":
-					{
-						"buffer_size": 4938,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								502,
-								505
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage",
-							"tab_size": 4.0,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],

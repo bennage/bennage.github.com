@@ -10,6 +10,8 @@ I've recently discovered that I favor blocks over playsets. I'm talking about to
 
 Now, the term 'playset' warrants a bit more explanation. I don't mean the large outdoor sets with swings and sandboxes and spring-loaded ponies. No, I'm a child of the 80s and I _loved me some_ Star Wars playsets.
 
+<!-- more -->
+
 {% img right /images/posts/hoth-playset.jpg %}
 
 So my definition of 'playset' is colored by my childhood. I think think of 'playset' as a themed toy representing an environment. Like the Hoth playset pictured here. If you want to pretend you are the Imperials raining destruction upon a ragtag Rebel Alliance, the [Hoth Imperial Attack playset](http://www.ebay.com/csc/i.html?_nkw=Hoth+imperial+attack+playset&LH_Complete=1&_odkw=Hoth+attack+playset "Yes, I had this as a kid.") can't be beat.

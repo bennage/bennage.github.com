@@ -12,6 +12,8 @@ _Take this post cum granlis salis. I'm trying to figure this stuff out and I'm t
 
 Whenever a browser makes a request, it includes a string identifying itself to the server. We commonly refer to this as the *user agent string*. This string identifies the browser and the platform and the version and a great deal more such nonsense.
 
+<!-- more -->
+
 {% img right /images/posts/tower-babel.jpg %}
 
 This sounds great in theory. We should be able to use this data to optimize what's being sent to the (mobile) browser. However, there's been something of a [sordid history for user agent strings](http://webaim.org/blog/user-agent-string-history/ "History of the browser user-agent string by Aaron Andersen"). In retrospect, we've realized that [user agent sniffing](http://en.wikipedia.org/wiki/User_agent#User_agent_sniffing) is a tool that has often hurt more than it has helped.

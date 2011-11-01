@@ -10,6 +10,8 @@ I've alluded before that I did a large chunk of my development in some form of [
 
 So, like me, you probably already kinda maybe knew JavaScript. But times have changed and now it's a serious language. How do you get up to speed? Here's what I did.
 
+<!-- more -->
+
 ## Read Some Books
 
 ### [Eloquent JavaScript](http://eloquentjavascript.net/)

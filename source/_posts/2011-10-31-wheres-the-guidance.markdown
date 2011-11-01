@@ -4,7 +4,7 @@ title: "Where's the Guidance?"
 date: 2011-10-31 11:56
 comments: true
 categories: [opinion]
-publish: false
+published: false
 ---
 
 First a confession, I really didn't know much about [p&p](http://msdn.microsoft.com/en-us/practices/default.aspx "patterns & practices") before I joined them. I knew that they (or now we) had produced [Unity](http://unity.codeplex.com/). I'd used it on a project or two before coming to Microsoft. I knew we had produced [Prism](http://compositewpf.codeplex.com/) because [Rob](http://www.bluespire.com/ "my former business partner") was on the advisory board. (I _had_ studied Jeremy Miller's [Build Your Own CAB series](http://codebetter.com/jeremymiller/2007/07/26/the-build-your-own-cab-series-table-of-contents/) but somehow it didn't stick that it was related to p&p.) I knew vaguely about [EntLib]("http://entlib.codeplex.com/") but most of my knowledge about it was drawn from an MSDN article circa 2005. To put it bluntly, I was ignorant about the group's history.
