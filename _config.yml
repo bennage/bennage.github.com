@@ -6,7 +6,7 @@ url: http://dev.bennage.com
 title: Christopher Bennage
 subtitle: not all who wander are lost
 author: Christopher Bennage
-simple_search: http://google.com/search
+simple_search: http://bing.com/search?site:dev.bennage.com&
 
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
 subscribe_rss: http://feeds.feedburner.com/ChristopherBennage
