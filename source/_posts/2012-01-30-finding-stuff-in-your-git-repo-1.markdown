@@ -26,6 +26,4 @@ Of course, you can also pass a regular expression to`Select-String` (that is, if
 * [the pipe operator `|`](http://technet.microsoft.com/en-us/library/ee176927.aspx)
 * [Better Git with Powershell by Phil Haack](http://haacked.com/archive/2011/12/13/better-git-with-powershell.aspx)
 
-<!--
 [Next, searching for files with specific content.](/blog/2012/02/01/finding-stuff-in-your-git-repo-2/)
--->
