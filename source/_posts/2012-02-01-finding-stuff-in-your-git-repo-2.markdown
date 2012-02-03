@@ -50,7 +50,7 @@ Notice that each line begins with the name of the commit where the match was fou
 
 	[commit ref]:[file path]:[line no]:[matching content]
 
-_N.B. I had one repository that did not work with `git grep`. It was because my 'text' files were encoded UTF-16 and git interpretted them as binary. I converted them to UTF-8 and the world became a happy place._
+_N.B. I had one repository that did not work with `git grep`. It was because my 'text' files were encoded UTF-16 and git interpretted them as binary. I converted them to UTF-8 and the world became a happy place. Thanks to [Keith Dahlby](https://twitter.com/#!/dahlbyk) and [Adam Dymitruk](https://twitter.com/#!/adymitruk) for helping me to figure out the problem._
 
 ## References
 * [grep](http://en.wikipedia.org/wiki/Grep)
