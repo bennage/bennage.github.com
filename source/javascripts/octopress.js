@@ -1,3 +1,14 @@
+function cycleSubtitle() {
+  var subtitle = $('#subtitle');
+  var pivot = (new Date().getSeconds() % 2);
+  var quotes = [
+    'not all who wander are lost',
+    'observing, reasoning, acting'
+    ];
+
+  subtitle.text(quotes[pivot]);
+}
+
 function getNav() {
   var mobileNav = $('nav[role=navigation] fieldset[role=search]').after('<fieldset class="mobile-nav"></fieldset>').next().append('<select></select>');
   mobileNav.children('select').append('<option value="">Navigate&hellip;</option>');
@@ -114,6 +125,7 @@ function renderDeliciousLinks(items) {
 }
 
 $.domReady(function() {
+  cycleSubtitle();
   testFeatures();
   wrapFlashVideos();
   flashVideoFallback();
