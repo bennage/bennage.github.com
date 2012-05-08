@@ -15,10 +15,12 @@ I am interested in way too much, and suffer from a paralytic oscillation between
 
 I am also keenly interested in my wife and my children. Finally, I follow Jesus.
 
-
-{% blockquote G. K. Chesterton, The Man Who Was Thursday %}
-"I've got it now", cried Bull, "it was because he was so fat and so light. Just like a balloon. We always think of fat people as heavy, but he could have danced against a sylph. I see now what I mean. Moderate strength is shown in violence, supreme strength is shown in levity. It was like the old speculations - what would happen if an elephant could leap up in the sky like a grasshopper?"
-{% endblockquote %}
+<blockquote>
+	<p>"I've got it now", cried Bull, "it was because he was so fat and so light. Just like a balloon. We always think of fat people as heavy, but he could have danced against a sylph. I see now what I mean. Moderate strength is shown in violence, supreme strength is shown in levity. It was like the old speculations - what would happen if an elephant could leap up in the sky like a grasshopper?"</p>
+	<footer>
+	<strong>G. K. Chesterton</strong><cite><a href="http://www.gutenberg.org/ebooks/1695">The Man Who Was Thursday</a></cite>
+	</footer>
+</blockquote>
 
 ### Places to find me
 * <a href="http://speakerrate.com/bennage" rel="me">Speaker Rate</a>
