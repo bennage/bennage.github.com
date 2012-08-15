@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Unit Testing WinJS"
+title: "Unit Testing WinJS: First Steps"
 date: 2012-08-15 16:25
 comments: true
 categories: [JavaScript, WinJS, Windows 8, unit testing]
@@ -109,6 +109,9 @@ Instead, we decided to take a more [functional](http://dev.bennage.com/blog/2010
 
 The best example of this approach in the HiloJS project (so far) can be found in [tileUdater.js](http://hilojs.codeplex.com/SourceControl/changeset/view/13593c579fb6#Hilo%2fHilo%2fTiles%2ftileUpdater.js). In that file, we create a simple object that coordinates the real work using a set of functions. The major functions are defined in their own files (all inside the \Hilo\Tiles folder). We "export" these functions using [`WinJS.Namespace.define`](http://msdn.microsoft.com/en-us/library/windows/apps/br212667.aspx). Exporting them makes them available to the code in tileUpdater.js as well as our tests.
 
-## Feedback
+## Summary
+
+So far this arrangement has worked really well for us. Working with Mocha has been a lot of fun. The test authoring experience isn't quite as smooth as I'd like, but I'm sure that will come as we gain more experience.
+Remember though, this project is very much a journey, so keep on eye on the [project site](http://hilojs.codeplex.com/). We'll be writing more about it as we learn.
 
 As always, your feedback is greatly desired. Do you have a better way? How does this approach strike? Feel free to speak up our the [project's discussion board](http://hilojs.codeplex.com/discussions).
