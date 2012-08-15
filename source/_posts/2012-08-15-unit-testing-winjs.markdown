@@ -15,7 +15,7 @@ One of the first questions we've been struggling with is how to best test a WinJ
 Our first barrier to unit testing a WinJS app was finding a convenient way to run the tests.
 The primary difficulty is that the WinRT APIs are only available in the context of a Windows 8 app (and that's also practicially the case for WinJS as well). So if your tests need to touch either one, the only choice you currently have is to run the tests inside a Windows 8 app.
 
-{% img right /images/posts/winjs-test-01.png %}
+{% img right /images/posts/winjs-test-solution.png %}
 
 After some experimentation, we choose to include a second app in our solution to host the unit tests. (At one point, we had the tests embedded in the actual app itself; executing them with a hidden keyboard shortcut.) Having two apps means that we have to share the source that's under test. Currently, we're just [manually linking the files](http://msdn.microsoft.com/en-us/library/9f4t9t92.aspx). I also have to manually go into the default.html and add references to the scripts. Ultimately, I'd like to have this automated, but that's a task for another day.  
 
