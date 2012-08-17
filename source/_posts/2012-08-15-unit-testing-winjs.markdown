@@ -46,7 +46,7 @@ If you don't understand the call to `then`, take a moment to read about [async p
 
 What's great about Mocha is that if you omit the `done` parameter, then the harness automagically assumes the test is synchronous. Very nice.
 
-We did have [one problem](https://github.com/visionmedia/mocha/issues/502) with Mocha. It has an internal recursive process that can cause a stack overflow in IE. [Derick Bailey](http://lostechies.com/derickbailey/) came up with a quick workaround by reseting the stack before each test with a call to `setTimeout` in our [test helper script](http://hilojs.codeplex.com/SourceControl/changeset/view/13593c579fb6#Hilo.Specifications%2fspec.helpers.js).
+We did have [one problem](https://github.com/visionmedia/mocha/issues/502) with Mocha. It has an internal recursive process that can cause a stack overflow in IE. [Derick Bailey](http://lostechies.com/derickbailey/) came up with a quick workaround by resetting the stack before each test with a call to `setTimeout` in our [test helper script](http://hilojs.codeplex.com/SourceControl/changeset/view/13593c579fb6#Hilo.Specifications%2fspec.helpers.js).
 
     beforeEach(function (done) {
         setTimeout(done, 0);
