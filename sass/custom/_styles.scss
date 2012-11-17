@@ -1,2 +1,50 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+
+img.screenie {
+	border: 0;	
+}
+
+body {
+	@include box-shadow(black 0px 0px 30px, black 0px 0px 10px);
+}
+
+html {
+	background-image: url('/images/bg.jpg');
+	background-position: 50px 0;
+	//background-attachment: fixed;
+	//background-size: 100% 100%;
+	// background-size: contain;
+
+}
+
+body > header {
+	padding-top: 0;
+	padding-bottom: 0.5em;
+  h1 {
+    a, a:visited, a:hover {
+    	color: rgb(255,255,255);
+    	text-shadow: 0px -1px 0px rgba(255,255,255,0.7), 0px 1px 0px rgba(0,0,0,0.3);
+    }
+  }
+}
+
+img.bio {
+	border: 0;	
+	float: left;
+	margin-top: 8px;
+	margin-right: 8px;
+}
+
+article aside {
+	background-color: rgba(0,0,0,0.1);
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	margin: -10px;
+	padding: 0 10px;
+}
+
+blockquote {
+	clear:both;
+}
