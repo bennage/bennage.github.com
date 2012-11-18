@@ -171,3 +171,11 @@ header[role="banner"]
 	0% { top: 100%; }
 	100% { top: -170%; }
 }
+
+#controls {
+	a {
+		padding: 1em;
+		color: rgba(255,255,255,0.3);
+	}
+
+}
