@@ -48,3 +48,18 @@ article aside {
 blockquote {
 	clear:both;
 }
+
+#newhope {
+	a {
+		background-image: url('/images/R2D2-icon.png');
+		background-repeat: no-repeat;
+		background-position: 8px;
+		display: block;
+		width: 32px;
+		height: 32px;
+		span {
+			display: none;
+		}
+	}
+
+}
