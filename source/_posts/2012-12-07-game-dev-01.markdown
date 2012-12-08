@@ -1,5 +1,6 @@
 ---
 layout: post
+published: false
 title: "Building a Game with JavaScript"
 date: 2012-12-07 17:32
 comments: true
@@ -48,7 +49,9 @@ The big mystery inside of `loop` is the `currentScreen` object. Here I was think
 I wanted the loop logic to work with both (as well as any future screens). I expect screen objects to have two methods:
 
 * `update` takes the time elapsed since the last frame and is responsible for updating the state of the game.
-* `draw` take the drawing context and is responsible for rendering the current state of the game.
+* `draw` takes the drawing context (from the canvas) and is responsible for rendering the current state of the game.
+
+You'll also see that I grab a canvas element and capture its drawing context. If you are not familiar with the canvas APIs, I recommend that you [start here](https://developer.mozilla.org/en-US/docs/HTML/Canvas).
 
 _Why two different methods?_
 
@@ -56,4 +59,3 @@ Keeping the `update` and `draw` functions separate is important. If each frame b
 
 Right now `update` and `draw` are always called for each iteration of the loop, so the distinction is academic in this context. We could though calculate our frame rate in `loop` and occasionally skip invoking `draw` if the rate slowed down.
 
-You'll also see that I grab a canvas element and capture its drawing context.

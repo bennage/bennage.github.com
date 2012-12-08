@@ -17,10 +17,10 @@ Really, we have too many great speakers to list. The spectrum ranges from [Scott
 
 Check out the [full list of speakers](http://lanyrd.com/2013/pnp-symposium/speakers/).
 
-The event is in **Remond, WA** on Microsoft's campus. The dates are **Janauary 15 - 17**.
+The event is in **Redmond, WA** on Microsoft's campus. The dates are **Janauary 15 - 17**.
 
 Regsistration is **$498**.
 
-You can [read all the detaisl](http://aka.ms/symposium) or you can jump straight to [the registration](http://www.regonline.com/Register/Checkin.aspx?EventID=1150970).
+You can [read all the details](http://aka.ms/symposium) or you can jump straight to [the registration](http://www.regonline.com/Register/Checkin.aspx?EventID=1150970).
 
 I look forward to seeing you there!
