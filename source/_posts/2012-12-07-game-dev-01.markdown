@@ -1,0 +1,59 @@
+---
+layout: post
+title: "Building a Game with JavaScript"
+date: 2012-12-07 17:32
+comments: true
+categories: [game development, JavaScript, HTML]
+---
+
+_See the [introduction post](/blog/2012/12/07/a-n00bs-look-at-html5-game-development/) for context._
+
+## The Loop
+
+In general, game development begins with the game loop. If you come from the business world of software development, this will be strange. You don't rely on events. [Phil Haack](http://haacked.com/) once asked me "why a loop?", to which I responded "uh...". 
+
+So if our runtime is the browser, how do setup the game loop? There's a relatively new API called [`requestAnimationFrame`](http://www.w3.org/TR/animation-timing/) and that's what most folks recommend. Check out these for details:
+
+* [Paul Irish](http://paulirish.com/2011/requestanimationframe-for-smart-animating/)
+* [The IE Team](http://ie.microsoft.com/testdrive/Graphics/RequestAnimationFrame/Default.html)
+
+(I do recall reading something negative along the way about the API, but I can't find it again.)
+
+
+### Implementation
+
+I used the `requestAnimationFrame` [the shim](https://gist.github.com/1579671) referenced in the Paul Irish post above. The shim is only necessary for older browsers that have not implemented the API already. We refer to each iteration of the loop as a "frame" because of the analogy with traditional animation.
+
+Here is my game's bootstrap code (well, an early vesrion of it):
+
+<script src="https://gist.github.com/4238210.js?file=boostrap.js"></script>
+
+The heart of this the `loop` function. It has the following step:
+
+* capture the current time
+* calculate the time that has elasped since the last frame
+* execute the game's logic for the frame (that's the update and draw invocations)
+* request the next invocation of `loop` using `requestAnimationFrame`
+* record the current time of the this frame for calculations in the next one
+
+(This code doesn't use `frameId` yet. The idea is that this handle could be used to halt the loop.)
+
+The `beginLoop` function is there merely to provide a closure for some of the variables used to track the state of the loop. It kicks off the loop with its initial invocation of `loop`.
+
+The big mystery inside of `loop` is the `currentScreen` object. Here I was thinking ahead (which can be dangerous). I know that my game will have at least two "screens", possibly more.
+
+* start menu screen
+* main game screen
+
+I wanted the loop logic to work with both (as well as any future screens). I expect screen objects to have two methods:
+
+* `update` takes the time elapsed since the last frame and is responsible for updating the state of the game.
+* `draw` take the drawing context and is responsible for rendering the current state of the game.
+
+_Why two different methods?_
+
+Keeping the `update` and `draw` functions separate is important. If each frame becomes expensive to compute, then you will end up dropping frames. However, it's very likely that you _won't_ want to drop calls to `update`. It's not necessary a big deal if you skip rendering a couple of frames, however if skip calculating the location of a projectile it might mysteriously "pass through" its target. This will become more relevant to us in particular, becaues I'd like to all the player to control the speed of game (a common feature of many tower defense games).
+
+Right now `update` and `draw` are always called for each iteration of the loop, so the distinction is academic in this context. We could though calculate our frame rate in `loop` and occasionally skip invoking `draw` if the rate slowed down.
+
+You'll also see that I grab a canvas element and capture its drawing context.

@@ -42,3 +42,5 @@ Graphics will be sprite-based. The game should be touch-friendly (really, I want
 * [Build New Games](http://buildnewgames.com/), a collaboration between Microsoft and [Bocoup](http://bocoup.com/), is an excellent set of articles on HTML/JavaScript game development.
 
 * My friend, [Matt Peterson](http://mattmadegames.com/), currently a graduate student at [DigiPen](https://www.digipen.edu/), who's advice and guidance has been most useful.
+
+[next »](/blog/2012/12/07/game-dev-01/)
