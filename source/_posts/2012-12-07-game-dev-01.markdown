@@ -1,6 +1,5 @@
 ---
 layout: post
-published: false
 title: "Building a Game with JavaScript"
 date: 2012-12-07 17:32
 comments: true
@@ -11,21 +10,20 @@ _See the [introduction post](/blog/2012/12/07/a-n00bs-look-at-html5-game-develop
 
 ## The Loop
 
-In general, game development begins with the game loop. If you come from the business world of software development, this will be strange. You don't rely on events. [Phil Haack](http://haacked.com/) once asked me "why a loop?", to which I responded "uh...". 
+In general, game development begins with the game loop. If you come from the business world of software development, this will be strange. You don't rely on events. [Phil Haack](http://haacked.com/) once asked me "why a loop?", to which I responded "uh...". However, a much better answer would have been [this one on stackoverflow](http://stackoverflow.com/questions/2565677/why-is-a-main-game-loop-is-necessary-for-developing-a-game).
 
-So if our runtime is the browser, how do setup the game loop? There's a relatively new API called [`requestAnimationFrame`](http://www.w3.org/TR/animation-timing/) and that's what most folks recommend. Check out these for details:
+Okay, so we should use a master loop. If our runtime is the browser, how do setup this loop? There's a relatively new API called [`requestAnimationFrame`](http://www.w3.org/TR/animation-timing/) and that's what most folks recommend. Check out these for details:
 
 * [Paul Irish](http://paulirish.com/2011/requestanimationframe-for-smart-animating/)
 * [The IE Team](http://ie.microsoft.com/testdrive/Graphics/RequestAnimationFrame/Default.html)
 
-(I do recall reading something negative along the way about the API, but I can't find it again.)
+(I do recall reading something negative along the way about the API, but I couldn't find it again.)
 
+I used the `requestAnimationFrame` [shim](https://gist.github.com/1579671) referenced in the Paul Irish post above. The shim is only necessary for older browsers that have not implemented the API. _By the way, we refer to each iteration of the loop as a "frame" because of the analogy with traditional animation._
 
 ### Implementation
 
-I used the `requestAnimationFrame` [the shim](https://gist.github.com/1579671) referenced in the Paul Irish post above. The shim is only necessary for older browsers that have not implemented the API already. We refer to each iteration of the loop as a "frame" because of the analogy with traditional animation.
-
-Here is my game's bootstrap code (well, an early vesrion of it):
+Now that we've ensured that `requestAnimationFrame` is present we can get to our game loop. Here is my game's bootstrap code (well, an early version of it):
 
 <script src="https://gist.github.com/4238210.js?file=boostrap.js"></script>
 
@@ -37,14 +35,14 @@ The heart of this the `loop` function. It has the following step:
 * request the next invocation of `loop` using `requestAnimationFrame`
 * record the current time of the this frame for calculations in the next one
 
-(This code doesn't use `frameId` yet. The idea is that this handle could be used to halt the loop.)
+_N.B. This code doesn't use `frameId` yet. The idea is that this handle could be used to halt the loop._
 
 The `beginLoop` function is there merely to provide a closure for some of the variables used to track the state of the loop. It kicks off the loop with its initial invocation of `loop`.
 
-The big mystery inside of `loop` is the `currentScreen` object. Here I was thinking ahead (which can be dangerous). I know that my game will have at least two "screens", possibly more.
+The big mystery inside of `loop` is the `currentScreen` object. Here I was thinking ahead (which can be dangerous). I know that my game will have at least two "screens", possibly more:
 
 * start menu screen
-* main game screen
+* main game screen (where the action takes place)
 
 I wanted the loop logic to work with both (as well as any future screens). I expect screen objects to have two methods:
 
@@ -53,9 +51,10 @@ I wanted the loop logic to work with both (as well as any future screens). I exp
 
 You'll also see that I grab a canvas element and capture its drawing context. If you are not familiar with the canvas APIs, I recommend that you [start here](https://developer.mozilla.org/en-US/docs/HTML/Canvas).
 
-_Why two different methods?_
+_Why two different methods for game logic?_
 
-Keeping the `update` and `draw` functions separate is important. If each frame becomes expensive to compute, then you will end up dropping frames. However, it's very likely that you _won't_ want to drop calls to `update`. It's not necessary a big deal if you skip rendering a couple of frames, however if skip calculating the location of a projectile it might mysteriously "pass through" its target. This will become more relevant to us in particular, becaues I'd like to all the player to control the speed of game (a common feature of many tower defense games).
+Keeping the `update` and `draw` functions separate is important. When frames becomes expensive to compute, the game may respond with lag or non-deterministic behavior. Too avoid this, you might want your game to skip over some logic during a particular iteration of the loop. However, it's very likely that you _won't_ want to drop calls to `update`. It's not necessary a big deal if you skip _rendering_ a couple of frames, however if skip calculating the location of a projectile then it might mysteriously "pass through" its target. This will become more relevant to us in particular, because I'd like to all the player to control the speed of game (a common feature of many tower defense games).
 
 Right now `update` and `draw` are always called for each iteration of the loop, so the distinction is academic in this context. We could though calculate our frame rate in `loop` and occasionally skip invoking `draw` if the rate slowed down.
 
+Now we have enough in place to begin working on our start menu screen.
