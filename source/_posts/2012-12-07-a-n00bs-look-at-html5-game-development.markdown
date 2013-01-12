@@ -43,4 +43,7 @@ Graphics will be sprite-based. The game should be touch-friendly (really, I want
 
 * My friend, [Matt Peterson](http://mattmadegames.com/), currently a graduate student at [DigiPen](https://www.digipen.edu/), who's advice and guidance has been most useful.
 
-[next »](/blog/2012/12/07/game-dev-01/)
+## Table of Contents
+
+1. [Game Loop](/blog/2012/12/07/game-dev-01/)
+2. [Start Screen](/blog/2013/01/11/game-dev-02/)

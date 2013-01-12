@@ -58,3 +58,5 @@ Keeping the `update` and `draw` functions separate is important. When frames bec
 Right now `update` and `draw` are always called for each iteration of the loop, so the distinction is academic in this context. We could though calculate our frame rate in `loop` and occasionally skip invoking `draw` if the rate slowed down.
 
 Now we have enough in place to begin working on our start menu screen.
+
+[next »](/blog/2013/01/11/game-dev-02/)

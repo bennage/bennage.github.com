@@ -1,0 +1,144 @@
+---
+layout: post
+title: "Building a Game with JavaScript: Start Screen"
+date: 2013-01-11 17:05
+comments: true
+categories: [game development, JavaScript, HTML]
+---
+
+This is a continuation from the [previous post](/blog/2012/12/07/game-dev-01/).
+
+## Specification
+
+Many games have a start screen or main menu of some sort. (Though I love games like [Braid](http://www.braid-game.com/) that bypass the whole notion.) Let's begin by designing our start screen.
+
+{% img right /images/posts/game-dev-startscreen-01.png [our simple start screen]%}
+
+We'll have a solid color background. Perhaps the ever lovely cornflower blue. Then we'll draw the name of our game and provide an instruction to the player. In order to make sure we have the player's attention, we'll animate the color of the instruction. It will morph from black to red and back again.
+
+Finally, when the player clicks the screen we'll transition to the main game. Or at least we'll stub out the transition.
+
+Here's a [demo](http://jsfiddle.net/bennage/HqYeD/2/) based on the code we'll cover later in this post (as well as that from the previous post.)
+
+## Implementation
+
+Here's the code to implement our start screen.
+
+<script src="https://gist.github.com/4371311.js"></script>
+
+## Explanation
+
+Recall that our start screen is meant to be invoked by our game loop. The game loop doesn't know about the specifics of the start screen, but it does expect it to have a _certain shape_. This enables us to swap out screen objects without having to modify the game loop itself. The shape that the game loop expects is this:
+
+	{
+		update: function(timeElapsedSinceLastFrame) { },
+		draw: function(drawingContext) { }
+	}
+
+### Update
+
+Let's begin with the start screen's `update` function. The first bit of logic is this:
+
+    hue += 1 * direction;
+    if (hue > 255) direction = -1;
+    if (hue < 0) direction = 1;
+
+Perhaps `hue` is not the best choice of variable names. It represents the red component for an [RGB color](http://en.wikipedia.org/wiki/RGB_color_model) value. The range of values for this component is `0` (no red) to `255` (all the reds!). On each iteration of our loop we "move" the hue towards either the red or black. 
+
+The variable `direction` can be either `1` or `-1`. A value of `1` means we are moving towards `255` and a value of `-1` means we are moving towards `0`. When we cross a boundary, we flip the direction.
+
+Keen observers will ask why we bother with `1 * direction`. In our current logic, it's an unnecessary step and unnecessary steps in game development are generally bad. In this case, I wanted to separate the rate of change from the direction. In order words, you could modify that expression to `2 * direction` and the color would change twice as fast.
+
+This leads us to another important point. Our rate of change is tied to how quickly our loop iterates; most likely 60fps. However, it's not guaranteed to be 60fps and that makes this approach a dangerous practice. Once way to detach ourselves from the loop's speed would be to use the elapsed time that is being passed into our `update` function. 
+
+Let's say that we want to it to take 2 full seconds to go from red to black regardless of how often the `update` function is called. There's a span of 256 discrete values between red and black. To make our calculations clear, let's say there are 256 units and we'll label these units **R**. Also, the elapsed time will be in milliseconds (ms). For a given frame, if were are given a slice of elapsed time in ms, we'll want to calculate how many **R** units to increase (or decrease) `hue` by for that slice. Our rate of change can be defined as `256 **R** / 2000 **ms**` or 0.128 **R/ms**. (You can read that as "0.128 units of red per millisecond".) This rate of change is a constant for our start screen and as such we can define it once (as opposed to calculating it inside the `update` function).
+
+Now that we have the rate of change , we only need to multiply it by the elapsed time received in `update` to determine how many **R**s we want. A revised version of the function would look like this:
+
+	var rate = 0.128; // R/ms
+
+	function update(elapsed) {
+		var amount = rate * elapsed;
+	    hue += amount * direction;
+	    if (hue > 255) direction = -1;
+	    if (hue < 0) direction = 1;
+	}
+
+One consequence of this change is that hue will no longer be integral values (as much as that can be said in JavaScript.) This means that we'd really want to have two values for the hue: an actual value and a rounded value. This is because the RBG model requires an integral value for each color component.
+
+	function update(elapsed) {
+		var amount = rate * elapsed;
+	    hue += amount * direction;
+	    if (hue > 255) direction = -1;
+	    if (hue < 0) direction = 1;
+
+	    rounded_hue = Math.round(hue);
+	}
+
+### Draw
+
+Let's turn our attention to `draw` for a moment. One of the first things you _generally_ do is to clear the entire screen. This is simple to do with the canvas API's `clearRect` method.
+
+	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+Notice that `ctx` is an instance of [CanvasRenderingContext2D](http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#canvasrenderingcontext2d) and not a [HTMLCanvasElement](http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#the-canvas-element). However, there is a handy back reference to the canvas element that we use to grab the actual width and height.
+
+There are other options other than clearing the entire canvas, but I'm not going to address this in this post. Also, there are some performance considerations. See the article listed under references.
+
+After clearing the screen, we want to draw something new. In this case, the game title and the instructions. In both cases I want to center the text horizontally. I created a helper function that I can provide with the text to render as well as the vertical position (y).
+
+	function centerText(ctx, text, y) {
+		var measurement = ctx.measureText(text);
+		var x = (ctx.canvas.width - measurement.width) / 2;
+		ctx.fillText(text, x, y);
+	}
+
+`measureText` returns the width in pixels that the rendered text will take up. We use this in combination with the canvas element's width to determine the x position for the text. `fillText` is responsible for actually drawing the text.
+
+The rendering context `ctx` is stateful. Meaning that, what happens when you call methods like `measureText` or `fillText` depends on the state of the rendering context. The state can be modified by setting its properties.
+
+	var y = ctx.canvas.height / 2;
+	ctx.fillStyle = 'white';
+	ctx.font = '48px monospace';
+	centerText(ctx, 'My Awesome Game', y);
+
+The properties `fillStyle` and `font` change the state of the rendering context and hence affect the methods calls inside of `centerText`. This state applies to all future methods calls. This means that all calls to `fillText` will use the color white until you can the `fillStyle`.
+
+Notice too that we are calculating the x and y values for the text on every frame. This is potentially wasteful since these values are unlikely to change. However, if we want to respond to changes in canvas size (or even changes to the text itself) then we'd want to continue calculating these on every frame. Otherwise, if we were confident that we didn't need to do this, we could calculate these values once and cache them.
+
+Now let's use the red component calculated in `update` to render the instructional text.        
+
+	var color = 'rgb(' + hue + ',0,0)';
+
+	ctx.fillStyle = color;
+	ctx.font = '24px monospace';
+	centerText(ctx, 'click to begin', y + 30);
+
+`fillStyle` can be set in a number of ways. Earlier, we used the simple value `white`. Here were are using `rgb()` to set the individual components explicitly. Any [CSS color](https://developer.mozilla.org/en-US/docs/CSS/color) _should_ work with `fillStyle`.  (I won't be too surprised if some don't though.)
+
+Now you might be wondering why we bothered calculating `hue` inside `update` since `hue` is all about what to draw on the screen. The reason is that `draw` is concerned with the _mechanics_ of rendering. Anything that is modeling the game state should live in `update`. The tell in this example is that `hue` is dependent on elapsed time and the `draw` doesn't know anything about that.
+
+### Update (again)
+
+Moving back to `update`, the next bit deals with input from the player. In the sample code I've extracted the input logic away. The key thing here is that we are not relying on events to tell us about input from the player. Instead we have some helper, `input` in this case, that gives us the current state of the input. If event-driven logic says "tell me when this happens" then our game logic says "tell me if this is happening now". The primary reason for this is to be deterministic. We can establish at the beginning of our `update` what the current input state is and that it won't change before the next invocation of the function. In simple games this might be inconsequential, but in others it can be a subtle source of bugs.
+
+	var isButtonDown = input.isButtonDown();
+
+	var mouseJustClicked = !isButtonDown && wasButtonDown;
+
+	if (mouseJustClicked && !transitioning) {
+	    transitioning = true;
+	    // do something here to transition to the actual game
+	}
+
+	wasButtonDown = isButtonDown;
+
+We only want transition when the mouse button has been released. In this case, "released" is defined as "down on the last frame but up on this one". Hence, we need to track what the mouse button's state was on the _last_ frame. That's `wasButtonDown` and it lives outside of `update`.
+
+Secondly, we don't want to trigger multiple transitions. That is, if our transition takes some time (perhaps due to animation) then we want to ignore subsequent clicks. We have our `transitioning` variable outside of `update` to track that for us.
+
+More to come...
+
+## Reference
+
+ * [Canvas Performace](http://www.html5rocks.com/en/tutorials/canvas/performance/)
