@@ -1,0 +1,66 @@
+---
+layout: post
+title: "Building a Game with JavaScript: #3"
+date: 2013-02-27 16:50
+comments: true
+categories: [game development, JavaScript, HTML]
+---
+
+This is a continuation from the [previous post](http://dev.bennage.com/blog/2013/01/11/game-dev-02/).
+
+## Breathing Life
+
+My vision for the game is to have waves of enemy ships fly in and attack the player's units. Let's begin by making a simple enemy as well as some dummy targets for them to attack. I'm going to keep the graphics very simple for the moment. Likewise we are going to focus on the enemy behavior and not worry about any player interaction just yet.
+
+Let's start from the top down. Our enemy units will "live" in our main screen for the game. It needs to expose the same interface that we had for the start screen we made in the last post. We'll also add a `start` method that we'll use to initialize the level.
+
+
+	function makeGameScreen() {
+	    var entities = [];
+	    var numOfEnemyShips = 12;
+
+	    function start() {
+
+	        for (var i = 0; i <= numOfEnemyShips; i++) {
+	            entities.push(makeEnemyShip(i * 10, i));
+	        }
+	    }
+
+	    function draw(ctx) {
+	        ctx.fillStyle = 'black';
+	        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+	        var entityIndex = entities.length - 1;
+	        for (; entityIndex != 0; entityIndex--) {
+	            entities[entityIndex].draw(ctx);
+	        }
+	    }
+
+	    function update(elapsed) {
+	        var entityIndex = entities.length - 1;
+	        for (; entityIndex != 0; entityIndex--) {
+	            entities[entityIndex].update(elapsed);
+	        }
+	    }
+
+	    return {
+	        draw: draw,
+	        update: update,
+	        start: start
+	    };
+	}
+
+
+The `entities` array will contain a list of the enemies we're tracking. I used the name "entity" because this is a common term in game development. In general, it means something that has behavior and is drawn to the screen. Thus, you can expect entities to have `update` and `draw` methods. This is not a hard and fast definition though, you'll find that the specifics of the definition can vary among engines, frameworks, and developers.
+
+In our `start` we populate this array by invoking our (as yet undefined) `makeEnemyShip` function. I'm passing in two numbers that `makeEnemyShip` will use to set the x and y position of the entity. I could have used random numbers or even hard coded values, however deriving from the loop's controls will cluster all the entities in the upper left corner of the screen.
+
+The `draw` and `update` functions are very similar. They both iterate over `entities` and invoke the corresponding function on each entity. They also pass along the necessary context. For `draw`, this is the 2D drawing context of the canvas and for `update` it's the elapsed time since the last frame.
+
+Notice how the loop is structured differently from the loop in `start`. This is a performance optimization, though it has little consequence with some small an array. On some browsers, the call to `length` is a bit expensive. This adds up when you make the call once per iteration of the loop. We move it out of the loop so that we only call it once. Check out [this test](http://jsperf.com/loop-iteration-length-comparison-variations). Performance optimizations are tricky and change every time new browsers are released. I hope to talk more about them later, but if you want more check out the book [High Performance JavaScript](http://www.amazon.com/Performance-JavaScript-Faster-Application-Interfaces/dp/059680279X) by [ Nicholas C. Zakas](http://www.nczonline.net/).
+
+_I had originally written my loops using the newer [Array.forEach](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach). However, this proved to be **significantly** slower than a `for` loop._
+
+The `draw` method also resets the canvas at the beginning of each iteration. If we did not do this, then every thing we drew on previous frames would still be present. For the start screen, I used `clearRect` however here I used `fillRect` with a solid color.
+
+Here's a function that will produce a simple enemy. It follows the same structure we've been using, `update` to handle the behavior and `draw` to actually draw it on the screen.
