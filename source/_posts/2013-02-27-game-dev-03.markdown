@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Building a Game with JavaScript: #3"
+title: "Building a Game with JavaScript: Making Things Move"
 date: 2013-02-27 16:50
 comments: true
 categories: [game development, JavaScript, HTML]
@@ -8,59 +8,74 @@ categories: [game development, JavaScript, HTML]
 
 This is a continuation from the [previous post](http://dev.bennage.com/blog/2013/01/11/game-dev-02/).
 
-## Breathing Life
+## Setting The Stage
 
-My vision for the game is to have waves of enemy ships fly in and attack the player's units. Let's begin by making a simple enemy as well as some dummy targets for them to attack. I'm going to keep the graphics very simple for the moment. Likewise we are going to focus on the enemy behavior and not worry about any player interaction just yet.
+The game we're building will have waves of enemy ships fly in to attack the player's units. Let's begin by making a simple enemy as well as some dummy targets for them to attack. I'm going to keep the graphics very simple for the moment. Likewise we are going to focus on the enemy behavior and not worry about any player interaction just yet.
 
-Let's start from the top down. Our enemy units will "live" in our main screen for the game. It needs to expose the same interface that we had for the start screen we made in the last post. We'll also add a `start` method that we'll use to initialize the level.
+{% img right /images/posts/game-dev-move-01.png [little, yellow, different]%}
 
+Here's a [demo](http://jsfiddle.net/bennage/HqYeD/17/) of what we'll make. Click on the start screen to transition into the game. The little yellow rectangles are our enemy ships. Each one projects its own target as a little red circle. Once it touches its target, it projects a new one and then flies toward it.
 
-	function makeGameScreen() {
-	    var entities = [];
-	    var numOfEnemyShips = 12;
+Let's start from the top down. Our enemy units will "live" in our main screen for the game. (At least for the time being.) This screen needs to expose the same interface that we had for the start screen we made in the last post. We'll also add a `start` method that we'll call just once in order to initialize things.
 
-	    function start() {
+### Implementation
 
-	        for (var i = 0; i <= numOfEnemyShips; i++) {
-	            entities.push(makeEnemyShip(i * 10, i));
-	        }
-	    }
+Here's the implementation:
 
-	    function draw(ctx) {
-	        ctx.fillStyle = 'black';
-	        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+<script src="https://gist.github.com/5078744.js"></script>
 
-	        var entityIndex = entities.length - 1;
-	        for (; entityIndex != 0; entityIndex--) {
-	            entities[entityIndex].draw(ctx);
-	        }
-	    }
+### Explanation
 
-	    function update(elapsed) {
-	        var entityIndex = entities.length - 1;
-	        for (; entityIndex != 0; entityIndex--) {
-	            entities[entityIndex].update(elapsed);
-	        }
-	    }
+The `entities` array will contain a list of the enemies we're tracking. I used the name "entity" because this is a common term in game development. In general, it means something that has behavior and is drawn to the screen. Thus, you can expect entities to have `update` and `draw` methods. This is not a hard and fast definition though. You'll find that the specifics of the definition can vary among engines, frameworks, and developers.
 
-	    return {
-	        draw: draw,
-	        update: update,
-	        start: start
-	    };
-	}
+In our `start` function we populate `entities` by invoking our (as yet undefined) `makeEnemyShip` function. I'm passing in two numbers that `makeEnemyShip` will use to set the x and y position of the ship. I could have used random numbers or even hard coded values, however deriving from the loop's controls makes it easy to cluster all the ships in the upper left corner of the screen.
 
+The `draw` and `update` functions for the screen are very similar. They both iterate over `entities` and invoke the corresponding function on each entity. They also pass along the necessary context. For `draw`, this is the 2D drawing context of the canvas and for `update` it's the elapsed time since the last frame.
 
-The `entities` array will contain a list of the enemies we're tracking. I used the name "entity" because this is a common term in game development. In general, it means something that has behavior and is drawn to the screen. Thus, you can expect entities to have `update` and `draw` methods. This is not a hard and fast definition though, you'll find that the specifics of the definition can vary among engines, frameworks, and developers.
+Notice how the loop is structured differently from the loop in `start`. This is a performance optimization; though it has little consequence with so small an array. On some browsers, the call to `length` is a bit expensive. (Especially in cases when the array isn't an array, but something that is [array-like](http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177).) This adds up when you make the call once per iteration of the loop. We move it out of the loop so that we only call it once. Check out [this test](http://jsperf.com/loop-iteration-length-comparison-variations). Performance optimizations are tricky and change every time new browsers are released. It's easy to get confused, and I recommend profiling your code frequently to look for hot spots rather than just guessing about optimizations. I hope to talk more about them later, but if you want more now check out the book [High Performance JavaScript](http://www.amazon.com/Performance-JavaScript-Faster-Application-Interfaces/dp/059680279X) by [ Nicholas C. Zakas](http://www.nczonline.net/).
 
-In our `start` we populate this array by invoking our (as yet undefined) `makeEnemyShip` function. I'm passing in two numbers that `makeEnemyShip` will use to set the x and y position of the entity. I could have used random numbers or even hard coded values, however deriving from the loop's controls will cluster all the entities in the upper left corner of the screen.
+_I had originally written my loops using the newer [Array.forEach](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach) to iterate over `entities`. However, this proved to be **significantly** slower than a `for` loop._
 
-The `draw` and `update` functions are very similar. They both iterate over `entities` and invoke the corresponding function on each entity. They also pass along the necessary context. For `draw`, this is the 2D drawing context of the canvas and for `update` it's the elapsed time since the last frame.
-
-Notice how the loop is structured differently from the loop in `start`. This is a performance optimization, though it has little consequence with some small an array. On some browsers, the call to `length` is a bit expensive. This adds up when you make the call once per iteration of the loop. We move it out of the loop so that we only call it once. Check out [this test](http://jsperf.com/loop-iteration-length-comparison-variations). Performance optimizations are tricky and change every time new browsers are released. I hope to talk more about them later, but if you want more check out the book [High Performance JavaScript](http://www.amazon.com/Performance-JavaScript-Faster-Application-Interfaces/dp/059680279X) by [ Nicholas C. Zakas](http://www.nczonline.net/).
-
-_I had originally written my loops using the newer [Array.forEach](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach). However, this proved to be **significantly** slower than a `for` loop._
-
-The `draw` method also resets the canvas at the beginning of each iteration. If we did not do this, then every thing we drew on previous frames would still be present. For the start screen, I used `clearRect` however here I used `fillRect` with a solid color.
+The screen's `draw` method also resets the canvas at the beginning of each iteration. If we did not do this, then every thing we drew on previous frames would still be present. For the start screen, I used `clearRect` however here I used `fillRect` with a solid color.
 
 Here's a function that will produce a simple enemy. It follows the same structure we've been using, `update` to handle the behavior and `draw` to actually draw it on the screen.
+
+## Some Bad Guys
+
+Our enemy ships are a little more complicated than the screen they live on. Visually, they _appear_ to have two components. The little yellow rectangle that moves about the screen and the phantom target that they project as a little red circle. In the final game, they will target one of the player's units. However, the logic is very similar. In fact, it may become useful in debugging to how each enemy ship render something over it's actual target.
+
+### Implementation
+
+<script src="https://gist.github.com/001d95610645a264ac09.js"></script>
+
+### Explanation
+
+Each enemy ship will be responsible for tracking its own state. In this code, the state is captured in a closure. In later code, we'll track the track in a more traditional way. (I haven't ran tests yet but I think that using a closure may have a performance impact.)
+
+All of these variables represent the enemy ship's state.
+
+	var position = { x: 0, y: 0 };
+	var orientation = 0;
+	var turnSpeed = fullCircle / 50;
+	var speed = 2;
+	var target = findNewTarget();  
+
+`position` is the location on the screen where we will render our ship. Technically, the is the position in "world space". World space is the logical space that entities in your game "live in". This is distinct from "screen space", which corresponds to the actual pixels on the screens. You can think of it this way: in your game you might have a circle with a radius of 10 and located at (100,100). However, how you draw it on the screen will depend upon where the player is viewing it from. If the player zooms in, the circle will grow larger but this doesn't change the position or radius of the circle. We used the term "projection" to describe this. We project from world space into screen space. The simplest project of course is just 1:1. Which means that there is no difference between world space and screen space. That's what will stick with for the moment.
+
+`orientation` is the direction the ship is currently facing. Our ship will always travel in the direction of its orientation. This makes the ship travel in smooth arcs as opposed to abruptly changing its course.
+
+`turnSpeed` and `speed` are represent how quickly the ship can turn and how fast it can travel respectively. We won't be modifying these values in the current code, which means we'll turn and travel at constant rates. We defined `turnSpeed` in terms of `fullCircle`. This is an alias for `Math.PI * 2`. This is because we are dealing in [radians](http://en.wikipedia.org/wiki/Radian) and not degrees. These values represent the rates of change for `orientation` and `position`.
+
+`target` is a value with the shape `{ x: Number, y: Number }`. The ship will always attempt to move towards this value by adjusting its `orientation`.
+
+`update` is the real meat of the enemy ship. First, we check to see if we are close to our target. If we are close enough, we consider our goal reached and we set a new target. Otherwise, we change our `orientation` so that we are flying toward our current target.
+
+	var y = target.y - position.y;
+	var x = target.x - position.x;
+	var d2 = Math.pow(x, 2) + Math.pow(y, 2);
+
+{% img right /images/posts/game-dev-move-02.png [calculating the distance]%}
+
+Here, `x` and `y` are really the distance between `target` and `position` along the respective axises. We want to know these values in order to calculate the disn...
+
+In general, you use the [Pythagorean theorum](http://en.wikipedia.org/wiki/Pythagorean_theorem) to calculate distance. However, finding the actual real distance involve calculating a square root. That's an expensive operation that's best to avoid whenever you can. 
