@@ -90,7 +90,7 @@ We can bypass the need by working with the distance&sup2; (hence the variable na
 
 Once we've established what the ship's target should be, we want the ship to move toward the target. As I've just mentioned, I've chosen to have the ship move at a constant speed. This means that it does not slow down or speed up. The only thing it can do is to change the direction it's facing (`orientation`). These sort of constraints determine the personality and character of your game. Bear in mind, you don't need to simulate the physics to have a fun game. Instead, you need to establish behaviors for your game entities that are merely fun. Fortunately, fun behaviors can often be easier to implement that the actual physics. I recommend taking a look at [the demo](http://jsfiddle.net/bennage/HqYeD/18/) and tweaking the `turnSpeed` and `speed` values to get a small taste for how the behavior can affect the game's character.
 
-{% img right /images/posts/game-dev-move-02.png [what's the delta between the angles?]%}
+{% img right /images/posts/game-dev-move-03.png [what's the delta between the angles?]%}
 
 In order to change the ship's orientation we need to first determine where the ship _ought_ to be facing. The values of `x` and `y` we just calculated can be interpreted as a [vector](http://en.wikipedia.org/wiki/Euclidean_vector). Meaning, it represents the direction and distance (magnitude) from the ship to the current target. To extract the actual angle (in radian) we use `Math.atan2(x,y)`.
 
@@ -99,7 +99,7 @@ In order to change the ship's orientation we need to first determine where the s
 
 So now we have the direction the ship _wants_ to face, `angle`, and the direction that it _is_ facing, `orientation`. We calculate the difference between them and store it as `delta`.
 
-{% img right /images/posts/game-dev-move-02.png [turning the wrong way]%}
+{% img right /images/posts/game-dev-move-04.png [turning the wrong way]%}
 
 
 The basic idea is that add the value of `turnSpeed` to `orientation` once each invocation of `udpate` until `delta` is 0 (meaning that the ship is flying directly at the target). However, some values of `delta` will cause the ship to "turn the wrong way". For example, imagine that the ship is facing the top of the screen and that we've defined that as `orientation === 0`. Now, imagine that the target is directly to its right. The value of `angle` would be &pi;/2 (or 90&deg;). Adding `turnSpeed` to `orientation` each frame increments the value from 0 to &pi;/2. However, if the target is directly to the left, then the value of `angle` would be 3&pi;/2 (or 270&deg;). Simply incrementing `orientation` would cause the ship to turn right and keep turning right. This is unintuitive behavior; we expect the ship to turn the shorted distance. In order to accomplish this, we translate any value of `delta` higher than &pi; (180&deg;) by subtracting `fullCircle`. This normalizes the value of `delta` between -&pi; and &pi; (or between -180&deg; and 180&deg;).
@@ -168,4 +168,4 @@ I decided that I want my ship to be 6px long and 2px wide. Since I want the midd
 
 After we restore the context's state, we draw the target. We don't bother using `rotate` because it's meaningless to rotate a simple circle. Likewise, we don't bother `translate` since the drawing logic is so simple.
 
-_The canvas is a broad topic in itself. I recommend taking a look at the tutorials over at [MDN](https://developer.mozilla.org/en-US/docs/HTML/Canvas). A handy reference for the APIs themselves can be found on [MSDN](http://msdn.microsoft.com/en-us/library/ff975057(v=vs.85).aspx)._
+_The canvas is a broad topic in itself. I recommend taking a look at the tutorials over at [MDN](https://developer.mozilla.org/en-US/docs/HTML/Canvas). A handy reference for the APIs themselves can be found on [MSDN](http://msdn.microsoft.com/en-us/library/ff975057)._
