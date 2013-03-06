@@ -137,7 +137,7 @@ We only want transition when the mouse button has been released. In this case, "
 
 Secondly, we don't want to trigger multiple transitions. That is, if our transition takes some time (perhaps due to animation) then we want to ignore subsequent clicks. We have our `transitioning` variable outside of `update` to track that for us.
 
-More to come...
+[next »](/blog/2013/03/05/game-dev-03/)
 
 ## Reference
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Building a Game with JavaScript: Making Things Move"
-date: 2013-02-27 16:50
+date: 2013-03-05 21:12
 comments: true
 categories: [game development, JavaScript, HTML]
 ---
