@@ -47,3 +47,5 @@ Graphics will be sprite-based. The game should be touch-friendly (really, I want
 
 1. [Game Loop](/blog/2012/12/07/game-dev-01/)
 2. [Start Screen](/blog/2013/01/11/game-dev-02/)
+3. [Making Things Move](/blog/2013/03/05/game-dev-03)
+4. ...
