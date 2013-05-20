@@ -1,0 +1,49 @@
+---
+layout: post
+title: "Couple of JavaScript Questions"
+date: 2013-05-20 14:52
+comments: true
+categories: [JavaScript]
+---
+
+A [friend](https://twitter.com/juliandominguez) was reviewing the [last post](/blog/2013/03/05/game-dev-03/) and he asked two questions about this JavaScript snippet:
+
+	var entityIndex = entities.length - 1;
+	for (; entityIndex != 0; entityIndex--) {
+		entities[entityIndex].draw(ctx);
+	}
+
+* Why am I initializing `entityIndex` outside the loop?
+* Why do I compare `entityIndex` to 0?
+
+## Initializing Outside
+
+The answer to the first question is really just personal readability (well, perhaps a _small_ touch of "this will make people pause and think"). 
+
+Let's dig into the construct a bit though.The declaration of `for` loop consists of three expressions. (I'm not talking about `for(in)` here.) 
+
+The first expression is an initializer; it is executed just once. It is usually something like `var i = 0`. This expression is still subject to [hoisting](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Statements/var#var_hoisting).
+
+The second expression is a conditional. It's executed _at least_ once. 
+
+The third expresion modifies the state and is executed once each time the condition is true. (No big surprises here.)
+
+In the case above, I instinctly felt there was too much going on one line, so I moved the first expression outside of the `for`. This does really have any impact on the way the code is executed and (since the variable is hoisted) is actually a bit closer to what the interpreter is really doing.
+
+## Comparing to Zero
+
+I choose to use `entityIndex != 0` not because I wanted to compare to zero, but because I wanted to avoid the cost of evaluating `entities.length` repeatedly. Since the second expression is evaluated over and over, we don't want to do anything expensive there. If our `entities` had lots of members, then calculating `length` could have a significant impact.
+
+There is some question about the relative performance of `> 0` vs `!= 0`, however the [test results](http://jsperf.com/greater-than-zero-vs-not-zero/2) for that seem to indicate that it is not consequential.
+
+## Closing Thoughts
+
+* It's easy to obsess about optmizations, but it's important to understand than many micro-optimizations are browser-specific. So test, test, test before you waste time on it.
+* I made the one change because it was more readable _to me_. It might not be so to you. If so, don't do it. 
+
+## References
+
+* [Ecma 262 Standard](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf)
+* [var hoisting](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Statements/var#var_hoisting)
+* [greater than vs not equal](http://jsperf.com/greater-than-zero-vs-not-zero/2)
+* [compare zero vs number](http://jsperf.com/comparison-zero-vs-number/2)
