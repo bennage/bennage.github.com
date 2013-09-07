@@ -6,6 +6,8 @@ comments: true
 categories: [JavaScript]
 ---
 
+<em>Updated September 7th. Also, the comments are more valuable than the post. I'm not sure what I was doing when I wrote it. :-P</em>
+
 A [friend](https://twitter.com/juliandominguez) was reviewing the [last post](/blog/2013/03/05/game-dev-03/) and he asked two questions about this JavaScript snippet:
 
 	var entityIndex = entities.length - 1;
@@ -28,7 +30,7 @@ The second expression is a conditional. It's executed _at least_ once.
 
 The third expresion modifies the state and is executed once each time the condition is true. (No big surprises here.)
 
-In the case above, I instinctly felt there was too much going on one line, so I moved the first expression outside of the `for`. This does really have any impact on the way the code is executed and (since the variable is hoisted) is actually a bit closer to what the interpreter is really doing.
+In the case above, I instinctly felt there was too much going on one line, so I moved the first expression outside of the `for`. This does not really have any impact on the way the code is executed and (since the variable is hoisted) is actually a bit closer to what the interpreter is really doing.
 
 ## Comparing to Zero
 
