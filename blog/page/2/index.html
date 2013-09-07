@@ -1,0 +1,900 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Christopher Bennage</title>
+  <meta name="author" content="Christopher Bennage">
+
+  
+  <meta name="description" content="It&#8217;s common for a single web page to include data from many sources. Consider this screen shot from Project Silk. There are four separate items &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dev.bennage.com/blog/page/2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/ChristopherBennage" rel="alternate" title="Christopher Bennage" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26126539-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Christopher Bennage</a></h1>
+  
+    <h2>not all who wander are lost</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/ChristopherBennage" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:dev.bennage.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/27/render-action/">Render Action</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-27T14:21:00-07:00" pubdate data-updated="true">Apr 27<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It&#8217;s common for a single web page to include data from many sources. Consider this screen shot from <a href="http://silk.codeplex.com/">Project Silk</a>. There are four separate items displayed.</p>
+
+<p><img class="right" src="/images/posts/many-concerns.png"></p>
+
+<p>The primary concern of the page is displaying a list of vehicles. However it also displays some statistics and a set of reminders. I labeled the stats and reminders as orthogonal because they are (in a sense) independent of the primary concern. Finally, there is the ambient data of the currently logged in user. I call this data ambient because we expect it to be present on all the pages in the application.</p>
+
+<p>It&#8217;s a common practice in MVC-style applications to map a single controller action to a view. That is, it is the responsibility of a single action to produce everything that is needed to render a particular web page.</p>
+
+<p>The difficulty with this approach is that <em>other pages</em> often need to render the same orthogonal data. Let&#8217;s examine the code for the action invoked by <code>\vehicle\list</code>.</p>
+
+<pre><code>public ActionResult List()
+{
+    AddCountryListToViewBag();
+
+    var vehicles = Using&lt;GetVehicleListForUser&gt;()
+        .Execute(CurrentUserId);
+
+    var imminentReminders = Using&lt;GetImminentRemindersForUser&gt;()
+        .Execute(CurrentUserId, DateTime.UtcNow);
+
+    var statistics = Using&lt;GetFleetSummaryStatistics&gt;()
+        .Execute(CurrentUserId);
+
+    var model = new DashboardViewModel
+                    {
+                        User = CurrentUser,
+                        VehicleListViewModel = new VehicleListViewModel(vehicles),
+                        ImminentReminders = imminentReminders,
+                        FleetSummaryStatistics = statistics
+                    };
+
+    return View(model);
+}
+</code></pre>
+
+<p>Disregarding how you might feel about the <code>Using&lt;T&gt;</code> method to invoke commands and other such details, I want you to focus on the fact that the controller is <em>composing</em> a model. We generate a number of smaller viewmodels and then compose them into an instance of <code>DashboardViewModel</code>. The class <code>DashboardViewModel</code> only exists to tie together the four, otherwise independent data.</p>
+
+<p><aside></p>
+
+<p>Personally, I prefer to avoid classes like <code>DashboardViewModel</code> and simply rely on dynamic typing in the view. However, others feel strongly about having IntelliSense support in the view.</p>
+
+<p></aside></p>
+
+<p>Project Silk had separate actions just to serve up JSON:</p>
+
+<pre><code>public JsonResult JsonList()
+    {
+        var list = Using&lt;GetVehicleListForUser&gt;()
+            .Execute(CurrentUserId)
+            .Select(x =&gt; ToJsonVehicleViewModel(x))
+            .ToList();
+
+        return Json(list);
+    }
+</code></pre>
+
+<p>You&#8217;ll notice that both <code>JsonList</code> and <code>List</code> use the same <code>GetVehicleListForUser</code> command for retrieving their data. <code>JsonList</code> also projected the data to a slightly different viewmodel.</p>
+
+<h2>Reducing the Code</h2>
+
+<p>While reevaluating this code for <a href="https://github.com/liike/">Project Liike</a>, we decided to employ <a href="http://en.wikipedia.org/wiki/Content_negotiation">content negotiation</a>. That is, we wanted a single endpoint, such as <code>\vehicle\list</code>, to return different representations of the data based upon a requested format. If the browser requested JSON, then <code>\vehicle\list</code> should return a list of the vehicles in JSON. If the browser requested markup, then the same endpoint should return HTML.</p>
+
+<p>First, we needed to eliminate the differences between the JSON viewmodel and the HTML viewmodel. Without going deep into details, this wasn&#8217;t hard to do. In fact, it revealed that we had some presentation logic in the view that should not have been there. The real problem was that I wanted the action to look more like this:</p>
+
+<pre><code>public ActionResult List()
+{
+    var vehicles = Using&lt;GetVehicleListForUser&gt;()
+        .Execute(CurrentUserId);
+
+    return new ContentTypeAwareResult(vehicles);
+}
+</code></pre>
+
+<p>Only, the view still needed the additional data of statistics and reminders. How should the view get it?</p>
+
+<p>We decided to use <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.html.childactionextensions.renderaction.aspx">RenderAction</a>. RenderAction allows a view to invoke another action and render the results into the current view.</p>
+
+<p>We needed to break out the other concerns into their own actions. For the sake of example, we&#8217;ll assume they are both on the <code>VehicleController</code> and named <code>Reminders</code> and <code>Statistics</code>. Each of these action would be responsible for getting a focused set of data. Then in the (imaginary) view for <code>List</code> we could invoke the actions like so:</p>
+
+<pre><code>// List.cshtml 
+&lt;ul&gt;
+@foreach (var vehicle in Model)
+{
+    &lt;li&gt;@vehicle.Name&lt;/li&gt;
+}
+&lt;/ul&gt;
+
+&lt;section role="reminders"&gt;
+@{ Html.RenderAction( "Reminders", "Vehicle") }
+&lt;/section&gt;
+
+&lt;section role="statistics"&gt;
+@{ Html.RenderAction( "Statistics", "Vehicle") }
+&lt;/section&gt;
+</code></pre>
+
+<p><aside></p>
+
+<p>Note that each action has it&#8217;s on associated view.</p>
+
+<p></aside></p>
+
+<p>The value of using RenderAction is that we where able to create very simple actions on our controllers. We were also able to reuse the actions for rendering both markup and JSON.</p>
+
+<p>A secondary benefit is the separation of concerns. For example, because we moved the responsibility of composition from the controller into the view, a designer could now revise the view for the <code>\vehicle\list</code> without needing to touch the code. They could remove any of the orthogonal concerns or even add new ones without introducing any breaking changes.</p>
+
+<h2>The Downside</h2>
+
+<p>There are a few caveats with this approach.</p>
+
+<p>First, don&#8217;t confuse RenderAction with <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.html.renderpartialextensions.renderpartial.aspx">RenderPartial</a>. RenderAction is for invoking a completely independent action, with its own view and model. RenderPartial is simply for renders a view based on a model passed to it (generally derived from the main viewmodel).</p>
+
+<p>Secondly, avoid using RenderAction to render a form. It&#8217;s likely won&#8217;t work the way you&#8217;d expect.This means that any form rendering will need to occur in your primary view.</p>
+
+<p>Thirdly, using RenderAction breaks the <a href="http://en.wikipedia.org/wiki/Model-view-controller#Overview">model-view-controller</a> pattern. What I mean is that, in MVC, it&#8217;s assumed that the view does nothing more than render a model. Controllers invoke a view, and not vice versa. Using RenderAction breaks this rule. Personally, I have no problem breaking the rule when it results in code that is more simple and more easily maintained. Isn&#8217;t that the whole <a href="/blog/2008/03/30/the-roots-of-best-practices/">point of best practices</a> anyway?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/08/finding-stuff-in-your-git-repo-3/">Finding Out When Something Happened in Your Git Repo</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-08T07:00:00-08:00" pubdate data-updated="true">Feb 8<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>Acknowledgment: This is meant to be the Windows equivalent of <a href="http://blog.jayway.com/author/andersjanmyr">Anders Janmyr</a>&#8217;s <a href="http://blog.jayway.com/2012/01/25/finding-with-git/">excellent post</a> on the subject of finding stuff with Git. Essentially, I&#8217;m translating some of Anders&#8217; examples to Powershell and providing explanations for things that many Windows devs might not be familiar with.</em></p>
+
+<p>This is the third in a series of posts providing a set of recipes for locating sundry and diverse <em>thingies</em> in a Git repository.</p>
+
+<h2>Determining when a file was added, deleted, modified, or renamed</h2>
+
+<p>You can include the <code>--diff-filter</code> argument with <code>git log</code> to find commits that include specific operations. For example:</p>
+
+<pre><code>git log --diff-filter=D # delete
+git log --diff-filter=A # add
+git log --diff-filter=M # modified
+git log --diff-filter=R # rename
+</code></pre>
+
+<p>There are additional flags as well. Check the <a href="http://schacon.github.com/git/git-log.html">documentation</a>. By default, <code>git log</code> just returns the commit id, author, date, and message. When using these filters I like to include <code>--summary</code> so that the list of operations in the commit are included as well.</p>
+
+<p><em>N.B. If you run a <code>git log</code> command and your prompt turns into a <code>:</code> simply press <code>q</code> to exit.</em></p>
+
+<p>I don&#8217;t think that you would ever want to return <em>all</em> of the operations of a specific type in the log however. Instead, you will probably want to find out when a specific file was operated on.</p>
+
+<p>Let&#8217;s say that something was deleted and you need to find out when and by whom. You can pass a path to <code>git log</code>, though you&#8217;ll need to preced it with <code>--</code> and a space to disambiguate it from other arguments. Armed with this and following Ander&#8217;s post you would expect to be able to do this:</p>
+
+<pre><code>git log --diff-filter=D --summary -- /path/to/deleted/file
+</code></pre>
+
+<p>And if you aren&#8217;t using Powershell this works as expected. I tested it with Git Bash (included with msysgit) and good ol&#8217; cmd as well. Both work as expected.</p>
+
+<p>However, when you attempt this in Powershell, git complains that the path is an <em>ambiguous arugment</em>. I was able to, um, &#8220;work around&#8221; it by creating an empty placeholder file at the location.  Fortunately, <a href="https://twitter.com/#!/Jittery">Jay Hill</a> heard my anguish on Twitter and dug up <a href="http://blogs.popart.com/2011/11/command-line-git-and-windows-gotchas/">this post</a> from <a href="http://blogs.popart.com/author/ethanbrown/">Ethan Brown</a>. In a nutshell, Powershell strips out the <code>--</code>. You can force it to be recognized by wrapping the argument in double qoutes:</p>
+
+<pre><code>git log --diff-filter=D --summary "--" /path/to/deleted/file
+</code></pre>
+
+<p>That works!</p>
+
+<p>I&#8217;m guessing that Powershell considers <code>--</code> to be an empty arugment and therefore something to be ignored. I also assume that when the file actually exists at the path that git is smart enough to recognize the argument as a path. (Indeed, the official documentations says that &#8220;paths <em>may</em> need to be prefixed&#8221;).</p>
+
+<p>While we&#8217;re here, I also want to point out that you can use wild cards in the path. Perhaps you don&#8217;t know the exact path to the file, but you know that it was named <code>monkey.js</code>:</p>
+
+<pre><code>git log --diff-filter=D --summary -- **/monkey.js
+</code></pre>
+
+<p>Happy hunting!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/01/finding-stuff-in-your-git-repo-2/">Finding Content in Files With Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-01T23:50:00-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>Acknowledgment: This is meant to be the Windows equivalent of <a href="http://blog.jayway.com/author/andersjanmyr">Anders Janmyr</a>&#8217;s <a href="http://blog.jayway.com/2012/01/25/finding-with-git/">excellent post</a> on the subject of finding stuff with Git. Essentially, I&#8217;m translating some of Anders&#8217; examples to Powershell and providing explanations for things that many Windows devs might not be familiar with.</em></p>
+
+<p>This is the second in a series of posts providing a set of recipes for locating sundry and diverse <em>thingies</em> in a Git repository.</p>
+
+<h2>Finding content in files</h2>
+
+<p>Let&#8217;s say that there are hidden monkeys inside your files and you need to find. You can search <em>the content</em> of files in a Git repositor by using <code>git grep</code>. (For all you Windows devs, <a href="http://en.wikipedia.org/wiki/Grep"><code>grep</code></a> is a kind of magical pony from Unixland whose special talent is finding things.)</p>
+
+<pre><code># find all files whose content contains the string 'monkey'
+PS:\&gt; git grep monkey
+</code></pre>
+
+<p>There several arguments you can pass to grep to modify the behavior. These special arguments make the pony do different tricks.</p>
+
+<pre><code># return the line number where the match was found
+PS:\&gt; git grep -n monkey
+
+# return just the file names
+PS:\&gt; git grep -l monkey
+
+# count the number of matches in each file
+PS:\&gt; git grep -c monkey
+</code></pre>
+
+<p>You can pass an arbitrary number of <em>references</em> after the pattern you&#8217;re trying to match. By <em>reference</em> I mean something that&#8217;s <em>commit-ish</em>. That is, it can be the id (or SHA) of a commit, the name of a branch, a tag, or one of the special identifier like HEAD.</p>
+
+<pre><code># search the master branch, and two commits by id, 
+# and also the commit two before the HEAD
+PS:\&gt; git grep monkey master d0fb0d 032086 HEAD~2
+</code></pre>
+
+<p>The SHA is the 40-digit id of a commit. We only need enough of the SHA for Git to uniquely identify the commit. Six or eight characters is generally enough.</p>
+
+<p>Here&#8217;s an example using the <a href="https://github.com/ravendb/ravendb">RavenDB repo</a>.</p>
+
+<pre><code>PS:\&gt; git grep -n monkey master f45c08bb8 HEAD~2
+
+master:Raven.Tests/Storage/CreateIndexes.cs:83:         db.PutIndex("monkey", new IndexDefinition { Map = unimportantIndexMap });
+master:Raven.Tests/Storage/CreateIndexes.cs:90:         Assert.Equal("monkey", indexNames[1]);
+f45c08bb8:Raven.Tests/Storage/CreateIndexes.cs:82:          db.PutIndex("monkey", new IndexDefinition { Map = unimportantIndexMap });
+f45c08bb8:Raven.Tests/Storage/CreateIndexes.cs:89:          Assert.Equal("monkey", indexNames[1]);
+HEAD~2:Raven.Tests/Storage/CreateIndexes.cs:83:         db.PutIndex("monkey", new IndexDefinition { Map = unimportantIndexMap });
+HEAD~2:Raven.Tests/Storage/CreateIndexes.cs:90:         Assert.Equal("monkey", indexNames[1]);
+</code></pre>
+
+<p>Notice that each line begins with the name of the commit where the match was found. In the example above where we asked for the line numbers, the results were in the pattern:</p>
+
+<pre><code>[commit ref]:[file path]:[line no]:[matching content]
+</code></pre>
+
+<p><em>N.B. I had one repository that did not work with <code>git grep</code>. It was because my &#8216;text&#8217; files were encoded UTF-16 and git interpretted them as binary. I converted them to UTF-8 and the world became a happy place. Thanks to <a href="https://twitter.com/#!/dahlbyk">Keith Dahlby</a> and <a href="https://twitter.com/#!/adymitruk">Adam Dymitruk</a> for helping me to figure out the problem.</em></p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Grep">grep</a></li>
+<li><a href="http://book.git-scm.com/1_the_git_object_model.html">SHA</a> (just the first paragraph)</li>
+<li><a href="http://book.git-scm.com/4_git_treeishes.html">ways of referencing commits</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/30/finding-stuff-in-your-git-repo-1/">Finding Files by Name With Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-30T07:02:00-08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>Acknowledgment: This is meant to be the Windows equivalent of <a href="http://blog.jayway.com/author/andersjanmyr">Anders Janmyr</a>&#8217;s <a href="http://blog.jayway.com/2012/01/25/finding-with-git/">excellent post</a> on the subject of finding stuff with Git. Essentially, I&#8217;m translating some of Anders&#8217; examples to Powershell and providing explanations for things that many Windows devs might not be familiar with.</em></p>
+
+<p>This is the first in a series of posts providing a set of recipes for locating sundry and diverse <em>thingies</em> in a Git repository.</p>
+
+<h2>Finding files by name</h2>
+
+<p>Let&#8217;s say that you want locate all the files in a git repository that contain &#8216;monkey&#8217; in the file name. (Finding monkeys is a very common task.)</p>
+
+<pre><code># find all files whose name matches 'monkey'
+PS:\&gt; git ls-files | Select-String monkey
+</code></pre>
+
+<p>This <em>pipes</em> the output of <code>git ls-files</code> into the Powershell cmdlet <code>Select-String</code> which filters the output line-by-line. To better understand what this means, run just <code>git ls-files</code>.</p>
+
+<p>Of course, you can also pass a regular expression to<code>Select-String</code> (that is, if you hate yourself.)</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://schacon.github.com/git/git-ls-files.html">git ls-files</a></li>
+<li><a href="http://technet.microsoft.com/en-us/library/dd315403.aspx">Select-String</a></li>
+<li><a href="http://technet.microsoft.com/en-us/library/ee176927.aspx">the pipe operator <code>|</code></a></li>
+<li><a href="http://haacked.com/archive/2011/12/13/better-git-with-powershell.aspx">Better Git with Powershell by Phil Haack</a></li>
+</ul>
+
+
+<p><a href="/blog/2012/02/01/finding-stuff-in-your-git-repo-2/">Next, searching for files with specific content.</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/09/on-not-being-an-arse/">On Not Being a Jerk</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-09T11:23:00-08:00" pubdate data-updated="true">Jan 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My interest in making software well is an accident. What I&#8217;m really interested in is <em>living life</em> well. Chasing that chimerical beast of software &#8220;best practices&#8221; is merely a happy side-effect.</p>
+
+<p>To that end, there&#8217;s an ancient maxim: <a href="http://en.wikipedia.org/wiki/Know_thyself">&#8216;know thyself&#8217;</a>. Despite over three decades of living with myself, I am often surprised by what I do. Surprised, and many times embarassed.</p>
+
+<p>For example, last week I complained on twitter about what I had perceived as selfish and inconsiderate behavior of some of my fellow employees. It was quickly pointed out to me that I was wrong; that I was completely misinterpreting my observations.</p>
+
+<p>Once I realized my mistake, my immediate thought was &#8220;Oh, I don&#8217;t want people to think that I&#8217;m a jerk. I wish I hadn&#8217;t said that&#8221;. Shortly afterwards though, I realized that I had been more concerned about what <em>other people thought</em> and not my real problem. The real problem was that I <em>was</em> a jerk. I had judged people I did not know with only scant evidence. This reminded me of another ancient maxim: <a href="ttp://www.biblegateway.com/passage/?search=Matthew+7%3A1">&#8220;judge not, that ye be not judged&#8221;</a>.</p>
+
+<p>Now, here is the surpising conclusion. I&#8217;m glad that I stated my faulty opinion out loud, despite that it embarassed me, because it revealed my fault and I had to correct it. I had to confront my own prejudice and fix it. If I had kept the venom to myself, I would have gone on nursing my prejudice.</p>
+
+<p>My take away: it doesn&#8217;t matter what people think about me, it matters what I am. It is better for me to surface my flaws and fix them, than it is for me to hide them and decay.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/01/refactoring-relationships/">Refactoring Relationships</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-01T14:42:00-07:00" pubdate data-updated="true">Nov 1<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Working with people is a lot like working with code. New relationships are green fields. Over time they become brown fields and (just like code) they require maintenance. I’m sure that everyone reading this can identify some <em>legacy</em> relationships that they would describe as well <em>complicated</em>. Just like some legacy code.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/11/01/refactoring-relationships/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/27/getting-started-with-javascript-again/">Getting Started With JavaScript&#8230; Again</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-27T11:56:00-07:00" pubdate data-updated="true">Oct 27<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve alluded before that I did a large chunk of my development in some form of <a href="http://en.wikipedia.org/wiki/ECMAScript">ECMAScript</a> for the first ten years of my professional life. Now, JavaScript is cool again for the first time. Everyone wants to learn it.</p>
+
+<p>So, like me, you probably already kinda maybe knew JavaScript. But times have changed and now it&#8217;s a serious language. How do you get up to speed? Here&#8217;s what I did.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/10/27/getting-started-with-javascript-again/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/19/mobile-developent-and-device-detection/">Mobile Development: Detecting Devices &amp; Features</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-19T16:01:00-07:00" pubdate data-updated="true">Oct 19<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>Take this post cum granlis salis. I&#8217;m trying to figure this stuff out and I&#8217;m thinking out loud.</em></p>
+
+<h2>Background</h2>
+
+<p>Whenever a browser makes a request, it includes a string identifying itself to the server. We commonly refer to this as the <em>user agent string</em>. This string identifies the browser and the platform and the version and a great deal more such nonsense.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/10/19/mobile-developent-and-device-detection/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/17/blocks-and-playsets/">Blocks and Playsets</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-17T09:40:00-07:00" pubdate data-updated="true">Oct 17<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve recently discovered that I favor blocks over playsets. I&#8217;m talking about toys, and of course the canonical example of blocks is Legos. You can build nearly anything with them. They are useful, versatile, and inviting.</p>
+
+<p>Now, the term &#8216;playset&#8217; warrants a bit more explanation. I don&#8217;t mean the large outdoor sets with swings and sandboxes and spring-loaded ponies. No, I&#8217;m a child of the 80s and I <em>loved me some</em> Star Wars playsets.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/10/17/blocks-and-playsets/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/10/being-a-new-kid-on-the-mobile-block/">Being a New Kid on the Mobile Block</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-10T14:58:00-07:00" pubdate data-updated="true">Oct 10<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The last few weeks I&#8217;ve been trying get a finger on the pulse of <em>mobile web development</em>. I wanted to identify the thought leaders, understand the big questions, and (perhaps mostly importantly) begin cataloging the practical considerations for building mobile experiences today.</p>
+
+<p>Here&#8217;s where I&#8217;m at so far&#8230;</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/10/10/being-a-new-kid-on-the-mobile-block/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+<h1>About Christopher</h1>
+
+<img class="bio" src="http://gravatar.com/avatar/0128fa0de6a321d6e3766ae3fa06b9c2?s=80">
+
+<ul><li>
+<p>
+Christopher is a developer on the <a href="http://msdn.microsoft.com/practices">patterns & practices</a> team at Microsoft.
+</p>
+
+
+<p>
+He considers sidewalks to merely be suggestions and frequently falls under the influence of G. K. Chesterton.
+</p><p>
+He thinks agile software principles and open source software are pretty cool; especially if JavaScript is involved.
+</p>
+</li>
+</ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/game-dev-03b/">Couple of JavaScript Questions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/05/game-dev-03/">Building a Game with JavaScript: Making Things Move</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/11/game-dev-02/">Building a Game with JavaScript: Start Screen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/game-dev-01/">Building a Game with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">a n00b&#8217;s look at HTML5 game development</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+<div id="recentcomments" class="dsq-widget">
+<h1 class="dsq-widget-title">Recent Comments</h1>
+<script type="text/javascript" src="http://bennage.disqus.com/recent_comments_widget.js?num_items=&hide_avatars=1&avatar_size=18&excerpt_length="></script>
+</div>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("bennage", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/bennage" class="twitter-follow-button" data-show-count="false">Follow @bennage</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/bennage">@bennage</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bennage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Christopher Bennage -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bennage';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/bennage.js"></script>
+<script src="/javascripts/newhope.js"></script>
+
+</body>
+</html>

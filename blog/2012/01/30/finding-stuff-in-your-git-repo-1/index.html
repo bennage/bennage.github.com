@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Finding Files by Name with Git - Christopher Bennage</title>
+  <meta name="author" content="Christopher Bennage">
+
+  
+  <meta name="description" content="Acknowledgment: This is meant to be the Windows equivalent of Anders Janmyr&#8217;s excellent post on the subject of finding stuff with Git. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dev.bennage.com/blog/2012/01/30/finding-stuff-in-your-git-repo-1/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/ChristopherBennage" rel="alternate" title="Christopher Bennage" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26126539-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Christopher Bennage</a></h1>
+  
+    <h2>not all who wander are lost</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/ChristopherBennage" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:dev.bennage.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Finding Files by Name With Git</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-30T07:02:00-08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>Acknowledgment: This is meant to be the Windows equivalent of <a href="http://blog.jayway.com/author/andersjanmyr">Anders Janmyr</a>&#8217;s <a href="http://blog.jayway.com/2012/01/25/finding-with-git/">excellent post</a> on the subject of finding stuff with Git. Essentially, I&#8217;m translating some of Anders&#8217; examples to Powershell and providing explanations for things that many Windows devs might not be familiar with.</em></p>
+
+<p>This is the first in a series of posts providing a set of recipes for locating sundry and diverse <em>thingies</em> in a Git repository.</p>
+
+<h2>Finding files by name</h2>
+
+<p>Let&#8217;s say that you want locate all the files in a git repository that contain &#8216;monkey&#8217; in the file name. (Finding monkeys is a very common task.)</p>
+
+<pre><code># find all files whose name matches 'monkey'
+PS:\&gt; git ls-files | Select-String monkey
+</code></pre>
+
+<p>This <em>pipes</em> the output of <code>git ls-files</code> into the Powershell cmdlet <code>Select-String</code> which filters the output line-by-line. To better understand what this means, run just <code>git ls-files</code>.</p>
+
+<p>Of course, you can also pass a regular expression to<code>Select-String</code> (that is, if you hate yourself.)</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://schacon.github.com/git/git-ls-files.html">git ls-files</a></li>
+<li><a href="http://technet.microsoft.com/en-us/library/dd315403.aspx">Select-String</a></li>
+<li><a href="http://technet.microsoft.com/en-us/library/ee176927.aspx">the pipe operator <code>|</code></a></li>
+<li><a href="http://haacked.com/archive/2011/12/13/better-git-with-powershell.aspx">Better Git with Powershell by Phil Haack</a></li>
+</ul>
+
+
+<p><a href="/blog/2012/02/01/finding-stuff-in-your-git-repo-2/">Next, searching for files with specific content.</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Christopher Bennage</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-30T07:02:00-08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/powershell/'>powershell</a>, <a class='category' href='/blog/categories/source-control/'>source control</a>, <a class='category' href='/blog/categories/windows/'>windows</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://dev.bennage.com/blog/2012/01/30/finding-stuff-in-your-git-repo-1/" data-via="bennage" data-counturl="http://dev.bennage.com/blog/2012/01/30/finding-stuff-in-your-git-repo-1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/09/on-not-being-an-arse/" title="Previous Post: On Not Being a Jerk">&laquo; On Not Being a Jerk</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/02/01/finding-stuff-in-your-git-repo-2/" title="Next Post: Finding Content in Files with Git">Finding Content in Files with Git &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Christopher</h1>
+
+<img class="bio" src="http://gravatar.com/avatar/0128fa0de6a321d6e3766ae3fa06b9c2?s=80">
+
+<ul><li>
+<p>
+Christopher is a developer on the <a href="http://msdn.microsoft.com/practices">patterns & practices</a> team at Microsoft.
+</p>
+
+
+<p>
+He considers sidewalks to merely be suggestions and frequently falls under the influence of G. K. Chesterton.
+</p><p>
+He thinks agile software principles and open source software are pretty cool; especially if JavaScript is involved.
+</p>
+</li>
+</ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/game-dev-03b/">Couple of JavaScript Questions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/05/game-dev-03/">Building a Game with JavaScript: Making Things Move</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/11/game-dev-02/">Building a Game with JavaScript: Start Screen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/game-dev-01/">Building a Game with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">a n00b's look at HTML5 game development</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+<div id="recentcomments" class="dsq-widget">
+<h1 class="dsq-widget-title">Recent Comments</h1>
+<script type="text/javascript" src="http://bennage.disqus.com/recent_comments_widget.js?num_items=&hide_avatars=1&avatar_size=18&excerpt_length="></script>
+</div>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("bennage", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/bennage" class="twitter-follow-button" data-show-count="false">Follow @bennage</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/bennage">@bennage</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bennage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Christopher Bennage -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bennage';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://dev.bennage.com/blog/2012/01/30/finding-stuff-in-your-git-repo-1/';
+        var disqus_url = 'http://dev.bennage.com/blog/2012/01/30/finding-stuff-in-your-git-repo-1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/bennage.js"></script>
+<script src="/javascripts/newhope.js"></script>
+
+</body>
+</html>

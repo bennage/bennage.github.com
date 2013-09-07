@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Finding Content in Files with Git - Christopher Bennage</title>
+  <meta name="author" content="Christopher Bennage">
+
+  
+  <meta name="description" content="Acknowledgment: This is meant to be the Windows equivalent of Anders Janmyr&#8217;s excellent post on the subject of finding stuff with Git. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dev.bennage.com/blog/2012/02/01/finding-stuff-in-your-git-repo-2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/ChristopherBennage" rel="alternate" title="Christopher Bennage" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26126539-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Christopher Bennage</a></h1>
+  
+    <h2>not all who wander are lost</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/ChristopherBennage" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:dev.bennage.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Finding Content in Files With Git</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-01T23:50:00-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>Acknowledgment: This is meant to be the Windows equivalent of <a href="http://blog.jayway.com/author/andersjanmyr">Anders Janmyr</a>&#8217;s <a href="http://blog.jayway.com/2012/01/25/finding-with-git/">excellent post</a> on the subject of finding stuff with Git. Essentially, I&#8217;m translating some of Anders&#8217; examples to Powershell and providing explanations for things that many Windows devs might not be familiar with.</em></p>
+
+<p>This is the second in a series of posts providing a set of recipes for locating sundry and diverse <em>thingies</em> in a Git repository.</p>
+
+<h2>Finding content in files</h2>
+
+<p>Let&#8217;s say that there are hidden monkeys inside your files and you need to find. You can search <em>the content</em> of files in a Git repositor by using <code>git grep</code>. (For all you Windows devs, <a href="http://en.wikipedia.org/wiki/Grep"><code>grep</code></a> is a kind of magical pony from Unixland whose special talent is finding things.)</p>
+
+<pre><code># find all files whose content contains the string 'monkey'
+PS:\&gt; git grep monkey
+</code></pre>
+
+<p>There several arguments you can pass to grep to modify the behavior. These special arguments make the pony do different tricks.</p>
+
+<pre><code># return the line number where the match was found
+PS:\&gt; git grep -n monkey
+
+# return just the file names
+PS:\&gt; git grep -l monkey
+
+# count the number of matches in each file
+PS:\&gt; git grep -c monkey
+</code></pre>
+
+<p>You can pass an arbitrary number of <em>references</em> after the pattern you&#8217;re trying to match. By <em>reference</em> I mean something that&#8217;s <em>commit-ish</em>. That is, it can be the id (or SHA) of a commit, the name of a branch, a tag, or one of the special identifier like HEAD.</p>
+
+<pre><code># search the master branch, and two commits by id, 
+# and also the commit two before the HEAD
+PS:\&gt; git grep monkey master d0fb0d 032086 HEAD~2
+</code></pre>
+
+<p>The SHA is the 40-digit id of a commit. We only need enough of the SHA for Git to uniquely identify the commit. Six or eight characters is generally enough.</p>
+
+<p>Here&#8217;s an example using the <a href="https://github.com/ravendb/ravendb">RavenDB repo</a>.</p>
+
+<pre><code>PS:\&gt; git grep -n monkey master f45c08bb8 HEAD~2
+
+master:Raven.Tests/Storage/CreateIndexes.cs:83:         db.PutIndex("monkey", new IndexDefinition { Map = unimportantIndexMap });
+master:Raven.Tests/Storage/CreateIndexes.cs:90:         Assert.Equal("monkey", indexNames[1]);
+f45c08bb8:Raven.Tests/Storage/CreateIndexes.cs:82:          db.PutIndex("monkey", new IndexDefinition { Map = unimportantIndexMap });
+f45c08bb8:Raven.Tests/Storage/CreateIndexes.cs:89:          Assert.Equal("monkey", indexNames[1]);
+HEAD~2:Raven.Tests/Storage/CreateIndexes.cs:83:         db.PutIndex("monkey", new IndexDefinition { Map = unimportantIndexMap });
+HEAD~2:Raven.Tests/Storage/CreateIndexes.cs:90:         Assert.Equal("monkey", indexNames[1]);
+</code></pre>
+
+<p>Notice that each line begins with the name of the commit where the match was found. In the example above where we asked for the line numbers, the results were in the pattern:</p>
+
+<pre><code>[commit ref]:[file path]:[line no]:[matching content]
+</code></pre>
+
+<p><em>N.B. I had one repository that did not work with <code>git grep</code>. It was because my &#8216;text&#8217; files were encoded UTF-16 and git interpretted them as binary. I converted them to UTF-8 and the world became a happy place. Thanks to <a href="https://twitter.com/#!/dahlbyk">Keith Dahlby</a> and <a href="https://twitter.com/#!/adymitruk">Adam Dymitruk</a> for helping me to figure out the problem.</em></p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Grep">grep</a></li>
+<li><a href="http://book.git-scm.com/1_the_git_object_model.html">SHA</a> (just the first paragraph)</li>
+<li><a href="http://book.git-scm.com/4_git_treeishes.html">ways of referencing commits</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Christopher Bennage</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-01T23:50:00-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/powershell/'>powershell</a>, <a class='category' href='/blog/categories/source-control/'>source control</a>, <a class='category' href='/blog/categories/windows/'>windows</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://dev.bennage.com/blog/2012/02/01/finding-stuff-in-your-git-repo-2/" data-via="bennage" data-counturl="http://dev.bennage.com/blog/2012/02/01/finding-stuff-in-your-git-repo-2/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/30/finding-stuff-in-your-git-repo-1/" title="Previous Post: Finding Files by Name with Git">&laquo; Finding Files by Name with Git</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/02/08/finding-stuff-in-your-git-repo-3/" title="Next Post: Finding Out When Something Happened in Your Git Repo">Finding Out When Something Happened in Your Git Repo &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Christopher</h1>
+
+<img class="bio" src="http://gravatar.com/avatar/0128fa0de6a321d6e3766ae3fa06b9c2?s=80">
+
+<ul><li>
+<p>
+Christopher is a developer on the <a href="http://msdn.microsoft.com/practices">patterns & practices</a> team at Microsoft.
+</p>
+
+
+<p>
+He considers sidewalks to merely be suggestions and frequently falls under the influence of G. K. Chesterton.
+</p><p>
+He thinks agile software principles and open source software are pretty cool; especially if JavaScript is involved.
+</p>
+</li>
+</ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/game-dev-03b/">Couple of JavaScript Questions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/05/game-dev-03/">Building a Game with JavaScript: Making Things Move</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/11/game-dev-02/">Building a Game with JavaScript: Start Screen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/game-dev-01/">Building a Game with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">a n00b's look at HTML5 game development</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+<div id="recentcomments" class="dsq-widget">
+<h1 class="dsq-widget-title">Recent Comments</h1>
+<script type="text/javascript" src="http://bennage.disqus.com/recent_comments_widget.js?num_items=&hide_avatars=1&avatar_size=18&excerpt_length="></script>
+</div>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("bennage", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/bennage" class="twitter-follow-button" data-show-count="false">Follow @bennage</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/bennage">@bennage</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bennage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Christopher Bennage -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bennage';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://dev.bennage.com/blog/2012/02/01/finding-stuff-in-your-git-repo-2/';
+        var disqus_url = 'http://dev.bennage.com/blog/2012/02/01/finding-stuff-in-your-git-repo-2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/bennage.js"></script>
+<script src="/javascripts/newhope.js"></script>
+
+</body>
+</html>

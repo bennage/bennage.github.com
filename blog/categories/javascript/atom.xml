@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: JavaScript | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Couple of JavaScript Questions]]></title>
+    <link href="http://dev.bennage.com/blog/2013/05/20/game-dev-03b/"/>
+    <updated>2013-05-20T14:52:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2013/05/20/game-dev-03b</id>
+    <content type="html"><![CDATA[<p><em>Updated September 7th. Also, the comments are more valuable than the post. I'm not sure what I was doing when I wrote it. :-P</em></p>
+
+<p>A <a href="https://twitter.com/juliandominguez">friend</a> was reviewing the <a href="/blog/2013/03/05/game-dev-03/">last post</a> and he asked two questions about this JavaScript snippet:</p>
+
+<pre><code>var entityIndex = entities.length - 1;
+for (; entityIndex != 0; entityIndex--) {
+    entities[entityIndex].draw(ctx);
+}
+</code></pre>
+
+<ul>
+<li>Why am I initializing <code>entityIndex</code> outside the loop?</li>
+<li>Why do I compare <code>entityIndex</code> to 0?</li>
+</ul>
+
+
+<h2>Initializing Outside</h2>
+
+<p>The answer to the first question is really just personal readability (well, perhaps a <em>small</em> touch of "this will make people pause and think").</p>
+
+<p>Let's dig into the construct a bit though.The declaration of <code>for</code> loop consists of three expressions. (I'm not talking about <code>for(in)</code> here.)</p>
+
+<p>The first expression is an initializer; it is executed just once. It is usually something like <code>var i = 0</code>. This expression is still subject to <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Statements/var#var_hoisting">hoisting</a>.</p>
+
+<p>The second expression is a conditional. It's executed <em>at least</em> once.</p>
+
+<p>The third expresion modifies the state and is executed once each time the condition is true. (No big surprises here.)</p>
+
+<p>In the case above, I instinctly felt there was too much going on one line, so I moved the first expression outside of the <code>for</code>. This does not really have any impact on the way the code is executed and (since the variable is hoisted) is actually a bit closer to what the interpreter is really doing.</p>
+
+<h2>Comparing to Zero</h2>
+
+<p>I choose to use <code>entityIndex != 0</code> not because I wanted to compare to zero, but because I wanted to avoid the cost of evaluating <code>entities.length</code> repeatedly. Since the second expression is evaluated over and over, we don't want to do anything expensive there. If our <code>entities</code> had lots of members, then calculating <code>length</code> could have a significant impact.</p>
+
+<p>There is some question about the relative performance of <code>&gt; 0</code> vs <code>!= 0</code>, however the <a href="http://jsperf.com/greater-than-zero-vs-not-zero/2">test results</a> for that seem to indicate that it is not consequential.</p>
+
+<h2>Closing Thoughts</h2>
+
+<ul>
+<li>It's easy to obsess about optmizations, but it's important to understand than many micro-optimizations are browser-specific. So test, test, test before you waste time on it.</li>
+<li>I made the one change because it was more readable <em>to me</em>. It might not be so to you. If so, don't do it.</li>
+</ul>
+
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf">Ecma 262 Standard</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Statements/var#var_hoisting">var hoisting</a></li>
+<li><a href="http://jsperf.com/greater-than-zero-vs-not-zero/2">greater than vs not equal</a></li>
+<li><a href="http://jsperf.com/comparison-zero-vs-number/2">compare zero vs number</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building a Game with JavaScript: Making Things Move]]></title>
+    <link href="http://dev.bennage.com/blog/2013/03/05/game-dev-03/"/>
+    <updated>2013-03-05T21:12:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2013/03/05/game-dev-03</id>
+    <content type="html"><![CDATA[<p>This is a continuation from the <a href="http://dev.bennage.com/blog/2013/01/11/game-dev-02/">previous post</a>.</p>
+
+<h2>Setting The Stage</h2>
+
+<p>The game we're building will have waves of enemy ships fly in to attack the player's units. Let's begin by making a simple enemy as well as some dummy targets for them to attack. I'm going to keep the graphics very simple for the moment. Likewise we are going to focus on the enemy behavior and not worry about any player interaction just yet.</p>
+
+<p><img class="right" src="/images/posts/game-dev-move-01.png" title="[little, yellow, different]" ></p>
+
+<p>Here's a <a href="http://jsfiddle.net/bennage/HqYeD/18/">demo</a> of what we'll make. Click on the start screen to transition into the game. The little yellow rectangles are our enemy ships. Each one projects its own target as a little red circle. Once it touches its target, it projects a new one and then flies toward it.</p>
+
+<p>Let's start from the top down. Our enemy units will "live" in our main screen for the game. (At least for the time being.) This screen needs to expose the same interface that we had for the start screen we made in the last post. We'll also add a <code>start</code> method that we'll call just once in order to initialize things.</p>
+
+<h3>Implementation</h3>
+
+<p>Here's the implementation:</p>
+
+<script src="https://gist.github.com/5078744.js"></script>
+
+
+<h3>Explanation</h3>
+
+<p>The <code>entities</code> array will contain a list of the enemies we're tracking. I used the name "entity" because this is a common term in game development. In general, it means something that has behavior and is drawn to the screen. Thus, you can expect entities to have <code>update</code> and <code>draw</code> methods. This is not a hard and fast definition though. You'll find that the specifics of the definition can vary among engines, frameworks, and developers.</p>
+
+<p>In our <code>start</code> function we populate <code>entities</code> by invoking our (as yet undefined) <code>makeEnemyShip</code> function. I'm passing in two numbers that <code>makeEnemyShip</code> will use to set the x and y position of the ship. I could have used random numbers or even hard coded values, however deriving from the loop's controls makes it easy to cluster all the ships in the upper left corner of the screen.</p>
+
+<p>The <code>draw</code> and <code>update</code> functions for the screen are very similar. They both iterate over <code>entities</code> and invoke the corresponding function on each entity. They also pass along the necessary context. For <code>draw</code>, this is the 2D drawing context of the canvas and for <code>update</code> it's the elapsed time since the last frame.</p>
+
+<p>Notice how the loop is structured differently from the loop in <code>start</code>. This is a performance optimization; though it has little consequence with so small an array. On some browsers, the call to <code>length</code> is a bit expensive. (Especially in cases when the array isn't an array, but something that is <a href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">array-like</a>.) This adds up when you make the call once per iteration of the loop. We move it out of the loop so that we only call it once. Check out <a href="http://jsperf.com/loop-iteration-length-comparison-variations">this test</a>. Performance optimizations are tricky and change every time new browsers are released. It's easy to get confused, and I recommend profiling your code frequently to look for hot spots rather than just guessing about optimizations. I hope to talk more about them later, but if you want more now check out the book <a href="http://www.amazon.com/Performance-JavaScript-Faster-Application-Interfaces/dp/059680279X">High Performance JavaScript</a> by <a href="http://www.nczonline.net/"> Nicholas C. Zakas</a>.</p>
+
+<p><em>I had originally written my loops using the newer <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach">Array.forEach</a> to iterate over <code>entities</code>. However, this proved to be <strong>significantly</strong> slower than a <code>for</code> loop.</em></p>
+
+<p>The screen's <code>draw</code> method also resets the canvas at the beginning of each iteration. If we did not do this, then every thing we drew on previous frames would still be present. For the start screen, I used <code>clearRect</code> however here I used <code>fillRect</code> with a solid color.</p>
+
+<p>Here's a function that will produce a simple enemy. It follows the same structure we've been using, <code>update</code> to handle the behavior and <code>draw</code> to actually draw it on the screen.</p>
+
+<h2>Some Bad Guys</h2>
+
+<p>Our enemy ships are a little more complicated than the screen they live on. Visually, they <em>appear</em> to have two components. The little yellow rectangle that moves about the screen and the phantom target that they project as a little red circle. In the final game, they will target one of the player's units. However, the logic is very similar. In fact, it may become useful in debugging to how each enemy ship render something over it's actual target.</p>
+
+<h3>Implementation</h3>
+
+<script src="https://gist.github.com/5084429.js"></script>
+
+
+<h3>Explanation</h3>
+
+<p>Each enemy ship will be responsible for tracking its own state. In this code, the state is captured in a closure. In later code, we'll track the track in a more traditional way. (I haven't ran tests yet but I think that using a closure may have a performance impact.)</p>
+
+<p>All of these variables represent the enemy ship's state.</p>
+
+<pre><code>var position = { x: 0, y: 0 };
+var orientation = 0;
+var turnSpeed = fullCircle / 50;
+var speed = 2;
+var target = findNewTarget();  
+</code></pre>
+
+<p><code>position</code> is the location on the screen where we will render our ship.</p>
+
+<p><em>Technically, the is the position in "world space". World space is the logical space that entities in your game "live in". This is distinct from "screen space", which corresponds to the actual pixels on the screens. You can think of it this way: in your game you might have a circle with a radius of 10 and located at (100,100). However, where you draw it on the screen will depend upon where the player is viewing it from. If the player zooms in, the circle will grow larger but this doesn't change the logical position or radius of the circle. We use the term "projection" to describe this. We project from world space into screen space based upon how the player is viewing the game world. The simplest project of course is just 1:1. Which means that there is no difference between world space and screen space. That's what will stick with for the moment.</em></p>
+
+<p><code>orientation</code> is the direction the ship is currently facing. Our ship will always travel in the direction of its orientation. This constraints causes the ship travel in smooth arcs as opposed to abruptly changing its course.</p>
+
+<p><code>turnSpeed</code> and <code>speed</code> represent how quickly the ship can turn and how fast it can travel respectively. We won't be modifying these values after setting them, which means the ship will turn and travel at constant rates. These values represent the rates of change for <code>orientation</code> and <code>position</code>. Note also, we defined <code>turnSpeed</code> in terms of <code>fullCircle</code>. This is an alias for <code>Math.PI * 2</code>; we are dealing in <a href="http://en.wikipedia.org/wiki/Radian">radians</a> and not degrees.</p>
+
+<p><code>target</code> is a value with the shape <code>{ x: Number, y: Number }</code>. The ship will always attempt to move towards this value by adjusting its <code>orientation</code>.</p>
+
+<h4>Update</h4>
+
+<p>The <code>update</code> function is the real meat of the enemy ship. First, we check to see if we are close to our target. If we are close enough, we consider our goal accomplished and we set a new target. Otherwise, we change our <code>orientation</code> so that we are flying toward our current target.</p>
+
+<pre><code>var y = target.y - position.y;
+var x = target.x - position.x;
+var d2 = Math.pow(x, 2) + Math.pow(y, 2);
+</code></pre>
+
+<p><img class="right" src="/images/posts/game-dev-move-02.png" title="[calculating the distance]" ></p>
+
+<p>Here, <code>x</code> and <code>y</code> are really the distance between <code>target</code> and <code>position</code> along the respective axises. We want to know these values in order to calculate the distance between them. In general, you use the <a href="http://en.wikipedia.org/wiki/Pythagorean_theorem">Pythagorean theorum</a> to calculate distance. <em>For deeper dive into the math, watch <a href="http://www.khanacademy.org/video/distance-formula">Distance Formula</a> on Khan Academy.</em> Finding the actual real distance uses a square root and calculating a square root is an expensive operation that's best to avoid whenever you can.</p>
+
+<p>We can bypass the need by working with the distance&sup2; (hence the variable name <code>d2</code>). We compare this against the hard-coded value of 16 (that's 4&sup2;). In other words, if the distance between the ship and its target is less than 4 units we find a new target.</p>
+
+<pre><code>if (d2 &lt; 16) {
+    target = findNewTarget();
+}
+</code></pre>
+
+<p>Once we've established what the ship's target should be, we want the ship to move toward the target. As I've just mentioned, I've chosen to have the ship move at a constant speed. This means that it does not slow down or speed up. The only thing it can do is to change the direction it's facing (<code>orientation</code>). These sort of constraints determine the personality and character of your game. Bear in mind, you don't need to simulate the physics to have a fun game. Instead, you need to establish behaviors for your game entities that are merely fun. Fortunately, fun behaviors can often be easier to implement that the actual physics. I recommend taking a look at <a href="http://jsfiddle.net/bennage/HqYeD/18/">the demo</a> and tweaking the <code>turnSpeed</code> and <code>speed</code> values to get a small taste for how the behavior can affect the game's character.</p>
+
+<p><img class="right" src="/images/posts/game-dev-move-03.png" title="[what's the delta between the angles?]" ></p>
+
+<p>In order to change the ship's orientation we need to first determine where the ship <em>ought</em> to be facing. The values of <code>x</code> and <code>y</code> we just calculated can be interpreted as a <a href="http://en.wikipedia.org/wiki/Euclidean_vector">vector</a>. Meaning, it represents the direction and distance (magnitude) from the ship to the current target. To extract the actual angle (in radian) we use <code>Math.atan2(x,y)</code>.</p>
+
+<pre><code>var angle = Math.atan2(y, x);
+var delta = angle - orientation;
+</code></pre>
+
+<p>So now we have the direction the ship <em>wants</em> to face, <code>angle</code>, and the direction that it <em>is</em> facing, <code>orientation</code>. We calculate the difference between them and store it as <code>delta</code>.</p>
+
+<p><img class="right" src="/images/posts/game-dev-move-04.png" title="[turning the wrong way]" ></p>
+
+<p>The basic idea is that add the value of <code>turnSpeed</code> to <code>orientation</code> once each invocation of <code>udpate</code> until <code>delta</code> is 0 (meaning that the ship is flying directly at the target). However, some values of <code>delta</code> will cause the ship to "turn the wrong way". For example, imagine that the ship is facing the top of the screen and that we've defined that as <code>orientation === 0</code>. Now, imagine that the target is directly to its right. The value of <code>angle</code> would be &pi;/2 (or 90&deg;). Adding <code>turnSpeed</code> to <code>orientation</code> each frame increments the value from 0 to &pi;/2. However, if the target is directly to the left, then the value of <code>angle</code> would be 3&pi;/2 (or 270&deg;). Simply incrementing <code>orientation</code> would cause the ship to turn right and keep turning right. This is unintuitive behavior; we expect the ship to turn the shorted distance. In order to accomplish this, we translate any value of <code>delta</code> higher than &pi; (180&deg;) by subtracting <code>fullCircle</code>. This normalizes the value of <code>delta</code> between -&pi; and &pi; (or between -180&deg; and 180&deg;).</p>
+
+<pre><code>var delta_abs = Math.abs(delta);
+if (delta_abs &gt; Math.PI) {
+    delta = delta_abs - fullCircle;
+}
+</code></pre>
+
+<p>We take the absolute value of <code>delta</code> because otherwise we'd have to check for <code>delta &lt; -Math.PI</code> as well. Also, we'll use <code>delta_abs</code> again.</p>
+
+<p>If <code>delta</code> is 0, we don't need to change <code>orientation</code>. When it is different we need to modify the value of <code>orientation</code>.</p>
+
+<pre><code>if (delta !== 0) {
+    var direction = delta / delta_abs;
+    orientation += (direction * Math.min(turnSpeed, delta_abs));
+    orientation %= fullCircle;
+}
+</code></pre>
+
+<p>First, we decide <em>how much</em> to change it using <code>Math.min(turnSpeed, delta_abs)</code>. We could just use <code>turnSpeed</code>. However if we did it's likely that <code>delta</code> would never quite be 0 and (depending on the size of <code>turnSpeed</code>) it could result is jittery motion. Secondly, we want to decided which <em>direction</em> to turn: positive values to the right and negative values to the left. We multiply the amount <code>direction</code> to change the sign, because <code>direction</code> will only ever be 1 or -1. Finally, we modulo <code>orientation</code> to ensure that it stays within a range of -2&pi; to 2&pi;. Otherwise, the calculation of <code>delta</code> would be off.</p>
+
+<p>Our last step in <code>update</code> is to modifiy the actual position using the latest <code>orientation</code> and <code>speed</code>.</p>
+
+<pre><code>position.x += Math.cos(orientation) * speed;
+position.y += Math.sin(orientation) * speed;
+</code></pre>
+
+<p><em>Some basic trigonometry is fairly fundamental for most game development. If you're mathematically lost at this point, I recommend <a href="https://www.khanacademy.org/math/trigonometry/basic-trigonometry">reviewing over at Khan Academey</a>.</em></p>
+
+<p>Here's the geometric interpretation of the code. We want the ship to move a distance of <code>speed</code> in the direction of <code>orientation</code>. To do this, we need to project this vector (distance and direction) on the x and y axises. Since the distance is the length of the hypothenuse of right triangle, cosine gives us the x part and sine gives us the y part. We can then add these values to the current position.</p>
+
+<h4>Draw</h4>
+
+<p>Drawing the ship to the screen is a bit easier to follow. Here's the flow of the logic:</p>
+
+<ul>
+<li>Save the state of the drawing context.</li>
+<li>Transform the context to make it easier to draw our ship.</li>
+<li>Draw the ship.</li>
+<li>Restore the context back to its original state.</li>
+<li><p>Draw the target</p>
+
+<pre><code>  function draw(ctx) {
+
+      ctx.save();
+
+      ctx.translate(position.x, position.y);
+      ctx.rotate(orientation);
+
+      ctx.fillStyle = 'yellow';
+      ctx.fillRect(-3, -1, 6, 2);
+
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,0,0,0.5)';
+      ctx.arc(target.x, target.y, 2, 0, Math.PI * 2, true);
+      ctx.fill();
+  }
+</code></pre></li>
+</ul>
+
+
+<p>Recall that <code>ctx</code> is the drawing context for the canvas. The context provide a useful API that allows us to move it around before we draw on it. This is analgous to having a sheet of paper that you might shift and rotate in order to make it easier to draw something complicated. This is the purpose of the <code>translate</code> and <code>rotate</code> methods.</p>
+
+<p>First, we use 'save' to establishing a checkpoint for the drawing context that we can easily revert back to using 'restore.' The calls to <code>translate</code> and <code>rotate</code> modify the state of the drawing context. This modified state is very specific to the drawing of our enemy ship. If we didn't translate and rotate the canvas, we'd have to do a lot more work to figure out where to draw the four corners of the rectangle.</p>
+
+<p>I decided that I want my ship to be 6px long and 2px wide. Since I want the middle of the middle of my ship to be the point where it rotates, I shift by half the length and half the width. Hence, the values passed to <code>ctx.fillRect(-3, -1, 6, 2)</code>. This point the new origin (0,0) at the middle of the rectangle, and it makes our call to <code>rotate</code> behave intuitively. If we used <code>ctx.fillRect(0, 0, 6, 2)</code> instead, then the ship would appear to rotate around its upper left corner. We'll use these same techniques once we switch to using <em>sprites</em>.</p>
+
+<p>After we restore the context's state, we draw the target. We don't bother using <code>rotate</code> because it's meaningless to rotate a simple circle. Likewise, we don't bother <code>translate</code> since the drawing logic is so simple.</p>
+
+<p><em>The canvas is a broad topic in itself. I recommend taking a look at the tutorials over at <a href="https://developer.mozilla.org/en-US/docs/HTML/Canvas">MDN</a>. A handy reference for the APIs themselves can be found on <a href="http://msdn.microsoft.com/en-us/library/ff975057">MSDN</a>.</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building a Game with JavaScript: Start Screen]]></title>
+    <link href="http://dev.bennage.com/blog/2013/01/11/game-dev-02/"/>
+    <updated>2013-01-11T17:05:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2013/01/11/game-dev-02</id>
+    <content type="html"><![CDATA[<p>This is a continuation from the <a href="/blog/2012/12/07/game-dev-01/">previous post</a>.</p>
+
+<h2>Specification</h2>
+
+<p>Many games have a start screen or main menu of some sort. (Though I love games like <a href="http://www.braid-game.com/">Braid</a> that bypass the whole notion.) Let's begin by designing our start screen.</p>
+
+<p><img class="right" src="/images/posts/game-dev-startscreen-01.png" title="[our simple start screen]" ></p>
+
+<p>We'll have a solid color background. Perhaps the ever lovely cornflower blue. Then we'll draw the name of our game and provide an instruction to the player. In order to make sure we have the player's attention, we'll animate the color of the instruction. It will morph from black to red and back again.</p>
+
+<p>Finally, when the player clicks the screen we'll transition to the main game. Or at least we'll stub out the transition.</p>
+
+<p>Here's a <a href="http://jsfiddle.net/bennage/HqYeD/2/">demo</a> based on the code we'll cover later in this post (as well as that from the previous post.)</p>
+
+<h2>Implementation</h2>
+
+<p>Here's the code to implement our start screen.</p>
+
+<script src="https://gist.github.com/4371311.js"></script>
+
+
+<h2>Explanation</h2>
+
+<p>Recall that our start screen is meant to be invoked by our game loop. The game loop doesn't know about the specifics of the start screen, but it does expect it to have a <em>certain shape</em>. This enables us to swap out screen objects without having to modify the game loop itself. The shape that the game loop expects is this:</p>
+
+<pre><code>{
+    update: function(timeElapsedSinceLastFrame) { },
+    draw: function(drawingContext) { }
+}
+</code></pre>
+
+<h3>Update</h3>
+
+<p>Let's begin with the start screen's <code>update</code> function. The first bit of logic is this:</p>
+
+<pre><code>hue += 1 * direction;
+if (hue &gt; 255) direction = -1;
+if (hue &lt; 0) direction = 1;
+</code></pre>
+
+<p>Perhaps <code>hue</code> is not the best choice of variable names. It represents the red component for an <a href="http://en.wikipedia.org/wiki/RGB_color_model">RGB color</a> value. The range of values for this component is <code>0</code> (no red) to <code>255</code> (all the reds!). On each iteration of our loop we "move" the hue towards either the red or black.</p>
+
+<p>The variable <code>direction</code> can be either <code>1</code> or <code>-1</code>. A value of <code>1</code> means we are moving towards <code>255</code> and a value of <code>-1</code> means we are moving towards <code>0</code>. When we cross a boundary, we flip the direction.</p>
+
+<p>Keen observers will ask why we bother with <code>1 * direction</code>. In our current logic, it's an unnecessary step and unnecessary steps in game development are generally bad. In this case, I wanted to separate the rate of change from the direction. In order words, you could modify that expression to <code>2 * direction</code> and the color would change twice as fast.</p>
+
+<p>This leads us to another important point. Our rate of change is tied to how quickly our loop iterates; most likely 60fps. However, it's not guaranteed to be 60fps and that makes this approach a dangerous practice. Once way to detach ourselves from the loop's speed would be to use the elapsed time that is being passed into our <code>update</code> function.</p>
+
+<p>Let's say that we want to it to take 2 full seconds to go from red to black regardless of how often the <code>update</code> function is called. There's a span of 256 discrete values between red and black. To make our calculations clear, let's say there are 256 units and we'll label these units <strong>R</strong>. Also, the elapsed time will be in milliseconds (ms). For a given frame, if were are given a slice of elapsed time in ms, we'll want to calculate how many <strong>R</strong> units to increase (or decrease) <code>hue</code> by for that slice. Our rate of change can be defined as <code>256 **R** / 2000 **ms**</code> or 0.128 <strong>R/ms</strong>. (You can read that as "0.128 units of red per millisecond".) This rate of change is a constant for our start screen and as such we can define it once (as opposed to calculating it inside the <code>update</code> function).</p>
+
+<p>Now that we have the rate of change , we only need to multiply it by the elapsed time received in <code>update</code> to determine how many <strong>R</strong>s we want. A revised version of the function would look like this:</p>
+
+<pre><code>var rate = 0.128; // R/ms
+
+function update(elapsed) {
+    var amount = rate * elapsed;
+    hue += amount * direction;
+    if (hue &gt; 255) direction = -1;
+    if (hue &lt; 0) direction = 1;
+}
+</code></pre>
+
+<p>One consequence of this change is that hue will no longer be integral values (as much as that can be said in JavaScript.) This means that we'd really want to have two values for the hue: an actual value and a rounded value. This is because the RBG model requires an integral value for each color component.</p>
+
+<pre><code>function update(elapsed) {
+    var amount = rate * elapsed;
+    hue += amount * direction;
+    if (hue &gt; 255) direction = -1;
+    if (hue &lt; 0) direction = 1;
+
+    rounded_hue = Math.round(hue);
+}
+</code></pre>
+
+<h3>Draw</h3>
+
+<p>Let's turn our attention to <code>draw</code> for a moment. One of the first things you <em>generally</em> do is to clear the entire screen. This is simple to do with the canvas API's <code>clearRect</code> method.</p>
+
+<pre><code>ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+</code></pre>
+
+<p>Notice that <code>ctx</code> is an instance of <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#canvasrenderingcontext2d">CanvasRenderingContext2D</a> and not a <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#the-canvas-element">HTMLCanvasElement</a>. However, there is a handy back reference to the canvas element that we use to grab the actual width and height.</p>
+
+<p>There are other options other than clearing the entire canvas, but I'm not going to address this in this post. Also, there are some performance considerations. See the article listed under references.</p>
+
+<p>After clearing the screen, we want to draw something new. In this case, the game title and the instructions. In both cases I want to center the text horizontally. I created a helper function that I can provide with the text to render as well as the vertical position (y).</p>
+
+<pre><code>function centerText(ctx, text, y) {
+    var measurement = ctx.measureText(text);
+    var x = (ctx.canvas.width - measurement.width) / 2;
+    ctx.fillText(text, x, y);
+}
+</code></pre>
+
+<p><code>measureText</code> returns the width in pixels that the rendered text will take up. We use this in combination with the canvas element's width to determine the x position for the text. <code>fillText</code> is responsible for actually drawing the text.</p>
+
+<p>The rendering context <code>ctx</code> is stateful. Meaning that, what happens when you call methods like <code>measureText</code> or <code>fillText</code> depends on the state of the rendering context. The state can be modified by setting its properties.</p>
+
+<pre><code>var y = ctx.canvas.height / 2;
+ctx.fillStyle = 'white';
+ctx.font = '48px monospace';
+centerText(ctx, 'My Awesome Game', y);
+</code></pre>
+
+<p>The properties <code>fillStyle</code> and <code>font</code> change the state of the rendering context and hence affect the methods calls inside of <code>centerText</code>. This state applies to all future methods calls. This means that all calls to <code>fillText</code> will use the color white until you can the <code>fillStyle</code>.</p>
+
+<p>Notice too that we are calculating the x and y values for the text on every frame. This is potentially wasteful since these values are unlikely to change. However, if we want to respond to changes in canvas size (or even changes to the text itself) then we'd want to continue calculating these on every frame. Otherwise, if we were confident that we didn't need to do this, we could calculate these values once and cache them.</p>
+
+<p>Now let's use the red component calculated in <code>update</code> to render the instructional text.</p>
+
+<pre><code>var color = 'rgb(' + hue + ',0,0)';
+
+ctx.fillStyle = color;
+ctx.font = '24px monospace';
+centerText(ctx, 'click to begin', y + 30);
+</code></pre>
+
+<p><code>fillStyle</code> can be set in a number of ways. Earlier, we used the simple value <code>white</code>. Here were are using <code>rgb()</code> to set the individual components explicitly. Any <a href="https://developer.mozilla.org/en-US/docs/CSS/color">CSS color</a> <em>should</em> work with <code>fillStyle</code>.  (I won't be too surprised if some don't though.)</p>
+
+<p>Now you might be wondering why we bothered calculating <code>hue</code> inside <code>update</code> since <code>hue</code> is all about what to draw on the screen. The reason is that <code>draw</code> is concerned with the <em>mechanics</em> of rendering. Anything that is modeling the game state should live in <code>update</code>. The tell in this example is that <code>hue</code> is dependent on elapsed time and the <code>draw</code> doesn't know anything about that.</p>
+
+<h3>Update (again)</h3>
+
+<p>Moving back to <code>update</code>, the next bit deals with input from the player. In the sample code I've extracted the input logic away. The key thing here is that we are not relying on events to tell us about input from the player. Instead we have some helper, <code>input</code> in this case, that gives us the current state of the input. If event-driven logic says "tell me when this happens" then our game logic says "tell me if this is happening now". The primary reason for this is to be deterministic. We can establish at the beginning of our <code>update</code> what the current input state is and that it won't change before the next invocation of the function. In simple games this might be inconsequential, but in others it can be a subtle source of bugs.</p>
+
+<pre><code>var isButtonDown = input.isButtonDown();
+
+var mouseJustClicked = !isButtonDown &amp;&amp; wasButtonDown;
+
+if (mouseJustClicked &amp;&amp; !transitioning) {
+    transitioning = true;
+    // do something here to transition to the actual game
+}
+
+wasButtonDown = isButtonDown;
+</code></pre>
+
+<p>We only want transition when the mouse button has been released. In this case, "released" is defined as "down on the last frame but up on this one". Hence, we need to track what the mouse button's state was on the <em>last</em> frame. That's <code>wasButtonDown</code> and it lives outside of <code>update</code>.</p>
+
+<p>Secondly, we don't want to trigger multiple transitions. That is, if our transition takes some time (perhaps due to animation) then we want to ignore subsequent clicks. We have our <code>transitioning</code> variable outside of <code>update</code> to track that for us.</p>
+
+<p><a href="/blog/2013/03/05/game-dev-03/">next »</a></p>
+
+<h2>Reference</h2>
+
+<ul>
+<li><a href="http://www.html5rocks.com/en/tutorials/canvas/performance/">Canvas Performace</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building a Game with JavaScript]]></title>
+    <link href="http://dev.bennage.com/blog/2012/12/07/game-dev-01/"/>
+    <updated>2012-12-07T17:32:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2012/12/07/game-dev-01</id>
+    <content type="html"><![CDATA[<p><em>See the <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">introduction post</a> for context.</em></p>
+
+<h2>The Loop</h2>
+
+<p>In general, game development begins with the game loop. If you come from the business world of software development, this will be strange. You don't rely on events. <a href="http://haacked.com/">Phil Haack</a> once asked me "why a loop?", to which I responded "uh...". However, a much better answer would have been <a href="http://stackoverflow.com/questions/2565677/why-is-a-main-game-loop-is-necessary-for-developing-a-game">this one on stackoverflow</a>.</p>
+
+<p>Okay, so we should use a master loop. If our runtime is the browser, how do setup this loop? There's a relatively new API called <a href="http://www.w3.org/TR/animation-timing/"><code>requestAnimationFrame</code></a> and that's what most folks recommend. Check out these for details:</p>
+
+<ul>
+<li><a href="http://paulirish.com/2011/requestanimationframe-for-smart-animating/">Paul Irish</a></li>
+<li><a href="http://ie.microsoft.com/testdrive/Graphics/RequestAnimationFrame/Default.html">The IE Team</a></li>
+</ul>
+
+
+<p>(I do recall reading something negative along the way about the API, but I couldn't find it again.)</p>
+
+<p>I used the <code>requestAnimationFrame</code> <a href="https://gist.github.com/1579671">shim</a> referenced in the Paul Irish post above. The shim is only necessary for older browsers that have not implemented the API. <em>By the way, we refer to each iteration of the loop as a "frame" because of the analogy with traditional animation.</em></p>
+
+<h3>Implementation</h3>
+
+<p>Now that we've ensured that <code>requestAnimationFrame</code> is present we can get to our game loop. Here is my game's bootstrap code (well, an early version of it):</p>
+
+<script src="https://gist.github.com/4238210.js?file=boostrap.js"></script>
+
+
+<p>The heart of this the <code>loop</code> function. It has the following step:</p>
+
+<ul>
+<li>capture the current time</li>
+<li>calculate the time that has elasped since the last frame</li>
+<li>execute the game's logic for the frame (that's the update and draw invocations)</li>
+<li>request the next invocation of <code>loop</code> using <code>requestAnimationFrame</code></li>
+<li>record the current time of the this frame for calculations in the next one</li>
+</ul>
+
+
+<p><em>N.B. This code doesn't use <code>frameId</code> yet. The idea is that this handle could be used to halt the loop.</em></p>
+
+<p>The <code>beginLoop</code> function is there merely to provide a closure for some of the variables used to track the state of the loop. It kicks off the loop with its initial invocation of <code>loop</code>.</p>
+
+<p>The big mystery inside of <code>loop</code> is the <code>currentScreen</code> object. Here I was thinking ahead (which can be dangerous). I know that my game will have at least two "screens", possibly more:</p>
+
+<ul>
+<li>start menu screen</li>
+<li>main game screen (where the action takes place)</li>
+</ul>
+
+
+<p>I wanted the loop logic to work with both (as well as any future screens). I expect screen objects to have two methods:</p>
+
+<ul>
+<li><code>update</code> takes the time elapsed since the last frame and is responsible for updating the state of the game.</li>
+<li><code>draw</code> takes the drawing context (from the canvas) and is responsible for rendering the current state of the game.</li>
+</ul>
+
+
+<p>You'll also see that I grab a canvas element and capture its drawing context. If you are not familiar with the canvas APIs, I recommend that you <a href="https://developer.mozilla.org/en-US/docs/HTML/Canvas">start here</a>.</p>
+
+<p><em>Why two different methods for game logic?</em></p>
+
+<p>Keeping the <code>update</code> and <code>draw</code> functions separate is important. When frames becomes expensive to compute, the game may respond with lag or non-deterministic behavior. Too avoid this, you might want your game to skip over some logic during a particular iteration of the loop. However, it's very likely that you <em>won't</em> want to drop calls to <code>update</code>. It's not necessary a big deal if you skip <em>rendering</em> a couple of frames, however if skip calculating the location of a projectile then it might mysteriously "pass through" its target. This will become more relevant to us in particular, because I'd like to all the player to control the speed of game (a common feature of many tower defense games).</p>
+
+<p>Right now <code>update</code> and <code>draw</code> are always called for each iteration of the loop, so the distinction is academic in this context. We could though calculate our frame rate in <code>loop</code> and occasionally skip invoking <code>draw</code> if the rate slowed down.</p>
+
+<p>Now we have enough in place to begin working on our start menu screen.</p>
+
+<p><a href="/blog/2013/01/11/game-dev-02/">next »</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[a n00b's look at HTML5 game development]]></title>
+    <link href="http://dev.bennage.com/blog/2012/12/07/a-n00bs-look-at-html5-game-development/"/>
+    <updated>2012-12-07T10:55:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2012/12/07/a-n00bs-look-at-html5-game-development</id>
+    <content type="html"><![CDATA[<h2>Preamble</h2>
+
+<p>Something disgusting, like six years ago, I <a href="http://www.43things.com/things/view/33927/develop-a-video-game">listed on 43Things</a> that I wanted to write a video game. I've actually made numerous arrested attempts ever since I started programming with my TI-94a back in 1983. My last attempt has been much less arrested (though still incomplete).</p>
+
+<p>I've learned a lot in my most recent endeavor, so it's time to share. You can follow the <a href="https://github.com/bennage/sidera">actual work in progress</a>, but my plan it to recreate the steps I've gone though over the course of a few posts.</p>
+
+<h2>Goals</h2>
+
+<p>I am too ambitious. With that in mind, I created a set of constraints for making a game.</p>
+
+<ul>
+<li>keep gameplay simple</li>
+<li>don't worry about art (that can come later)</li>
+</ul>
+
+
+<p>I started off wanting to make a game for the Windows 8 store. I decided afterwards that I will target modern browsers in general. This means that I took no dependencies on the WinJS libraries. (Though the Windows store is still my endgame.)</p>
+
+<p>I also decided to <em>not</em> use any frameworks (such as <a href="http://impactjs.com/">ImpactJS</a>). Not because they are bad, but because I want to learn why I need them.</p>
+
+<h2>Gameplay</h2>
+
+<p><img class="right" src="/images/posts/sidera-early-build.png" title="[screen capture of the current build of my game]" ></p>
+
+<p>This is my spec (well, more or less).</p>
+
+<p>I decided to make a simple <a href="http://en.wikipedia.org/wiki/Tower_defense">tower defense</a> game. My inspiration is <a href="http://old.casualcollective.com/#games/TSG">The Space Game</a> from the Casual Collective, as well as plenty of influence from StarCraft.</p>
+
+<p>The player will build structures in an asteroid field. Waves of enemy ships will attempt to destroy those structures. The player has to manage resources such as minerals and solar power, and fend of the attacks. Structures will cost minerals to build and require power to operate.</p>
+
+<p>The player can navigate the map (up, down, left, right) as well as zooming in and out. There will be a minimap.</p>
+
+<p>Graphics will be sprite-based. The game should be touch-friendly (really, I want touch to be primary).</p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><p><a href="http://buildnewgames.com/">Build New Games</a>, a collaboration between Microsoft and <a href="http://bocoup.com/">Bocoup</a>, is an excellent set of articles on HTML/JavaScript game development.</p></li>
+<li><p>My friend, <a href="http://mattmadegames.com/">Matt Peterson</a>, currently a graduate student at <a href="https://www.digipen.edu/">DigiPen</a>, who's advice and guidance has been most useful.</p></li>
+</ul>
+
+
+<h2>Table of Contents</h2>
+
+<ol>
+<li><a href="/blog/2012/12/07/game-dev-01/">Game Loop</a></li>
+<li><a href="/blog/2013/01/11/game-dev-02/">Start Screen</a></li>
+<li><a href="/blog/2013/03/05/game-dev-03">Making Things Move</a></li>
+<li>...</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

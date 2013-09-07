@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: async | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/async/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[WinJS: Unpacking Promises]]></title>
+    <link href="http://dev.bennage.com/blog/2012/08/21/winjs-unpacking-promises/"/>
+    <updated>2012-08-21T12:02:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2012/08/21/winjs-unpacking-promises</id>
+    <content type="html"><![CDATA[<p>N.B. <em>If you don't know anything about WinJS, take a moment to peruse <a href="http://dev.bennage.com/blog/2012/08/01/a-brief-introduction-to-winjs/">this primer</a>. Also, the context of this post is the <a href="http://hilojs.codeplex.com/">p&amp;p Hilo project</a>.</em></p>
+
+<p><em>In particular, you should read about promises and <a href="http://msdn.microsoft.com/en-us/library/windows/apps/hh700330.aspx">asynchronous programming in JavaScript</a>. Derick Bailey also wrote <a href="http://lostechies.com/derickbailey/2012/07/19/want-to-build-win8winjs-apps-you-need-to-understand-promises/">about promises</a> on his blog.</em></p>
+
+<h2>A Bit About Promises</h2>
+
+<p>A promise is an object. It is not a function and it is not the <em>value</em> returned from the async operation. To get to the value, you need to call the <code>then</code> method on the promise object. You pass a callback function as an argument to <code>then</code>. The promise invokes the callback and passes the value you're interested in into the callback. Clear as mud, right?</p>
+
+<p>Here's a fictitious example that pretends like calculating a random number requires an async operation:</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    // do stuff with `someNumber`
+});
+</code></pre>
+
+<p>The call to <code>then</code> returns a promise itself. You could do this:</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    // do stuff with `someNumber`
+}).then(function() {
+    // more stuff
+});
+</code></pre>
+
+<p>Or written another way:</p>
+
+<pre><code>var afterRandomNumber = getRandomNumberAsync().then(function(someNumber) { 
+    // do stuff with `someNumber`
+});
+
+afterRandomNumber.then(function() {
+    // more stuff
+});
+</code></pre>
+
+<p>The two example above are the <em>same</em>.</p>
+
+<p>Now if our callback function returns a value, that value is passed along to the next promise's callback.</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    return someNumber + 1;
+}).then(function(someNumberPlusOne) {
+
+});
+</code></pre>
+
+<p>This allows you to easily chain promises, piping the output of one into the next callback in the chain.</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    return someNumber + 1;
+}).then(function(someNumberPlusOne) {
+    return someNumberPlusOne + 1;
+}).then(function(someNumberPlusTwo) {
+
+});
+</code></pre>
+
+<p>Of course, this is a bit silly when then operations are not async. It's more interesting when the thing you return from the callback is also a promise. Let's make a another fictitious async function, this time one that needs input:</p>
+
+<pre><code>getRandomNumberHigherThanAsync(10).then(function(someNumberOverTen){
+    // do something with `someNumberOverTen`
+});
+</code></pre>
+
+<p>Now we can do this:</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    return getRandomNumberHigherThanAsync(someNumber);
+}).then(function(something){
+    // What will `something` be?
+});
+</code></pre>
+
+<p>In the example above, you might think that <code>something</code> will be the promise returned from <code>getRandomNumberHigherThanAsync</code>. It's not. Instead, it's the <em>value</em> that <code>getRandomNumberHigherThanAsync</code> produces and would pass into its callback. <em>Returning another promise from within the callback for a promise is a special case.</em> Though it's probably the most frequent case.</p>
+
+<h2>Putting Promises Together</h2>
+
+<p>Now let's pretend we have a set of functions that all return promises, named <code>A</code> through <code>E</code>. If we wanted to execute them in sequence, passing the results from one to the next, we <em>could</em> write it this:</p>
+
+<pre><code>A().then(function(a) {
+    return B(a).then(function(b){
+        return C(b).then(function(c){
+            return D(c).then(function(d){
+                return E(d);
+            });
+        });
+    });
+});
+</code></pre>
+
+<p>Yeah, that hurts my eyes too. Though I found that I was writing my code <em>just like this</em> at first.</p>
+
+<p>However, we should realize that <code>A.then()</code> returns a promise and that that promise completes only when all of the nested promises have completed. If we wanted to execute a new function <code>F</code> after all these steps, we could do it like this:</p>
+
+<pre><code>var waitForAllToBeDone = A().then(function(a) {
+    return B(a).then(function(b){
+        return C(b).then(function(c){
+            return D(c).then(function(d){
+                return E(d);
+            });
+        });
+    });
+});
+
+waitForAllToBeDone().then(function(e){
+    return F(e);
+});
+</code></pre>
+
+<p>However, that last inline callback has the same signature as <code>F</code>. That means that we can simplify to this:</p>
+
+<pre><code>waitForAllToBeDone().then(F);
+</code></pre>
+
+<p>Now we realize that what we did for <code>F</code> is also true for <code>E</code>. In fact, it is true for the entire chain. We can simplify that nasty nested beast to:</p>
+
+<pre><code>A().then(B).then(C).then(D).then(E).then(F);
+</code></pre>
+
+<p>Much nicer.</p>
+
+<h2>A Real Example</h2>
+
+<p>Let's bring this home. While working on <a href="http://hilojs.codeplex.com/">HiloJS</a> we needed to copy an image thumbnail to a new file. It sounds simple, but it requires the following steps:</p>
+
+<ol>
+<li>Open a file that we will write <em>to</em>. We'll call this the <strong>target</strong> file.</li>
+<li>Get the thumbnail image from another file. We'll call this the <strong>source</strong> file. (WinRT creates the thumbnail for us from the source.)</li>
+<li>Copy the stream from the thumbnail source to the target file's input stream.</li>
+<li>Flush the output stream.</li>
+<li>Close both the input and the output stream.</li>
+</ol>
+
+
+<p>(Actually we don't really care about the order of the first two steps. They could be switched.)</p>
+
+<p>Our initial implementation looked liked this:</p>
+
+<pre><code>function writeThumbnailToFile(sourceFile, targetFile) {
+
+    var whenFileIsOpen = targetFile.openAsync(fileAccessMode.readWrite);
+
+    return whenFileIsOpen.then(function (outputStream) {
+
+        return sourceFile.getThumbnailAsync(thumbnailMode.singleItem)).then(function (thumbnail) {
+            var inputStream = thumbnail.getInputStreamAt(0);
+            return randomAccessStream.copyAsync(inputStream, outputStream).then(function () {
+                return outputStream.flushAsync().then(function () {
+                    inputStream.close();
+                    outputStream.close();
+                });
+            });
+        });
+    });
+}
+</code></pre>
+
+<p>Then we had a code review with the always helpful Chris Tavares. He pointed us in a more excellent direction. We were able to change the code to this:</p>
+
+<pre><code>function writeThumbnailToFile(sourceFile, targetFile) {
+
+    var whenFileIsOpen = targetFile.openAsync(fileAccessMode.readWrite);
+    var whenThumbailIsReady = sourceFile.getThumbnailAsync(thumbnailMode.singleItem);
+
+    var whenEverythingIsReady = WinJS.Promise.join([whenFileIsOpen, whenThumbailIsReady]);
+
+    var inputStream, outputStream;
+
+    whenEverythingIsReady.then(function (args) {
+        outputStream = args[0];
+        var thumbnail = args[1];
+        inputStream = thumbnail.getInputStreamAt(0);
+        return randomAccessStream.copyAsync(inputStream, outputStream);
+
+    }).then(function () {
+        return outputStream.flushAsync();
+
+    }).then(function () {
+        inputStream.close();
+        outputStream.close();
+    });
+}
+</code></pre>
+
+<p>A couple of notable differences:</p>
+
+<ol>
+<li><p>In the first implementation, we passed along some values via the closure (e.g., <code>inputStream</code> and <code>outputStream</code>). In the second, we had to declare them in the outer scope because there was no common closure.</p></li>
+<li><p>In the first implementation, we chained <code>targetFile.openAsync</code> and <code>sourceFile.getThumbnailAsync</code>, but we didn't really need to. We made the real relationship more explicit in the second using <code>WinJS.Promise.join</code>. That mean the values of these two promises came to us in an arrays (we named it <code>args</code>).</p></li>
+</ol>
+
+
+<h2>Summary</h2>
+
+<p>Understanding how promises can be composed really helped us to make the code more readable. It can be difficult to wrap your head around the way they work, but (like it or not) promises are an essential part of writing apps with WinJS.</p>
+
+<h2>Fictitious Functions Implementations</h2>
+
+<pre><code>// an example implementation of getRandomNumberAsync
+
+function getRandomNumberAsync() {
+    return WinJS.Promise.as(Math.random());
+}
+
+// an example implementation of getRandomNumberHigherThanAsync
+
+function getRandomNumberHigherThanAsync(minimum) {
+    var someNumber = Math.random() + minimum;
+    return WinJS.Promise.as(someNumber);
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

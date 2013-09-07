@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>WinJS: Unpacking Promises - Christopher Bennage</title>
+  <meta name="author" content="Christopher Bennage">
+
+  
+  <meta name="description" content="N.B. If you don&#8217;t know anything about WinJS, take a moment to peruse this primer. Also, the context of this post is the p&amp;p Hilo project. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dev.bennage.com/blog/2012/08/21/winjs-unpacking-promises/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/ChristopherBennage" rel="alternate" title="Christopher Bennage" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26126539-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Christopher Bennage</a></h1>
+  
+    <h2>not all who wander are lost</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/ChristopherBennage" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:dev.bennage.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">WinJS: Unpacking Promises</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-21T12:02:00-07:00" pubdate data-updated="true">Aug 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>N.B. <em>If you don&#8217;t know anything about WinJS, take a moment to peruse <a href="http://dev.bennage.com/blog/2012/08/01/a-brief-introduction-to-winjs/">this primer</a>. Also, the context of this post is the <a href="http://hilojs.codeplex.com/">p&amp;p Hilo project</a>.</em></p>
+
+<p><em>In particular, you should read about promises and <a href="http://msdn.microsoft.com/en-us/library/windows/apps/hh700330.aspx">asynchronous programming in JavaScript</a>. Derick Bailey also wrote <a href="http://lostechies.com/derickbailey/2012/07/19/want-to-build-win8winjs-apps-you-need-to-understand-promises/">about promises</a> on his blog.</em></p>
+
+<h2>A Bit About Promises</h2>
+
+<p>A promise is an object. It is not a function and it is not the <em>value</em> returned from the async operation. To get to the value, you need to call the <code>then</code> method on the promise object. You pass a callback function as an argument to <code>then</code>. The promise invokes the callback and passes the value you&#8217;re interested in into the callback. Clear as mud, right?</p>
+
+<p>Here&#8217;s a fictitious example that pretends like calculating a random number requires an async operation:</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    // do stuff with `someNumber`
+});
+</code></pre>
+
+<p>The call to <code>then</code> returns a promise itself. You could do this:</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    // do stuff with `someNumber`
+}).then(function() {
+    // more stuff
+});
+</code></pre>
+
+<p>Or written another way:</p>
+
+<pre><code>var afterRandomNumber = getRandomNumberAsync().then(function(someNumber) { 
+    // do stuff with `someNumber`
+});
+
+afterRandomNumber.then(function() {
+    // more stuff
+});
+</code></pre>
+
+<p>The two example above are the <em>same</em>.</p>
+
+<p>Now if our callback function returns a value, that value is passed along to the next promise&#8217;s callback.</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    return someNumber + 1;
+}).then(function(someNumberPlusOne) {
+
+});
+</code></pre>
+
+<p>This allows you to easily chain promises, piping the output of one into the next callback in the chain.</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    return someNumber + 1;
+}).then(function(someNumberPlusOne) {
+    return someNumberPlusOne + 1;
+}).then(function(someNumberPlusTwo) {
+
+});
+</code></pre>
+
+<p>Of course, this is a bit silly when then operations are not async. It&#8217;s more interesting when the thing you return from the callback is also a promise. Let&#8217;s make a another fictitious async function, this time one that needs input:</p>
+
+<pre><code>getRandomNumberHigherThanAsync(10).then(function(someNumberOverTen){
+    // do something with `someNumberOverTen`
+});
+</code></pre>
+
+<p>Now we can do this:</p>
+
+<pre><code>getRandomNumberAsync().then(function(someNumber) { 
+    return getRandomNumberHigherThanAsync(someNumber);
+}).then(function(something){
+    // What will `something` be?
+});
+</code></pre>
+
+<p>In the example above, you might think that <code>something</code> will be the promise returned from <code>getRandomNumberHigherThanAsync</code>. It&#8217;s not. Instead, it&#8217;s the <em>value</em> that <code>getRandomNumberHigherThanAsync</code> produces and would pass into its callback. <em>Returning another promise from within the callback for a promise is a special case.</em> Though it&#8217;s probably the most frequent case.</p>
+
+<h2>Putting Promises Together</h2>
+
+<p>Now let&#8217;s pretend we have a set of functions that all return promises, named <code>A</code> through <code>E</code>. If we wanted to execute them in sequence, passing the results from one to the next, we <em>could</em> write it this:</p>
+
+<pre><code>A().then(function(a) {
+    return B(a).then(function(b){
+        return C(b).then(function(c){
+            return D(c).then(function(d){
+                return E(d);
+            });
+        });
+    });
+});
+</code></pre>
+
+<p>Yeah, that hurts my eyes too. Though I found that I was writing my code <em>just like this</em> at first.</p>
+
+<p>However, we should realize that <code>A.then()</code> returns a promise and that that promise completes only when all of the nested promises have completed. If we wanted to execute a new function <code>F</code> after all these steps, we could do it like this:</p>
+
+<pre><code>var waitForAllToBeDone = A().then(function(a) {
+    return B(a).then(function(b){
+        return C(b).then(function(c){
+            return D(c).then(function(d){
+                return E(d);
+            });
+        });
+    });
+});
+
+waitForAllToBeDone().then(function(e){
+    return F(e);
+});
+</code></pre>
+
+<p>However, that last inline callback has the same signature as <code>F</code>. That means that we can simplify to this:</p>
+
+<pre><code>waitForAllToBeDone().then(F);
+</code></pre>
+
+<p>Now we realize that what we did for <code>F</code> is also true for <code>E</code>. In fact, it is true for the entire chain. We can simplify that nasty nested beast to:</p>
+
+<pre><code>A().then(B).then(C).then(D).then(E).then(F);
+</code></pre>
+
+<p>Much nicer.</p>
+
+<h2>A Real Example</h2>
+
+<p>Let&#8217;s bring this home. While working on <a href="http://hilojs.codeplex.com/">HiloJS</a> we needed to copy an image thumbnail to a new file. It sounds simple, but it requires the following steps:</p>
+
+<ol>
+<li>Open a file that we will write <em>to</em>. We&#8217;ll call this the <strong>target</strong> file.</li>
+<li>Get the thumbnail image from another file. We&#8217;ll call this the <strong>source</strong> file. (WinRT creates the thumbnail for us from the source.)</li>
+<li>Copy the stream from the thumbnail source to the target file&#8217;s input stream.</li>
+<li>Flush the output stream.</li>
+<li>Close both the input and the output stream.</li>
+</ol>
+
+
+<p>(Actually we don&#8217;t really care about the order of the first two steps. They could be switched.)</p>
+
+<p>Our initial implementation looked liked this:</p>
+
+<pre><code>function writeThumbnailToFile(sourceFile, targetFile) {
+
+    var whenFileIsOpen = targetFile.openAsync(fileAccessMode.readWrite);
+
+    return whenFileIsOpen.then(function (outputStream) {
+
+        return sourceFile.getThumbnailAsync(thumbnailMode.singleItem)).then(function (thumbnail) {
+            var inputStream = thumbnail.getInputStreamAt(0);
+            return randomAccessStream.copyAsync(inputStream, outputStream).then(function () {
+                return outputStream.flushAsync().then(function () {
+                    inputStream.close();
+                    outputStream.close();
+                });
+            });
+        });
+    });
+}
+</code></pre>
+
+<p>Then we had a code review with the always helpful Chris Tavares. He pointed us in a more excellent direction. We were able to change the code to this:</p>
+
+<pre><code>function writeThumbnailToFile(sourceFile, targetFile) {
+
+    var whenFileIsOpen = targetFile.openAsync(fileAccessMode.readWrite);
+    var whenThumbailIsReady = sourceFile.getThumbnailAsync(thumbnailMode.singleItem);
+
+    var whenEverythingIsReady = WinJS.Promise.join([whenFileIsOpen, whenThumbailIsReady]);
+
+    var inputStream, outputStream;
+
+    whenEverythingIsReady.then(function (args) {
+        outputStream = args[0];
+        var thumbnail = args[1];
+        inputStream = thumbnail.getInputStreamAt(0);
+        return randomAccessStream.copyAsync(inputStream, outputStream);
+
+    }).then(function () {
+        return outputStream.flushAsync();
+
+    }).then(function () {
+        inputStream.close();
+        outputStream.close();
+    });
+}
+</code></pre>
+
+<p>A couple of notable differences:</p>
+
+<ol>
+<li><p>In the first implementation, we passed along some values via the closure (e.g., <code>inputStream</code> and <code>outputStream</code>). In the second, we had to declare them in the outer scope because there was no common closure.</p></li>
+<li><p>In the first implementation, we chained <code>targetFile.openAsync</code> and <code>sourceFile.getThumbnailAsync</code>, but we didn&#8217;t really need to. We made the real relationship more explicit in the second using <code>WinJS.Promise.join</code>. That mean the values of these two promises came to us in an arrays (we named it <code>args</code>).</p></li>
+</ol>
+
+
+<h2>Summary</h2>
+
+<p>Understanding how promises can be composed really helped us to make the code more readable. It can be difficult to wrap your head around the way they work, but (like it or not) promises are an essential part of writing apps with WinJS.</p>
+
+<h2>Fictitious Functions Implementations</h2>
+
+<pre><code>// an example implementation of getRandomNumberAsync
+
+function getRandomNumberAsync() {
+    return WinJS.Promise.as(Math.random());
+}
+
+// an example implementation of getRandomNumberHigherThanAsync
+
+function getRandomNumberHigherThanAsync(minimum) {
+    var someNumber = Math.random() + minimum;
+    return WinJS.Promise.as(someNumber);
+}
+</code></pre>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Christopher Bennage</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-21T12:02:00-07:00" pubdate data-updated="true">Aug 21<span>st</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/winjs/'>WinJS</a>, <a class='category' href='/blog/categories/windows-8/'>Windows 8</a>, <a class='category' href='/blog/categories/async/'>async</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://dev.bennage.com/blog/2012/08/21/winjs-unpacking-promises/" data-via="bennage" data-counturl="http://dev.bennage.com/blog/2012/08/21/winjs-unpacking-promises/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/08/15/unit-testing-winjs/" title="Previous Post: Unit Testing WinJS: First Steps">&laquo; Unit Testing WinJS: First Steps</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/11/16/technical-interviews/" title="Next Post: Technical Interviews">Technical Interviews &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Christopher</h1>
+
+<img class="bio" src="http://gravatar.com/avatar/0128fa0de6a321d6e3766ae3fa06b9c2?s=80">
+
+<ul><li>
+<p>
+Christopher is a developer on the <a href="http://msdn.microsoft.com/practices">patterns & practices</a> team at Microsoft.
+</p>
+
+
+<p>
+He considers sidewalks to merely be suggestions and frequently falls under the influence of G. K. Chesterton.
+</p><p>
+He thinks agile software principles and open source software are pretty cool; especially if JavaScript is involved.
+</p>
+</li>
+</ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/game-dev-03b/">Couple of JavaScript Questions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/05/game-dev-03/">Building a Game with JavaScript: Making Things Move</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/11/game-dev-02/">Building a Game with JavaScript: Start Screen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/game-dev-01/">Building a Game with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">a n00b's look at HTML5 game development</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+<div id="recentcomments" class="dsq-widget">
+<h1 class="dsq-widget-title">Recent Comments</h1>
+<script type="text/javascript" src="http://bennage.disqus.com/recent_comments_widget.js?num_items=&hide_avatars=1&avatar_size=18&excerpt_length="></script>
+</div>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("bennage", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/bennage" class="twitter-follow-button" data-show-count="false">Follow @bennage</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/bennage">@bennage</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bennage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Christopher Bennage -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bennage';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://dev.bennage.com/blog/2012/08/21/winjs-unpacking-promises/';
+        var disqus_url = 'http://dev.bennage.com/blog/2012/08/21/winjs-unpacking-promises/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/bennage.js"></script>
+<script src="/javascripts/newhope.js"></script>
+
+</body>
+</html>

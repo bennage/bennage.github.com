@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: source control | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/source-control/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Finding Out When Something Happened in Your Git Repo]]></title>
+    <link href="http://dev.bennage.com/blog/2012/02/08/finding-stuff-in-your-git-repo-3/"/>
+    <updated>2012-02-08T07:00:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2012/02/08/finding-stuff-in-your-git-repo-3</id>
+    <content type="html"><![CDATA[<p><em>Acknowledgment: This is meant to be the Windows equivalent of <a href="http://blog.jayway.com/author/andersjanmyr">Anders Janmyr</a>'s <a href="http://blog.jayway.com/2012/01/25/finding-with-git/">excellent post</a> on the subject of finding stuff with Git. Essentially, I'm translating some of Anders' examples to Powershell and providing explanations for things that many Windows devs might not be familiar with.</em></p>
+
+<p>This is the third in a series of posts providing a set of recipes for locating sundry and diverse <em>thingies</em> in a Git repository.</p>
+
+<h2>Determining when a file was added, deleted, modified, or renamed</h2>
+
+<p>You can include the <code>--diff-filter</code> argument with <code>git log</code> to find commits that include specific operations. For example:</p>
+
+<pre><code>git log --diff-filter=D # delete
+git log --diff-filter=A # add
+git log --diff-filter=M # modified
+git log --diff-filter=R # rename
+</code></pre>
+
+<p>There are additional flags as well. Check the <a href="http://schacon.github.com/git/git-log.html">documentation</a>. By default, <code>git log</code> just returns the commit id, author, date, and message. When using these filters I like to include <code>--summary</code> so that the list of operations in the commit are included as well.</p>
+
+<p><em>N.B. If you run a <code>git log</code> command and your prompt turns into a <code>:</code> simply press <code>q</code> to exit.</em></p>
+
+<p>I don't think that you would ever want to return <em>all</em> of the operations of a specific type in the log however. Instead, you will probably want to find out when a specific file was operated on.</p>
+
+<p>Let's say that something was deleted and you need to find out when and by whom. You can pass a path to <code>git log</code>, though you'll need to preced it with <code>--</code> and a space to disambiguate it from other arguments. Armed with this and following Ander's post you would expect to be able to do this:</p>
+
+<pre><code>git log --diff-filter=D --summary -- /path/to/deleted/file
+</code></pre>
+
+<p>And if you aren't using Powershell this works as expected. I tested it with Git Bash (included with msysgit) and good ol' cmd as well. Both work as expected.</p>
+
+<p>However, when you attempt this in Powershell, git complains that the path is an <em>ambiguous arugment</em>. I was able to, um, "work around" it by creating an empty placeholder file at the location.  Fortunately, <a href="https://twitter.com/#!/Jittery">Jay Hill</a> heard my anguish on Twitter and dug up <a href="http://blogs.popart.com/2011/11/command-line-git-and-windows-gotchas/">this post</a> from <a href="http://blogs.popart.com/author/ethanbrown/">Ethan Brown</a>. In a nutshell, Powershell strips out the <code>--</code>. You can force it to be recognized by wrapping the argument in double qoutes:</p>
+
+<pre><code>git log --diff-filter=D --summary "--" /path/to/deleted/file
+</code></pre>
+
+<p>That works!</p>
+
+<p>I'm guessing that Powershell considers <code>--</code> to be an empty arugment and therefore something to be ignored. I also assume that when the file actually exists at the path that git is smart enough to recognize the argument as a path. (Indeed, the official documentations says that "paths <em>may</em> need to be prefixed").</p>
+
+<p>While we're here, I also want to point out that you can use wild cards in the path. Perhaps you don't know the exact path to the file, but you know that it was named <code>monkey.js</code>:</p>
+
+<pre><code>git log --diff-filter=D --summary -- **/monkey.js
+</code></pre>
+
+<p>Happy hunting!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finding Content in Files with Git]]></title>
+    <link href="http://dev.bennage.com/blog/2012/02/01/finding-stuff-in-your-git-repo-2/"/>
+    <updated>2012-02-01T23:50:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2012/02/01/finding-stuff-in-your-git-repo-2</id>
+    <content type="html"><![CDATA[<p><em>Acknowledgment: This is meant to be the Windows equivalent of <a href="http://blog.jayway.com/author/andersjanmyr">Anders Janmyr</a>'s <a href="http://blog.jayway.com/2012/01/25/finding-with-git/">excellent post</a> on the subject of finding stuff with Git. Essentially, I'm translating some of Anders' examples to Powershell and providing explanations for things that many Windows devs might not be familiar with.</em></p>
+
+<p>This is the second in a series of posts providing a set of recipes for locating sundry and diverse <em>thingies</em> in a Git repository.</p>
+
+<h2>Finding content in files</h2>
+
+<p>Let's say that there are hidden monkeys inside your files and you need to find. You can search <em>the content</em> of files in a Git repositor by using <code>git grep</code>. (For all you Windows devs, <a href="http://en.wikipedia.org/wiki/Grep"><code>grep</code></a> is a kind of magical pony from Unixland whose special talent is finding things.)</p>
+
+<pre><code># find all files whose content contains the string 'monkey'
+PS:\&gt; git grep monkey
+</code></pre>
+
+<p>There several arguments you can pass to grep to modify the behavior. These special arguments make the pony do different tricks.</p>
+
+<pre><code># return the line number where the match was found
+PS:\&gt; git grep -n monkey
+
+# return just the file names
+PS:\&gt; git grep -l monkey
+
+# count the number of matches in each file
+PS:\&gt; git grep -c monkey
+</code></pre>
+
+<p>You can pass an arbitrary number of <em>references</em> after the pattern you're trying to match. By <em>reference</em> I mean something that's <em>commit-ish</em>. That is, it can be the id (or SHA) of a commit, the name of a branch, a tag, or one of the special identifier like HEAD.</p>
+
+<pre><code># search the master branch, and two commits by id, 
+# and also the commit two before the HEAD
+PS:\&gt; git grep monkey master d0fb0d 032086 HEAD~2
+</code></pre>
+
+<p>The SHA is the 40-digit id of a commit. We only need enough of the SHA for Git to uniquely identify the commit. Six or eight characters is generally enough.</p>
+
+<p>Here's an example using the <a href="https://github.com/ravendb/ravendb">RavenDB repo</a>.</p>
+
+<pre><code>PS:\&gt; git grep -n monkey master f45c08bb8 HEAD~2
+
+master:Raven.Tests/Storage/CreateIndexes.cs:83:         db.PutIndex("monkey", new IndexDefinition { Map = unimportantIndexMap });
+master:Raven.Tests/Storage/CreateIndexes.cs:90:         Assert.Equal("monkey", indexNames[1]);
+f45c08bb8:Raven.Tests/Storage/CreateIndexes.cs:82:          db.PutIndex("monkey", new IndexDefinition { Map = unimportantIndexMap });
+f45c08bb8:Raven.Tests/Storage/CreateIndexes.cs:89:          Assert.Equal("monkey", indexNames[1]);
+HEAD~2:Raven.Tests/Storage/CreateIndexes.cs:83:         db.PutIndex("monkey", new IndexDefinition { Map = unimportantIndexMap });
+HEAD~2:Raven.Tests/Storage/CreateIndexes.cs:90:         Assert.Equal("monkey", indexNames[1]);
+</code></pre>
+
+<p>Notice that each line begins with the name of the commit where the match was found. In the example above where we asked for the line numbers, the results were in the pattern:</p>
+
+<pre><code>[commit ref]:[file path]:[line no]:[matching content]
+</code></pre>
+
+<p><em>N.B. I had one repository that did not work with <code>git grep</code>. It was because my 'text' files were encoded UTF-16 and git interpretted them as binary. I converted them to UTF-8 and the world became a happy place. Thanks to <a href="https://twitter.com/#!/dahlbyk">Keith Dahlby</a> and <a href="https://twitter.com/#!/adymitruk">Adam Dymitruk</a> for helping me to figure out the problem.</em></p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Grep">grep</a></li>
+<li><a href="http://book.git-scm.com/1_the_git_object_model.html">SHA</a> (just the first paragraph)</li>
+<li><a href="http://book.git-scm.com/4_git_treeishes.html">ways of referencing commits</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finding Files by Name with Git]]></title>
+    <link href="http://dev.bennage.com/blog/2012/01/30/finding-stuff-in-your-git-repo-1/"/>
+    <updated>2012-01-30T07:02:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2012/01/30/finding-stuff-in-your-git-repo-1</id>
+    <content type="html"><![CDATA[<p><em>Acknowledgment: This is meant to be the Windows equivalent of <a href="http://blog.jayway.com/author/andersjanmyr">Anders Janmyr</a>'s <a href="http://blog.jayway.com/2012/01/25/finding-with-git/">excellent post</a> on the subject of finding stuff with Git. Essentially, I'm translating some of Anders' examples to Powershell and providing explanations for things that many Windows devs might not be familiar with.</em></p>
+
+<p>This is the first in a series of posts providing a set of recipes for locating sundry and diverse <em>thingies</em> in a Git repository.</p>
+
+<h2>Finding files by name</h2>
+
+<p>Let's say that you want locate all the files in a git repository that contain 'monkey' in the file name. (Finding monkeys is a very common task.)</p>
+
+<pre><code># find all files whose name matches 'monkey'
+PS:\&gt; git ls-files | Select-String monkey
+</code></pre>
+
+<p>This <em>pipes</em> the output of <code>git ls-files</code> into the Powershell cmdlet <code>Select-String</code> which filters the output line-by-line. To better understand what this means, run just <code>git ls-files</code>.</p>
+
+<p>Of course, you can also pass a regular expression to<code>Select-String</code> (that is, if you hate yourself.)</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://schacon.github.com/git/git-ls-files.html">git ls-files</a></li>
+<li><a href="http://technet.microsoft.com/en-us/library/dd315403.aspx">Select-String</a></li>
+<li><a href="http://technet.microsoft.com/en-us/library/ee176927.aspx">the pipe operator <code>|</code></a></li>
+<li><a href="http://haacked.com/archive/2011/12/13/better-git-with-powershell.aspx">Better Git with Powershell by Phil Haack</a></li>
+</ul>
+
+
+<p><a href="/blog/2012/02/01/finding-stuff-in-your-git-repo-2/">Next, searching for files with specific content.</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: software | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/software/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Blocks and Playsets]]></title>
+    <link href="http://dev.bennage.com/blog/2011/10/17/blocks-and-playsets/"/>
+    <updated>2011-10-17T09:40:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2011/10/17/blocks-and-playsets</id>
+    <content type="html"><![CDATA[<p>I've recently discovered that I favor blocks over playsets. I'm talking about toys, and of course the canonical example of blocks is Legos. You can build nearly anything with them. They are useful, versatile, and inviting.</p>
+
+<p>Now, the term 'playset' warrants a bit more explanation. I don't mean the large outdoor sets with swings and sandboxes and spring-loaded ponies. No, I'm a child of the 80s and I <em>loved me some</em> Star Wars playsets.</p>
+
+<!-- more -->
+
+
+<p><img class="right" src="/images/posts/hoth-playset.jpg"></p>
+
+<p>So my definition of 'playset' is colored by my childhood. I think think of 'playset' as a themed toy representing an environment. Like the Hoth playset pictured here. If you want to pretend you are the Imperials raining destruction upon a ragtag Rebel Alliance, the <a href="http://www.ebay.com/csc/i.html?_nkw=Hoth+imperial+attack+playset&amp;LH_Complete=1&amp;_odkw=Hoth+attack+playset" title="Yes, I had this as a kid.">Hoth Imperial Attack playset</a> can't be beat.</p>
+
+<p>The problem is <em>that's all you can do with it</em>. I mean, you can't use the Hoth playset to stage an epic Cybertronian showdown between Optimus and Megatron. (Well you can, but you'll have admit it's just a bit awkward.)</p>
+
+<p>Let's get back to the blocks. Those puppies can be used to reconstruct a carbonite freezing chamber <em>as well as</em> hosting a dramatic cliff-side battle between Snake Eyes and Storm Shadow. Better yet, you can construct worlds of your own invention instead of merely mirroring those of others.</p>
+
+<p>In reality, it's not so cut and dry. (Nothing is, is it?) No, in reality, there's a spectrum. In reality, there is Lego®  Star Wars®. The line between blocks and playsets is blurred.</p>
+
+<h2>Software</h2>
+
+<p>I believe these categories apply to software as well, though we call them <em>libraries</em> and <em>frameworks</em>. <a href="http://wekeroad.com/">Rob Conery</a> asked a <a href="https://plus.google.com/u/0/100497775264295816553/posts/DoWuYVrDzqX%20%22Is%20Backbone.js%20is%20a%20'Framework'%20or%20a%20'Library'?">question about this</a> on Google+ recently. <a href="http://lostechies.com/derickbailey/">Derick Bailey</a> provides a definition attributed to Chris Eppstein:</p>
+
+<p><blockquote><p>"Frameworks call your code, you call library code." <br/></p></blockquote></p>
+
+<p>I began thinking about this from a different angle. I think that <em>frameworks impose an opinion</em>. <a href="http://rubyonrails.org/">Ruby on Rails</a> has a <a href="http://gettingreal.37signals.com/ch04_Make_Opinionated_Software.php">strong opinion</a> about how to create web apps. I think that make it a framework. Or at least, closer to the framework end of the spectrum than to the library end.</p>
+
+<p><img class="right" src="/images/posts/crossover-comic.jpg"></p>
+
+<p>Now, to be clear, I am <em>not</em> saying that opinionated software or that frameworks are bad. In fact, they can be brilliant. I think Rail's strong opinion has been a significant contribution to its success. What's important to understand though is the limitations. When you are using a framework, the boundaries are harder to cross. The results can be strained and unnatural. The problem for me begins when our fanboy favor for a framework leads us to force its use it where it doesn't fit.</p>
+
+<h2>Fun</h2>
+
+<p>Playing with both blocks and playsets is <em>fun</em>. So let's stretch the analogy even further. What does that mean to software development? My takeaway is this:</p>
+
+<ul>
+<li>Understand the tools you are using.</li>
+<li>If it hurts, ask why. (I always liked Ayende's <a href="http://ayende.com/blog/3320/zero-friction-maintainability">Zero Friction thoughts</a>.)</li>
+<li>Finally, <a href="http://hanselminutes.com/260/net-api-design-that-optimizes-for-programmer-joy-with-jonathan-carter">optimize your development experience for joy</a>.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

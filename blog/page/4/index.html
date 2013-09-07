@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Christopher Bennage</title>
+  <meta name="author" content="Christopher Bennage">
+
+  
+  <meta name="description" content="I&#8217;ve been asked about best practices and good design several times over the last few months. A few questions have been from students, or &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dev.bennage.com/blog/page/4/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/ChristopherBennage" rel="alternate" title="Christopher Bennage" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26126539-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Christopher Bennage</a></h1>
+  
+    <h2>not all who wander are lost</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/ChristopherBennage" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:dev.bennage.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/03/30/the-roots-of-best-practices/">The Roots of Best Practices</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-30T01:55:00-07:00" pubdate data-updated="true">Mar 30<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img class="right" src="/images/posts/roots.jpg"></p>
+
+<p>I&#8217;ve been asked about best practices and good design several times over the last few months. A few questions have been from students, or newcomers to .NET, and I have found their questions very insightful. They ask questions I remember asking myself. One good example was &#8220;I know I should separate my app into three layers, but how should I do it?&#8221;</p>
+
+<p>I&#8217;m rather to sensitive to the idea of &#8220;answering the wrong question&#8221;. I believe that it&#8217;s easy to do that when talking about best practices.  My intention with this post is build a foundation for discussing good design. A starting point to make sure we are solving the right riddle. I certainly don&#8217;t consider myself a <a href="http://www.pragprog.com/the-pragmatic-programmer">master</a> on this topic, but I do have a lot of thoughts.</p>
+
+<h2>Acknowledging My Bias</h2>
+
+<p>I&#8217;m a fan of <a href="http://en.wikipedia.org/wiki/Object-oriented_programming">Object Orient Programming</a>, <a href="http://en.wikipedia.org/wiki/Domain-driven_design">Domain-Driven Design</a>, <a href="http://en.wikipedia.org/wiki/Design_patterns">Design Patterns</a>, <a href="http://en.wikipedia.org/wiki/Test_Driven_Development">Test Driven Development</a>, and <a href="http://en.wikipedia.org/wiki/Agile_software_development">agile methodologies</a>. I use a lot of <a href="http://www.ohloh.net/accounts/10381/stacks/14905">open source software</a>. Foremost, I like to think that I am pragmatic.   I&#8217;m motivated by getting stuff done.</p>
+
+<h2>The Point of Best Practices</h2>
+
+<p>There are a long list of principles out that are generally acknowledged as best practices. They range from generalities like &#8220;your code should be well commented&#8221; to very specific and named rules such as the <a href="http://en.wikipedia.org/wiki/Liskov_substitution_principle">Liskov substitution principle</a>. Regardless of the type, I think it&#8217;s important to know why a given principle is better than its alternatives.</p>
+
+<p>I&#8217;ll use the <a href="http://en.wikipedia.org/wiki/Law_Of_Demeter">Law of Demeter</a> (LoD) as an example. Overly simplified, the law says that an object should only invoke methods that it owns.  In other words, you&#8217;ll break the law with something.child.Method() whereas something.Method() does not.</p>
+
+<p>Why is LoD good? One quick answer is that you never know when something.child might be null, and applying LoD helps you avoid the nasty <a href="http://msdn2.microsoft.com/en-us/library/system.nullreferenceexception.aspx">NullReferenceException</a>. Wikipedia has a nice summary the benefits:</p>
+
+<blockquote>
+
+The advantage of following the Law of Demeter is that the resulting software tends to be more maintainable and adaptable. Since objects are less dependent on the internal structure of other objects, object containers can be changed without reworking their callers.
+
+</blockquote>
+
+
+<p>Now we are approaching the real heart of the matter, we want software that is easy to maintainable, and easy to extend. LoD promotes those values. In facts, most of the generally accepted principles are meant to produce software that is <em>maintainable and extensible</em>. Here is my <a href="http://en.wikipedia.org/wiki/Grand_unification_theory">Grand Unification Theory</a> of software best practices: the guiding, or root, principles are <strong>Maintainability</strong> and <strong>Extensibility</strong>. (These two are close cousins, and you might arguably combine them.)</p>
+
+<p>Okay, so maybe there are other guiding principles as well, such as <strong>Scalability</strong> and <strong>Performance</strong>. I&#8217;d even add that the most important root principle is <strong>Value</strong>. By Value, I mean that the software needs to do <em>what the user wants done</em>.  So maybe, Maintainability and Extensibility are just like electromagnetism and the weak nuclear force of good software design.</p>
+
+<h2>The Root of the Matter</h2>
+
+<p>Now, let&#8217;s deconstruct further.  Why do we care about Maintainability and Extensibility? We care because they result in <em>reduced</em> costs.  The bulk of cost with custom software is <em>not</em> building it, but <a href="http://users.jyu.fi/~koskinen/smcosts.htm">maintaining it</a>. If you are in business, reduced costs equals more money; if you are a hobbyist or open source developer then reduced costs means getting to the desired result in less time.  That&#8217;s the bottom line: <em>time and money</em>. We employ best practices to save ourselves time and money.</p>
+
+<p>Okay, well, nothing new here. You probably already knew this.  I emphasize it though because I&#8217;ve found that &#8220;best practices&#8221; have a tendency to degrade into a set of arbitrarily applied rules, enforced without exception, irrespective of whether or not they are useful. A great example is &#8220;always comment your code&#8221;. The intention of this rule is improve maintainability.  We&#8217;ve all seen the end result.</p>
+
+<pre><code>//open the file 
+FileStream stream = File.Open(pathToFile, FileMode.Open);
+</code></pre>
+
+<p>Does this improve maintainability? Perhaps if you can&#8217;t read C#, but even then it seems unlikely. Does one extraneous little comment hurt? Not by itself. A poppy flower is beautiful, a thousand poppies is dangerous. If 50% of your source is extraneous comments, it&#8217;s nothing but noise and it&#8217;s reducing maintainability.</p>
+
+<h2>My Point</h2>
+
+<p>Let&#8217;s take a look at the question I was asked again:</p>
+
+<p>&#8220;I know I should separate my app into three layers, but how should I do it?&#8221;</p>
+
+<p>To answer this correctly, we need to start with the motivation for layering an application in the first place. &#8220;Three-tier architecture&#8221; has a good intention, just as &#8220;well commented code&#8221; does. However, the principle has can easily be lost in the arbitrary application of the rule.</p>
+
+<h2>Epilogue</h2>
+
+<p>For more reading on this topic, check out the <a href="http://lostechies.com/blogs/chad_myers/archive/2008/03/07/pablo-s-topic-of-the-month-march-solid-principles.aspx">series of posts over at Los Techies on SOLID Principles</a>. There is some great discussion in the comments too.</p>
+
+<p>What do you think?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/3/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+<h1>About Christopher</h1>
+
+<img class="bio" src="http://gravatar.com/avatar/0128fa0de6a321d6e3766ae3fa06b9c2?s=80">
+
+<ul><li>
+<p>
+Christopher is a developer on the <a href="http://msdn.microsoft.com/practices">patterns & practices</a> team at Microsoft.
+</p>
+
+
+<p>
+He considers sidewalks to merely be suggestions and frequently falls under the influence of G. K. Chesterton.
+</p><p>
+He thinks agile software principles and open source software are pretty cool; especially if JavaScript is involved.
+</p>
+</li>
+</ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/game-dev-03b/">Couple of JavaScript Questions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/05/game-dev-03/">Building a Game with JavaScript: Making Things Move</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/11/game-dev-02/">Building a Game with JavaScript: Start Screen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/game-dev-01/">Building a Game with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">a n00b&#8217;s look at HTML5 game development</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+<div id="recentcomments" class="dsq-widget">
+<h1 class="dsq-widget-title">Recent Comments</h1>
+<script type="text/javascript" src="http://bennage.disqus.com/recent_comments_widget.js?num_items=&hide_avatars=1&avatar_size=18&excerpt_length="></script>
+</div>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("bennage", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/bennage" class="twitter-follow-button" data-show-count="false">Follow @bennage</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/bennage">@bennage</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bennage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Christopher Bennage -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bennage';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/bennage.js"></script>
+<script src="/javascripts/newhope.js"></script>
+
+</body>
+</html>

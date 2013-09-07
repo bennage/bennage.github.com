@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: events | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/events/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Symposium 2013]]></title>
+    <link href="http://dev.bennage.com/blog/2012/12/04/p-and-p-symposium-2013/"/>
+    <updated>2012-12-04T14:52:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2012/12/04/p-and-p-symposium-2013</id>
+    <content type="html"><![CDATA[<p>Our annual (or mostly annual) conference is coming up in Janaury. I'm <em>really</em> excited about our set of speakers. Including:</p>
+
+<ul>
+<li><a href="https://twitter.com/steltzner">Adam Steltzner</a> from NASA's <a href="http://www.jpl.nasa.gov/msl/">Mars Curiosity</a>.</li>
+<li><a href="http://www.felicityaston.co.uk/">Felicity Aston</a> the first woman in the world to ski across Antarctica alone.</li>
+</ul>
+
+
+<p><img class="right" src="/images/posts/pnpsym2013.png"></p>
+
+<p>Really, we have too many great speakers to list. The spectrum ranges from <a href="http://www.hanselman.com/blog/">Scott Hanselman</a> to <a href="http://www.devthought.com/">Guillermo Rauch</a>.</p>
+
+<p>Check out the <a href="http://lanyrd.com/2013/pnp-symposium/speakers/">full list of speakers</a>.</p>
+
+<p>The event is in <strong>Redmond, WA</strong> on Microsoft's campus. The dates are <strong>Janauary 15 - 17</strong>.</p>
+
+<p>Regsistration is <strong>$498</strong>.</p>
+
+<p>You can <a href="http://aka.ms/symposium">read all the details</a> or you can jump straight to <a href="http://www.regonline.com/Register/Checkin.aspx?EventID=1150970">the registration</a>.</p>
+
+<p>I look forward to seeing you there!</p>
+]]></content>
+  </entry>
+  
+</feed>

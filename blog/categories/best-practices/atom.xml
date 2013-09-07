@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: best practices | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/best-practices/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Refactoring Relationships]]></title>
+    <link href="http://dev.bennage.com/blog/2011/11/01/refactoring-relationships/"/>
+    <updated>2011-11-01T14:42:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2011/11/01/refactoring-relationships</id>
+    <content type="html"><![CDATA[<p>Working with people is a lot like working with code. New relationships are green fields. Over time they become brown fields and (just like code) they require maintenance. I’m sure that everyone reading this can identify some <em>legacy</em> relationships that they would describe as well <em>complicated</em>. Just like some legacy code.</p>
+
+<!-- more -->
+
+
+<p>I mean a lot with the word ‘relationship’. I have in mind everything from co-workers to friends to significant others. All of these variations require maintenance and I think we should deliberately structure our relationships so that maintenance is easier.</p>
+
+<h2>Interaction Smells</h2>
+
+<p><img class="right" src="/images/posts/rowing.jpg"></p>
+
+<p>So what is the social equivalent of a switch\case statement?</p>
+
+<p>We talk about <a href="http://en.wikipedia.org/wiki/Code_smell">code smells</a> in software development as suggestive indicators that something is wrong. When it comes to relationships, I'll call them <em>interaction smells</em>. I would consider these common emotional responses to be smells:</p>
+
+<ul>
+<li>avoidance</li>
+<li>irritation</li>
+<li>suspicion</li>
+</ul>
+
+
+<p>Personally, I have been guilty of avoiding someone because I thought I would irritate them and I didn’t want the hassle. This was in a work environment and it a negative effect on the overall efficacy of the group. My <em>impulse to avoid</em> was a smell and it led to a problem that needed to be addressed.</p>
+
+<h2>Amicability Debt</h2>
+
+<p>Bad code gets worse over time. We call this <a href="http://martinfowler.com/bliki/TechnicalDebt.html">technical debt</a>. Relationships that have soured do not get better by themselves. Little fractures grow over time. If we don’t address them when we smell them, the stink only gets worse. In addition, the stinky relationship can be begin affecting other parts of design, uh I mean, other social interactions (e.g., the team you are working with).</p>
+
+<h2>Refactoring the Relationship</h2>
+
+<p>Relationships are more difficult to work with than code for one primary reason:</p>
+
+<p><em>You cannot revert back to a previous state if your changes fail.</em></p>
+
+<p>Nevertheless, we often <em>need</em> to make changes. Refactoring code doesn’t change the exposed functionality, we just make internal changes to improve it. If you are beginning to have problems with your boss, that doesn’t necessarily mean it’s time to quit (that would be changing the function) rather you might just need some relational refactoring.</p>
+
+<p>But what do I mean by refactoring a relationship? Well, there’s a lot to be said and you can find a good deal of practical advice on dealing with conflict over on <a href="http://www.stevenlist.com/blog/">“Doc” List’s blog</a>.</p>
+
+<p>In brief though, I mean this:</p>
+
+<p>Be honest and humble. “Hey, Joe, I feel like you’ve been a bit on edge with me. Did I do something to frustrate you? I’d like to clear the air.” Then talk it over. Again, refer to Doc’s blog for lots of details.</p>
+
+<p>One final qualification, since you cannot revert what you say and do, you must be deliberate and thoughtful about your refactoring.</p>
+
+<p><em>This was originally posted this in August 2009, but I needed a reminder myself so&hellip;</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Roots of Best Practices]]></title>
+    <link href="http://dev.bennage.com/blog/2008/03/30/the-roots-of-best-practices/"/>
+    <updated>2008-03-30T01:55:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2008/03/30/the-roots-of-best-practices</id>
+    <content type="html"><![CDATA[<p><img class="right" src="/images/posts/roots.jpg"></p>
+
+<p>I've been asked about best practices and good design several times over the last few months. A few questions have been from students, or newcomers to .NET, and I have found their questions very insightful. They ask questions I remember asking myself. One good example was "I know I should separate my app into three layers, but how should I do it?"</p>
+
+<p>I'm rather to sensitive to the idea of "answering the wrong question". I believe that it's easy to do that when talking about best practices.  My intention with this post is build a foundation for discussing good design. A starting point to make sure we are solving the right riddle. I certainly don't consider myself a <a href="http://www.pragprog.com/the-pragmatic-programmer">master</a> on this topic, but I do have a lot of thoughts.</p>
+
+<h2>Acknowledging My Bias</h2>
+
+<p>I'm a fan of <a href="http://en.wikipedia.org/wiki/Object-oriented_programming">Object Orient Programming</a>, <a href="http://en.wikipedia.org/wiki/Domain-driven_design">Domain-Driven Design</a>, <a href="http://en.wikipedia.org/wiki/Design_patterns">Design Patterns</a>, <a href="http://en.wikipedia.org/wiki/Test_Driven_Development">Test Driven Development</a>, and <a href="http://en.wikipedia.org/wiki/Agile_software_development">agile methodologies</a>. I use a lot of <a href="http://www.ohloh.net/accounts/10381/stacks/14905">open source software</a>. Foremost, I like to think that I am pragmatic.   I'm motivated by getting stuff done.</p>
+
+<h2>The Point of Best Practices</h2>
+
+<p>There are a long list of principles out that are generally acknowledged as best practices. They range from generalities like "your code should be well commented" to very specific and named rules such as the <a href="http://en.wikipedia.org/wiki/Liskov_substitution_principle">Liskov substitution principle</a>. Regardless of the type, I think it's important to know why a given principle is better than its alternatives.</p>
+
+<p>I'll use the <a href="http://en.wikipedia.org/wiki/Law_Of_Demeter">Law of Demeter</a> (LoD) as an example. Overly simplified, the law says that an object should only invoke methods that it owns.  In other words, you'll break the law with something.child.Method() whereas something.Method() does not.</p>
+
+<p>Why is LoD good? One quick answer is that you never know when something.child might be null, and applying LoD helps you avoid the nasty <a href="http://msdn2.microsoft.com/en-us/library/system.nullreferenceexception.aspx">NullReferenceException</a>. Wikipedia has a nice summary the benefits:</p>
+
+<blockquote>
+
+The advantage of following the Law of Demeter is that the resulting software tends to be more maintainable and adaptable. Since objects are less dependent on the internal structure of other objects, object containers can be changed without reworking their callers.
+
+</blockquote>
+
+
+<p>Now we are approaching the real heart of the matter, we want software that is easy to maintainable, and easy to extend. LoD promotes those values. In facts, most of the generally accepted principles are meant to produce software that is <em>maintainable and extensible</em>. Here is my <a href="http://en.wikipedia.org/wiki/Grand_unification_theory">Grand Unification Theory</a> of software best practices: the guiding, or root, principles are <strong>Maintainability</strong> and <strong>Extensibility</strong>. (These two are close cousins, and you might arguably combine them.)</p>
+
+<p>Okay, so maybe there are other guiding principles as well, such as <strong>Scalability</strong> and <strong>Performance</strong>. I'd even add that the most important root principle is <strong>Value</strong>. By Value, I mean that the software needs to do <em>what the user wants done</em>.  So maybe, Maintainability and Extensibility are just like electromagnetism and the weak nuclear force of good software design.</p>
+
+<h2>The Root of the Matter</h2>
+
+<p>Now, let's deconstruct further.  Why do we care about Maintainability and Extensibility? We care because they result in <em>reduced</em> costs.  The bulk of cost with custom software is <em>not</em> building it, but <a href="http://users.jyu.fi/~koskinen/smcosts.htm">maintaining it</a>. If you are in business, reduced costs equals more money; if you are a hobbyist or open source developer then reduced costs means getting to the desired result in less time.  That's the bottom line: <em>time and money</em>. We employ best practices to save ourselves time and money.</p>
+
+<p>Okay, well, nothing new here. You probably already knew this.  I emphasize it though because I've found that "best practices" have a tendency to degrade into a set of arbitrarily applied rules, enforced without exception, irrespective of whether or not they are useful. A great example is "always comment your code". The intention of this rule is improve maintainability.  We've all seen the end result.</p>
+
+<pre><code>//open the file 
+FileStream stream = File.Open(pathToFile, FileMode.Open);
+</code></pre>
+
+<p>Does this improve maintainability? Perhaps if you can't read C#, but even then it seems unlikely. Does one extraneous little comment hurt? Not by itself. A poppy flower is beautiful, a thousand poppies is dangerous. If 50% of your source is extraneous comments, it's nothing but noise and it's reducing maintainability.</p>
+
+<h2>My Point</h2>
+
+<p>Let's take a look at the question I was asked again:</p>
+
+<p>"I know I should separate my app into three layers, but how should I do it?"</p>
+
+<p>To answer this correctly, we need to start with the motivation for layering an application in the first place. "Three-tier architecture" has a good intention, just as "well commented code" does. However, the principle has can easily be lost in the arbitrary application of the rule.</p>
+
+<h2>Epilogue</h2>
+
+<p>For more reading on this topic, check out the <a href="http://lostechies.com/blogs/chad_myers/archive/2008/03/07/pablo-s-topic-of-the-month-march-solid-principles.aspx">series of posts over at Los Techies on SOLID Principles</a>. There is some great discussion in the comments too.</p>
+
+<p>What do you think?</p>
+]]></content>
+  </entry>
+  
+</feed>

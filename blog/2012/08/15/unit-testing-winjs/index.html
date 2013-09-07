@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Unit Testing WinJS: First Steps - Christopher Bennage</title>
+  <meta name="author" content="Christopher Bennage">
+
+  
+  <meta name="description" content="N.B. If you don&#8217;t know anything about WinJS, take a moment to peruse this primer. Also, the context of this post is the p&amp;p Hilo project. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dev.bennage.com/blog/2012/08/15/unit-testing-winjs/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/ChristopherBennage" rel="alternate" title="Christopher Bennage" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26126539-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Christopher Bennage</a></h1>
+  
+    <h2>not all who wander are lost</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/ChristopherBennage" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:dev.bennage.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Unit Testing WinJS: First Steps</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-15T16:25:00-07:00" pubdate data-updated="true">Aug 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>N.B. <em>If you don&#8217;t know anything about WinJS, take a moment to peruse <a href="http://dev.bennage.com/blog/2012/08/01/a-brief-introduction-to-winjs/">this primer</a>. Also, the context of this post is the <a href="http://hilojs.codeplex.com/">p&amp;p Hilo project</a>.</em></p>
+
+<p>One of the first questions we&#8217;ve been struggling with is how to best test a WinJS app.  (I&#8217;m going to use the term &#8220;unit test&#8221; somewhat loosely. Some of our tests would technically be classified as &#8220;integration tests&#8221;.)</p>
+
+<h2>Where to run the tests</h2>
+
+<p>Our first barrier to unit testing a WinJS app was finding a convenient way to run the tests.
+The primary difficulty is that the WinRT APIs are only available in the context of a Windows 8 app (and that&#8217;s also practicially the case for WinJS as well). So if your tests need to touch either one, the only choice you currently have is to run the tests inside a Windows 8 app.</p>
+
+<p><img class="right" src="/images/posts/winjs-test-solution.png"></p>
+
+<p>After some experimentation, we choose to include a second app in our solution to host the unit tests. (At one point, we had the tests embedded in the actual app itself; executing them with a hidden keyboard shortcut.) Having two apps means that we have to share the source that&#8217;s under test. Currently, we&#8217;re just <a href="http://msdn.microsoft.com/en-us/library/9f4t9t92.aspx">manually linking the files</a>. I also have to manually go into the default.html and add references to the scripts. Ultimately, I&#8217;d like to have this automated, but that&#8217;s a task for another day.</p>
+
+<p><em>Notice in the screen shot of the solution explorer, that the <code>Hilo</code> folder in the <code>Hilo.Specifications</code> project has a little red <strong>x</strong>. This is because the folder doesn&#8217;t physically exist there. Instead, there are just links to the corresponding files in the main <code>Hilo</code> project.</em></p>
+
+<h2>How to run the tests</h2>
+
+<p>We settled on <a href="http://visionmedia.github.com/mocha/">Mocha</a> for running our unit tests. Mocha is popular in the <a href="http://nodejs.org/">Node.js</a> and it has (in my opinion) one of the better async test stories. This is really important when building Windows 8 apps because (much like Node.js) all the APIs are asynchronous.</p>
+
+<p>We also choose to use a <a href="http://en.wikipedia.org/wiki/Behavior_Driven_Development">BDD-style</a> for the tests. However, Mocha supports several styles, including a QUnit style.</p>
+
+<p>Mocha will pass a function into your tests for you to call once the asynchronous work is complete. For example:</p>
+
+<pre><code>it('test something asynchronous using a promise', function(done) {
+
+    doSomeWork().then(function(result){
+
+        if(!result) { // or whatever assertion is appropriate
+            throw new Error('test failed') 
+        } else {
+            done(); // we call the function after the async work is complete
+        }
+
+    });
+});
+</code></pre>
+
+<p>If you don&#8217;t understand the call to <code>then</code>, take a moment to read about <a href="http://msdn.microsoft.com/en-us/library/windows/apps/hh700330.aspx">async programming in WinJS apps</a>.</p>
+
+<p>What&#8217;s great about Mocha is that if you omit the <code>done</code> parameter, then the harness automagically assumes the test is synchronous. Very nice.</p>
+
+<p>We did have <a href="https://github.com/visionmedia/mocha/issues/502">one problem</a> with Mocha. It has an internal recursive process that can cause a stack overflow in IE. <a href="http://lostechies.com/derickbailey/">Derick Bailey</a> came up with a quick workaround by resetting the stack before each test with a call to <code>setTimeout</code> in our <a href="http://hilojs.codeplex.com/SourceControl/changeset/view/13593c579fb6#Hilo.Specifications%2fspec.helpers.js">test helper script</a>.</p>
+
+<pre><code>beforeEach(function (done) {
+    setTimeout(done, 0);
+});
+</code></pre>
+
+<p>As mentioned before, Mocha is primarly for Node. However Mocha&#8217;s creator <a href="http://tjholowaychuk.com/">TJ Holowaychuk</a>, graciously allowed me to setup a <a href="http://nuget.org/packages/mochajs-browseronly">Nuget package</a> to make it easier for Windows developers to use Mocha.</p>
+
+<h3>Steps to install Mocha</h3>
+
+<ol>
+<li>Right-click on the test project and select Manage Nuget Packages</li>
+<li>Seach for &#8220;mocha&#8221;</li>
+<li>Select &#8220;mocha for browsers&#8221; and click Install</li>
+<li>Open the default.html page and reference the scripts. They are located in the \lib folder. (see below)</li>
+<li>Open the default.js file and add <code>mocha.run()</code> some where after app is ready.</li>
+</ol>
+
+
+<p>In my <a href="http://hilojs.codeplex.com/SourceControl/changeset/view/13593c579fb6#Hilo.Specifications%2fdefault.html">default.html</a>:</p>
+
+<pre><code>&lt;link rel="stylesheet" type="text/css" href="/lib/mocha.css"&gt;
+&lt;script src="/lib/mocha.js"&gt;&lt;/script&gt;
+ &lt;!-- choose the style that you want for tests first --&gt;
+&lt;script&gt;mocha.setup('bdd')&lt;/script&gt;
+
+&lt;!-- then reference your actual test script --&gt;
+</code></pre>
+
+<p>A simplified <a href="http://hilojs.codeplex.com/SourceControl/changeset/view/13593c579fb6#Hilo.Specifications%2fdefault.js">default.js</a> might be:</p>
+
+<pre><code>﻿(function () {
+    'use strict';
+
+    var activation = Windows.ApplicationModel.Activation,
+        app = WinJS.Application,
+        nav = WinJS.Navigation;
+
+    app.addEventListener('activated', function (args) {
+        if (args.detail.kind === activation.ActivationKind.launch) {
+            args.setPromise(WinJS.UI.processAll().then(function () {
+                mocha.run();
+            }));
+        }
+    }, false);
+
+    app.start();
+})(this);
+</code></pre>
+
+<h2>What to mock?</h2>
+
+<p>The next big question was about making our code &#8220;testable&#8221;. I don&#8217;t like saying that because, in general, we don&#8217;t want test concerns to be bleed into the code. (I have some <a href="http://dev.bennage.com/blog/2008/03/30/the-roots-of-best-practices/">personal principles</a> about these sorts of practices.)</p>
+
+<p>At first, I tried to create a system that would completely mock out every WinRT API. I modeled it after <a href="http://www.commonjs.org/specs/modules/1.0/">CommonJS Modules</a>. In essence, I made every &#8220;module&#8221; in my app use a <code>require</code> function to locate its dependencies. Using this approach you had to reference the WinRT API in the very unnatural form of:</p>
+
+<pre><code>var knownFolders = require('Windows.Storage.KnownFolders'); 
+</code></pre>
+
+<p>instead of the standard:</p>
+
+<pre><code>var knownFolders = Windows.Storage.KnownFolders;
+</code></pre>
+
+<p>This made it easy (ish) to mock out the WinRT call in my tests. However, there were a <a href="http://hilojs.codeplex.com/discussions/364538">number</a> of <a href="http://hilojs.codeplex.com/discussions/366305">negatives</a> to this approach. Mostly, it added an extra layers of complexity and it broke tooling (such as Intellisense and code navigation).</p>
+
+<p>Instead, we decided to take a more <a href="http://dev.bennage.com/blog/2010/09/06/what-is-functional-programming/">functional</a> approach to our code. As much as was reasonable, we tried to write our code as <em>functions with inputs</em> instead of as <em>objects with dependencies</em>. Then in our tests we could invoke the functions passing in &#8220;mocks&#8221; that were shaped like the necessary WinRT dependencies. This mean that we had thin layers in our app that invoked the functions and passed in the necessary bits. It also meant that in a few cases, we had to run tests against the actual WinRT objects. (Technically, I would call these &#8220;integration&#8221; tests instead of &#8220;unit&#8221; tests).</p>
+
+<p>The best example of this approach in the HiloJS project (so far) can be found in <a href="http://hilojs.codeplex.com/SourceControl/changeset/view/13593c579fb6#Hilo%2fHilo%2fTiles%2ftileUpdater.js">tileUdater.js</a>. In that file, we create a simple object that coordinates the real work using a set of functions. The major functions are defined in their own files (all inside the \Hilo\Tiles folder). We &#8220;export&#8221; these functions using <a href="http://msdn.microsoft.com/en-us/library/windows/apps/br212667.aspx"><code>WinJS.Namespace.define</code></a>. Exporting them makes them available to the code in tileUpdater.js as well as our tests.</p>
+
+<h2>Summary</h2>
+
+<p>So far this arrangement has worked really well for us. Working with Mocha has been a lot of fun. The test authoring experience isn&#8217;t quite as smooth as I&#8217;d like, but I&#8217;m sure that will come as we gain more experience.
+Remember though, this project is very much a journey, so keep on eye on the <a href="http://hilojs.codeplex.com/">project site</a>. We&#8217;ll be writing more about it as we learn.</p>
+
+<p>As always, your feedback is greatly desired. Do you have a better way? How does this approach strike? Feel free to speak up our the <a href="http://hilojs.codeplex.com/discussions">project&#8217;s discussion board</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Christopher Bennage</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-15T16:25:00-07:00" pubdate data-updated="true">Aug 15<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/winjs/'>WinJS</a>, <a class='category' href='/blog/categories/windows-8/'>Windows 8</a>, <a class='category' href='/blog/categories/unit-testing/'>unit testing</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://dev.bennage.com/blog/2012/08/15/unit-testing-winjs/" data-via="bennage" data-counturl="http://dev.bennage.com/blog/2012/08/15/unit-testing-winjs/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/08/01/a-brief-introduction-to-winjs/" title="Previous Post: A Brief Introduction to WinJS">&laquo; A Brief Introduction to WinJS</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/08/21/winjs-unpacking-promises/" title="Next Post: WinJS: Unpacking Promises">WinJS: Unpacking Promises &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Christopher</h1>
+
+<img class="bio" src="http://gravatar.com/avatar/0128fa0de6a321d6e3766ae3fa06b9c2?s=80">
+
+<ul><li>
+<p>
+Christopher is a developer on the <a href="http://msdn.microsoft.com/practices">patterns & practices</a> team at Microsoft.
+</p>
+
+
+<p>
+He considers sidewalks to merely be suggestions and frequently falls under the influence of G. K. Chesterton.
+</p><p>
+He thinks agile software principles and open source software are pretty cool; especially if JavaScript is involved.
+</p>
+</li>
+</ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/game-dev-03b/">Couple of JavaScript Questions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/05/game-dev-03/">Building a Game with JavaScript: Making Things Move</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/11/game-dev-02/">Building a Game with JavaScript: Start Screen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/game-dev-01/">Building a Game with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">a n00b's look at HTML5 game development</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+<div id="recentcomments" class="dsq-widget">
+<h1 class="dsq-widget-title">Recent Comments</h1>
+<script type="text/javascript" src="http://bennage.disqus.com/recent_comments_widget.js?num_items=&hide_avatars=1&avatar_size=18&excerpt_length="></script>
+</div>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("bennage", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/bennage" class="twitter-follow-button" data-show-count="false">Follow @bennage</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/bennage">@bennage</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bennage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Christopher Bennage -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bennage';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://dev.bennage.com/blog/2012/08/15/unit-testing-winjs/';
+        var disqus_url = 'http://dev.bennage.com/blog/2012/08/15/unit-testing-winjs/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/bennage.js"></script>
+<script src="/javascripts/newhope.js"></script>
+
+</body>
+</html>

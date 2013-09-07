@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: opinion | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/opinion/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[On Not Being a Jerk]]></title>
+    <link href="http://dev.bennage.com/blog/2012/01/09/on-not-being-an-arse/"/>
+    <updated>2012-01-09T11:23:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2012/01/09/on-not-being-an-arse</id>
+    <content type="html"><![CDATA[<p>My interest in making software well is an accident. What I'm really interested in is <em>living life</em> well. Chasing that chimerical beast of software "best practices" is merely a happy side-effect.</p>
+
+<p>To that end, there's an ancient maxim: <a href="http://en.wikipedia.org/wiki/Know_thyself">'know thyself'</a>. Despite over three decades of living with myself, I am often surprised by what I do. Surprised, and many times embarassed.</p>
+
+<p>For example, last week I complained on twitter about what I had perceived as selfish and inconsiderate behavior of some of my fellow employees. It was quickly pointed out to me that I was wrong; that I was completely misinterpreting my observations.</p>
+
+<p>Once I realized my mistake, my immediate thought was "Oh, I don't want people to think that I'm a jerk. I wish I hadn't said that". Shortly afterwards though, I realized that I had been more concerned about what <em>other people thought</em> and not my real problem. The real problem was that I <em>was</em> a jerk. I had judged people I did not know with only scant evidence. This reminded me of another ancient maxim: <a href="ttp://www.biblegateway.com/passage/?search=Matthew+7%3A1">"judge not, that ye be not judged"</a>.</p>
+
+<p>Now, here is the surpising conclusion. I'm glad that I stated my faulty opinion out loud, despite that it embarassed me, because it revealed my fault and I had to correct it. I had to confront my own prejudice and fix it. If I had kept the venom to myself, I would have gone on nursing my prejudice.</p>
+
+<p>My take away: it doesn't matter what people think about me, it matters what I am. It is better for me to surface my flaws and fix them, than it is for me to hide them and decay.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Refactoring Relationships]]></title>
+    <link href="http://dev.bennage.com/blog/2011/11/01/refactoring-relationships/"/>
+    <updated>2011-11-01T14:42:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2011/11/01/refactoring-relationships</id>
+    <content type="html"><![CDATA[<p>Working with people is a lot like working with code. New relationships are green fields. Over time they become brown fields and (just like code) they require maintenance. I’m sure that everyone reading this can identify some <em>legacy</em> relationships that they would describe as well <em>complicated</em>. Just like some legacy code.</p>
+
+<!-- more -->
+
+
+<p>I mean a lot with the word ‘relationship’. I have in mind everything from co-workers to friends to significant others. All of these variations require maintenance and I think we should deliberately structure our relationships so that maintenance is easier.</p>
+
+<h2>Interaction Smells</h2>
+
+<p><img class="right" src="/images/posts/rowing.jpg"></p>
+
+<p>So what is the social equivalent of a switch\case statement?</p>
+
+<p>We talk about <a href="http://en.wikipedia.org/wiki/Code_smell">code smells</a> in software development as suggestive indicators that something is wrong. When it comes to relationships, I'll call them <em>interaction smells</em>. I would consider these common emotional responses to be smells:</p>
+
+<ul>
+<li>avoidance</li>
+<li>irritation</li>
+<li>suspicion</li>
+</ul>
+
+
+<p>Personally, I have been guilty of avoiding someone because I thought I would irritate them and I didn’t want the hassle. This was in a work environment and it a negative effect on the overall efficacy of the group. My <em>impulse to avoid</em> was a smell and it led to a problem that needed to be addressed.</p>
+
+<h2>Amicability Debt</h2>
+
+<p>Bad code gets worse over time. We call this <a href="http://martinfowler.com/bliki/TechnicalDebt.html">technical debt</a>. Relationships that have soured do not get better by themselves. Little fractures grow over time. If we don’t address them when we smell them, the stink only gets worse. In addition, the stinky relationship can be begin affecting other parts of design, uh I mean, other social interactions (e.g., the team you are working with).</p>
+
+<h2>Refactoring the Relationship</h2>
+
+<p>Relationships are more difficult to work with than code for one primary reason:</p>
+
+<p><em>You cannot revert back to a previous state if your changes fail.</em></p>
+
+<p>Nevertheless, we often <em>need</em> to make changes. Refactoring code doesn’t change the exposed functionality, we just make internal changes to improve it. If you are beginning to have problems with your boss, that doesn’t necessarily mean it’s time to quit (that would be changing the function) rather you might just need some relational refactoring.</p>
+
+<p>But what do I mean by refactoring a relationship? Well, there’s a lot to be said and you can find a good deal of practical advice on dealing with conflict over on <a href="http://www.stevenlist.com/blog/">“Doc” List’s blog</a>.</p>
+
+<p>In brief though, I mean this:</p>
+
+<p>Be honest and humble. “Hey, Joe, I feel like you’ve been a bit on edge with me. Did I do something to frustrate you? I’d like to clear the air.” Then talk it over. Again, refer to Doc’s blog for lots of details.</p>
+
+<p>One final qualification, since you cannot revert what you say and do, you must be deliberate and thoughtful about your refactoring.</p>
+
+<p><em>This was originally posted this in August 2009, but I needed a reminder myself so&hellip;</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Blocks and Playsets]]></title>
+    <link href="http://dev.bennage.com/blog/2011/10/17/blocks-and-playsets/"/>
+    <updated>2011-10-17T09:40:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2011/10/17/blocks-and-playsets</id>
+    <content type="html"><![CDATA[<p>I've recently discovered that I favor blocks over playsets. I'm talking about toys, and of course the canonical example of blocks is Legos. You can build nearly anything with them. They are useful, versatile, and inviting.</p>
+
+<p>Now, the term 'playset' warrants a bit more explanation. I don't mean the large outdoor sets with swings and sandboxes and spring-loaded ponies. No, I'm a child of the 80s and I <em>loved me some</em> Star Wars playsets.</p>
+
+<!-- more -->
+
+
+<p><img class="right" src="/images/posts/hoth-playset.jpg"></p>
+
+<p>So my definition of 'playset' is colored by my childhood. I think think of 'playset' as a themed toy representing an environment. Like the Hoth playset pictured here. If you want to pretend you are the Imperials raining destruction upon a ragtag Rebel Alliance, the <a href="http://www.ebay.com/csc/i.html?_nkw=Hoth+imperial+attack+playset&amp;LH_Complete=1&amp;_odkw=Hoth+attack+playset" title="Yes, I had this as a kid.">Hoth Imperial Attack playset</a> can't be beat.</p>
+
+<p>The problem is <em>that's all you can do with it</em>. I mean, you can't use the Hoth playset to stage an epic Cybertronian showdown between Optimus and Megatron. (Well you can, but you'll have admit it's just a bit awkward.)</p>
+
+<p>Let's get back to the blocks. Those puppies can be used to reconstruct a carbonite freezing chamber <em>as well as</em> hosting a dramatic cliff-side battle between Snake Eyes and Storm Shadow. Better yet, you can construct worlds of your own invention instead of merely mirroring those of others.</p>
+
+<p>In reality, it's not so cut and dry. (Nothing is, is it?) No, in reality, there's a spectrum. In reality, there is Lego®  Star Wars®. The line between blocks and playsets is blurred.</p>
+
+<h2>Software</h2>
+
+<p>I believe these categories apply to software as well, though we call them <em>libraries</em> and <em>frameworks</em>. <a href="http://wekeroad.com/">Rob Conery</a> asked a <a href="https://plus.google.com/u/0/100497775264295816553/posts/DoWuYVrDzqX%20%22Is%20Backbone.js%20is%20a%20'Framework'%20or%20a%20'Library'?">question about this</a> on Google+ recently. <a href="http://lostechies.com/derickbailey/">Derick Bailey</a> provides a definition attributed to Chris Eppstein:</p>
+
+<p><blockquote><p>"Frameworks call your code, you call library code." <br/></p></blockquote></p>
+
+<p>I began thinking about this from a different angle. I think that <em>frameworks impose an opinion</em>. <a href="http://rubyonrails.org/">Ruby on Rails</a> has a <a href="http://gettingreal.37signals.com/ch04_Make_Opinionated_Software.php">strong opinion</a> about how to create web apps. I think that make it a framework. Or at least, closer to the framework end of the spectrum than to the library end.</p>
+
+<p><img class="right" src="/images/posts/crossover-comic.jpg"></p>
+
+<p>Now, to be clear, I am <em>not</em> saying that opinionated software or that frameworks are bad. In fact, they can be brilliant. I think Rail's strong opinion has been a significant contribution to its success. What's important to understand though is the limitations. When you are using a framework, the boundaries are harder to cross. The results can be strained and unnatural. The problem for me begins when our fanboy favor for a framework leads us to force its use it where it doesn't fit.</p>
+
+<h2>Fun</h2>
+
+<p>Playing with both blocks and playsets is <em>fun</em>. So let's stretch the analogy even further. What does that mean to software development? My takeaway is this:</p>
+
+<ul>
+<li>Understand the tools you are using.</li>
+<li>If it hurts, ask why. (I always liked Ayende's <a href="http://ayende.com/blog/3320/zero-friction-maintainability">Zero Friction thoughts</a>.)</li>
+<li>Finally, <a href="http://hanselminutes.com/260/net-api-design-that-optimizes-for-programmer-joy-with-jonathan-carter">optimize your development experience for joy</a>.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Last Six Months]]></title>
+    <link href="http://dev.bennage.com/blog/2011/10/05/the-last-six-months/"/>
+    <updated>2011-10-05T13:30:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2011/10/05/the-last-six-months</id>
+    <content type="html"><![CDATA[<p>I'm two weeks shy of six months at Microsoft. When I arrived here I was immediately thrown into the fray on <a href="http://silk.codeplex.com/">Project Silk</a>. The primary developer on the project was heading into paternity leave. Fortunately, I had read <a href="http://www.amazon.com/JavaScript-Good-Parts-Douglas-Crockford/dp/0596517742">JavaScript: The Good Parts</a> on my flight out to Redmond. <!-- more -->(I had no idea that I'd be diving deep into JavaScript.)</p>
+
+<p>After Silk, I um, got to work on some other <a href="http://code.msdn.microsoft.com/windowsapps/CanvasPaint-6ebde109" title="a sample app using a lot of HTML5 goodies">cool</a> <a href="http://msdn.microsoft.com/en-us/library/windows/apps/hh464930" title="a primer for async programming patterns in JavaScript">stuff</a> that propelled me even deeper in the HTML5/JavaScript world.</p>
+
+<p>After hours, I started playing with NodeJS. Specifically, spiking out some play-by-post dorky goodness inspired by the efforts of my buddy <a href="http://anglicangeek.com/" title="Anglo-Catholic Christian, RPG dork, and software craftsman">Drew Miller</a> using <a href="http://expressjs.com/" title="sort of like Sinatra on Node">Express</a>, <a href="http://www.mongodb.org/" title="but I still like RavenDB">Mongo</a>, and <a href="http://visionmedia.github.com/expresso/" title="a unit testing framework for Node">Expresso</a>.</p>
+
+<p>I've really enjoyed jumping back deep into JavaScript. This is a return for me in many ways. Back in the late 90s I was doing classic ASP development and I had settled on JScript over VBScript. (I had even begun writing an <a href="http://en.wikipedia.org/wiki/Object-relational_mapping" title="object-relational mapper">ORM</a> in JScript, though I had no idea what an ORM was or just how deep the water can get. I just knew that I was tired of writing the same thing over and over.) I was also spending a lot of time with Flash and ActionScript back then. In fact, the Flash community was were I first encountered the MVC pattern. It was also the place where I first began learning about object-oriented programming.</p>
+
+<p>Working at Microsoft has been a wonderful experience so far and I'm especially fond of my team here at <a href="http://msdn.microsoft.com/en-us/practices/default.aspx" title="patterns &amp; practices">p&amp;p</a>. It is a different perspective being on the inside. I'm excited about the opportunities to produce quality guidance. I'm also glad to help encourage trends here that I believe are helpful both to the company and the community.</p>
+
+<p> As a bonus, these first six months here in Redmond have been beautiful weather.</p>
+
+<p> My next project is exploring the mobile web. This is a crazy, active, and vibrant area at the moment. There's a lot for me to learn. Fortunately, we value transparency here in p&amp;p and I intend to post frequently about my projects.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[A Punctuated Life]]></title>
+    <link href="http://dev.bennage.com/blog/2011/04/06/a-punctuated-life/"/>
+    <updated>2011-04-06T17:23:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2011/04/06/a-punctuated-life</id>
+    <content type="html"><![CDATA[<h2>Chapter XXXVI</h2>
+
+<p>My time with <a href="http://www.bluespire.com/" title="Blue Spire Consulting">Blue Spire</a> has officially ended. I have accepted a position with Microsoft on the <a href="http://msdn.microsoft.com/en-us/practices/default.aspx">Patterns &amp; Practices</a> team. My start date is April 18th.</p>
+
+<p>Even though I’ve been professionally restless for a while, leaving Blue Spire turned out to be rather emotional for me. Untangling myself from a business I spent almost five years building up depressed me. Nevertheless, it’s done and Blue Spire lives on. Keep an eye on <a href="http://devlicio.us/blogs/rob_eisenberg/">Rob’s blog</a> for details about the company and his future plans.</p>
+
+<!--more-->
+
+
+<p>Why?</p>
+
+<p>Several friends have asked me why I would make this choice. Why would I leave running my own business? Why would I go to Microsoft of all places? Why would I uproot my family from a <a href="http://en.wikipedia.org/wiki/Tallahassee,_Florida" title="Tallahassee, FL">city we love</a>, from dear and close friends, and move so far a way?</p>
+
+<p>I needed a reboot. I wasn’t achieving the personal professional goals I had set for myself and I needed to reevaluate. I wanted a job and a city that would expose me to lots of different influences and perspectives.</p>
+
+<p>So why Microsoft? There were several really exciting positions out there and it was hard to choose. In the end, the Microsoft position had the best balance for what I wanted in my next professional role. I’m genuinely excited about joining p&amp;p. I asked around and I heard nothing but good things about the P&amp;P team. Even from folks who are critical of Microsoft in general. In addition,the values and culture of the team align with my own. They have a vision I can buy into.</p>
+
+<p>Still, at the end of the day, my wife and I made the choice to have the experience. We want to spend some time living on the West Coast. I want to see what it’s like to work for a giant like Microsoft. We wanted to live near a major city, and mountains, and ocean. Of course, I had other goals as well; certain financial criteria I needed to meet, opportunities to learn and grow, chances to exercise my pedagogical nature, and so on. They all flowed together. In the end though, I want my life to be punctuated, full of chapters, experiences, and stories.</p>
+
+<p>I’m excited.</p>
+]]></content>
+  </entry>
+  
+</feed>

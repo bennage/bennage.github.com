@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: gaming | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/gaming/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[What I Learned Playing StarCraft]]></title>
+    <link href="http://dev.bennage.com/blog/2011/01/30/what-i-learned-playing-starcraft/"/>
+    <updated>2011-01-30T21:13:00-08:00</updated>
+    <id>http://dev.bennage.com/blog/2011/01/30/what-i-learned-playing-starcraft</id>
+    <content type="html"><![CDATA[<p>On March 31, 1998, around 10am, my then-manager Alex and I left the office we shared together and headed over to Electronics Boutique. Alex and I were both developers working for the IT department of an up and coming software company called PC DOCS. In those days, we didn’t have a corporate firewall. My desktop was a node on the internet. In fact, I was running a web server on it. A bunch of us would stay late after work, barricaded in other peoples’ cubicles, all phones on speaker, playing WarCraft II and Quake. Those were halcyon days. I was just about to turn 23. I was just about to get married.</p>
+
+<!-- more -->
+
+
+<p><img class="right" src="/images/posts/starcraft.jpg" title="&#34;the Protoss mothership&#34;" alt="&#34;the Protoss mothership&#34;"></p>
+
+<p>Alex and I had headed to EB because it was Release Day for StarCraft. I don’t think that I had ever been so excited about a video game. Well, maybe once but that’s another story…</p>
+
+<p>A few months ago, StarCraft 2 was released. While there wasn’t as personal ceremony this time, I still purchased it on Release Day.</p>
+
+<p>This time around I decided to <em>really</em> learn how to play the game. In case you are unaware, StarCraft is huge. There are <a href="http://en.wikipedia.org/wiki/StarCraft_professional_competition" title="seriously">televised tournaments, professional players, and so on</a>. In many ways, it’s analogous to chess. As I began to learn more about it, I found that there are certain tenets of gameplay and, as I mused on these, I found that they extend to life in general (though I’ll limit them here to a professional context).</p>
+
+<h2>The First Lesson</h2>
+
+<p>In the game, there are a dizziness amount of options. Your opponent can overwhelm you with astounding ease if you are unprepared for their particular tactic. So you might be inclined to try and prepare for all contingencies. But guess what? You can’t. You will end up spending all of your resources ‘preparing’. You think that this aligns with your overarching goal, but in reality it is a distraction.</p>
+
+<p>Professionally, we are given a goal: build software that will do <em>X</em>. As developers we typically and immediately begin thinking about all the ‘what ifs’. Usually because we’ve been burned by them in the past. <em>X</em> is still in sight, but there is a long road to get to there, because we have to deal with <em>Y</em> and <em>Z</em> and so many other things. We have to be prepared.</p>
+
+<p>The truth is that you <em>cannot</em> be prepared for everything. It is actually a waste of energy and a distraction from your real goal. In the game of StarCraft, if you try to prepare for everything, you <em>will</em> lose. Instead, you must choose your battles.</p>
+
+<h2>The Second Lesson</h2>
+
+<p>How do you know which battles to choose? Surely a battle is coming. There are always problems in every project. You can’t simply be <em>unprepared</em>. That’s suicide.</p>
+
+<p>In StarCraft, the answer is scouting. That is, you gather intelligence about what the enemy is doing. Once you know, then you can prepare properly and efficiently.</p>
+
+<p>Recently, I was asked about some performance concerns at the start of a project. Now, I have been seriously burned by performance issues. In fact, one of the worst software disasters I was a part of was a performance issue. Nevertheless, the concerns raised with granular and premature. As Donald Knuth said “<a href="http://c2.com/cgi/wiki?PrematureOptimization">premature optimization is the root of all evil</a>”. Now, I am most emphatically <em>not</em> saying to avoid optimization. What I am saying is to scout, gathering intelligence and responding accordingly.</p>
+
+<h2>A Summary</h2>
+
+<p>I’ll sum up these two thoughts:</p>
+
+<ul>
+<li>Don’t waste time on things you don’t need.</li>
+<li>Find out what you need through active analysis.</li>
+</ul>
+
+
+<p>None of this is new. In fact, you see pretty much the same things preached all over. I hear it in <a href="http://www.extremeprogramming.org/rules/early.html" title="eXtreme Programming">XP</a>, I hear it in Agile, I hear it in StarCraft.</p>
+
+<h2>Epilogue</h2>
+
+<p>I’m reminded of this passage:</p>
+
+<p><blockquote><p>“Well,” said the girl solidly, “what is there to wake up to?”</p></p><p><p>“There must be!” cried Inglewood, turning round in a singular excitement—“there must be something to wake up to! All we do is preparations—your cleanliness, and my healthiness, and Warner’s scientific appliances. We’re always preparing for something—something that never comes off. I ventilate the house, and you sweep the house; but what is going to HAPPEN in the house?”</p><footer><strong>G. K. Chesterton</strong> <cite><a href='http://www.gutenberg.org/cache/epub/1718/pg1718.html'>Manalive</a></cite></footer></blockquote></p>
+]]></content>
+  </entry>
+  
+</feed>

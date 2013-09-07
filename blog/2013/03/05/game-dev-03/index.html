@@ -1,0 +1,513 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Building a Game with JavaScript: Making Things Move - Christopher Bennage</title>
+  <meta name="author" content="Christopher Bennage">
+
+  
+  <meta name="description" content="This is a continuation from the previous post. Setting The Stage The game we&#8217;re building will have waves of enemy ships fly in to attack the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dev.bennage.com/blog/2013/03/05/game-dev-03/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/ChristopherBennage" rel="alternate" title="Christopher Bennage" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26126539-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Christopher Bennage</a></h1>
+  
+    <h2>not all who wander are lost</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/ChristopherBennage" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:dev.bennage.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Building a Game With JavaScript: Making Things Move</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-05T21:12:00-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This is a continuation from the <a href="http://dev.bennage.com/blog/2013/01/11/game-dev-02/">previous post</a>.</p>
+
+<h2>Setting The Stage</h2>
+
+<p>The game we&#8217;re building will have waves of enemy ships fly in to attack the player&#8217;s units. Let&#8217;s begin by making a simple enemy as well as some dummy targets for them to attack. I&#8217;m going to keep the graphics very simple for the moment. Likewise we are going to focus on the enemy behavior and not worry about any player interaction just yet.</p>
+
+<p><img class="right" src="/images/posts/game-dev-move-01.png" title="[little, yellow, different]" ></p>
+
+<p>Here&#8217;s a <a href="http://jsfiddle.net/bennage/HqYeD/18/">demo</a> of what we&#8217;ll make. Click on the start screen to transition into the game. The little yellow rectangles are our enemy ships. Each one projects its own target as a little red circle. Once it touches its target, it projects a new one and then flies toward it.</p>
+
+<p>Let&#8217;s start from the top down. Our enemy units will &#8220;live&#8221; in our main screen for the game. (At least for the time being.) This screen needs to expose the same interface that we had for the start screen we made in the last post. We&#8217;ll also add a <code>start</code> method that we&#8217;ll call just once in order to initialize things.</p>
+
+<h3>Implementation</h3>
+
+<p>Here&#8217;s the implementation:</p>
+
+<script src="https://gist.github.com/5078744.js"></script>
+
+
+<h3>Explanation</h3>
+
+<p>The <code>entities</code> array will contain a list of the enemies we&#8217;re tracking. I used the name &#8220;entity&#8221; because this is a common term in game development. In general, it means something that has behavior and is drawn to the screen. Thus, you can expect entities to have <code>update</code> and <code>draw</code> methods. This is not a hard and fast definition though. You&#8217;ll find that the specifics of the definition can vary among engines, frameworks, and developers.</p>
+
+<p>In our <code>start</code> function we populate <code>entities</code> by invoking our (as yet undefined) <code>makeEnemyShip</code> function. I&#8217;m passing in two numbers that <code>makeEnemyShip</code> will use to set the x and y position of the ship. I could have used random numbers or even hard coded values, however deriving from the loop&#8217;s controls makes it easy to cluster all the ships in the upper left corner of the screen.</p>
+
+<p>The <code>draw</code> and <code>update</code> functions for the screen are very similar. They both iterate over <code>entities</code> and invoke the corresponding function on each entity. They also pass along the necessary context. For <code>draw</code>, this is the 2D drawing context of the canvas and for <code>update</code> it&#8217;s the elapsed time since the last frame.</p>
+
+<p>Notice how the loop is structured differently from the loop in <code>start</code>. This is a performance optimization; though it has little consequence with so small an array. On some browsers, the call to <code>length</code> is a bit expensive. (Especially in cases when the array isn&#8217;t an array, but something that is <a href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">array-like</a>.) This adds up when you make the call once per iteration of the loop. We move it out of the loop so that we only call it once. Check out <a href="http://jsperf.com/loop-iteration-length-comparison-variations">this test</a>. Performance optimizations are tricky and change every time new browsers are released. It&#8217;s easy to get confused, and I recommend profiling your code frequently to look for hot spots rather than just guessing about optimizations. I hope to talk more about them later, but if you want more now check out the book <a href="http://www.amazon.com/Performance-JavaScript-Faster-Application-Interfaces/dp/059680279X">High Performance JavaScript</a> by <a href="http://www.nczonline.net/"> Nicholas C. Zakas</a>.</p>
+
+<p><em>I had originally written my loops using the newer <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/forEach">Array.forEach</a> to iterate over <code>entities</code>. However, this proved to be <strong>significantly</strong> slower than a <code>for</code> loop.</em></p>
+
+<p>The screen&#8217;s <code>draw</code> method also resets the canvas at the beginning of each iteration. If we did not do this, then every thing we drew on previous frames would still be present. For the start screen, I used <code>clearRect</code> however here I used <code>fillRect</code> with a solid color.</p>
+
+<p>Here&#8217;s a function that will produce a simple enemy. It follows the same structure we&#8217;ve been using, <code>update</code> to handle the behavior and <code>draw</code> to actually draw it on the screen.</p>
+
+<h2>Some Bad Guys</h2>
+
+<p>Our enemy ships are a little more complicated than the screen they live on. Visually, they <em>appear</em> to have two components. The little yellow rectangle that moves about the screen and the phantom target that they project as a little red circle. In the final game, they will target one of the player&#8217;s units. However, the logic is very similar. In fact, it may become useful in debugging to how each enemy ship render something over it&#8217;s actual target.</p>
+
+<h3>Implementation</h3>
+
+<script src="https://gist.github.com/5084429.js"></script>
+
+
+<h3>Explanation</h3>
+
+<p>Each enemy ship will be responsible for tracking its own state. In this code, the state is captured in a closure. In later code, we&#8217;ll track the track in a more traditional way. (I haven&#8217;t ran tests yet but I think that using a closure may have a performance impact.)</p>
+
+<p>All of these variables represent the enemy ship&#8217;s state.</p>
+
+<pre><code>var position = { x: 0, y: 0 };
+var orientation = 0;
+var turnSpeed = fullCircle / 50;
+var speed = 2;
+var target = findNewTarget();  
+</code></pre>
+
+<p><code>position</code> is the location on the screen where we will render our ship.</p>
+
+<p><em>Technically, the is the position in &#8220;world space&#8221;. World space is the logical space that entities in your game &#8220;live in&#8221;. This is distinct from &#8220;screen space&#8221;, which corresponds to the actual pixels on the screens. You can think of it this way: in your game you might have a circle with a radius of 10 and located at (100,100). However, where you draw it on the screen will depend upon where the player is viewing it from. If the player zooms in, the circle will grow larger but this doesn&#8217;t change the logical position or radius of the circle. We use the term &#8220;projection&#8221; to describe this. We project from world space into screen space based upon how the player is viewing the game world. The simplest project of course is just 1:1. Which means that there is no difference between world space and screen space. That&#8217;s what will stick with for the moment.</em></p>
+
+<p><code>orientation</code> is the direction the ship is currently facing. Our ship will always travel in the direction of its orientation. This constraints causes the ship travel in smooth arcs as opposed to abruptly changing its course.</p>
+
+<p><code>turnSpeed</code> and <code>speed</code> represent how quickly the ship can turn and how fast it can travel respectively. We won&#8217;t be modifying these values after setting them, which means the ship will turn and travel at constant rates. These values represent the rates of change for <code>orientation</code> and <code>position</code>. Note also, we defined <code>turnSpeed</code> in terms of <code>fullCircle</code>. This is an alias for <code>Math.PI * 2</code>; we are dealing in <a href="http://en.wikipedia.org/wiki/Radian">radians</a> and not degrees.</p>
+
+<p><code>target</code> is a value with the shape <code>{ x: Number, y: Number }</code>. The ship will always attempt to move towards this value by adjusting its <code>orientation</code>.</p>
+
+<h4>Update</h4>
+
+<p>The <code>update</code> function is the real meat of the enemy ship. First, we check to see if we are close to our target. If we are close enough, we consider our goal accomplished and we set a new target. Otherwise, we change our <code>orientation</code> so that we are flying toward our current target.</p>
+
+<pre><code>var y = target.y - position.y;
+var x = target.x - position.x;
+var d2 = Math.pow(x, 2) + Math.pow(y, 2);
+</code></pre>
+
+<p><img class="right" src="/images/posts/game-dev-move-02.png" title="[calculating the distance]" ></p>
+
+<p>Here, <code>x</code> and <code>y</code> are really the distance between <code>target</code> and <code>position</code> along the respective axises. We want to know these values in order to calculate the distance between them. In general, you use the <a href="http://en.wikipedia.org/wiki/Pythagorean_theorem">Pythagorean theorum</a> to calculate distance. <em>For deeper dive into the math, watch <a href="http://www.khanacademy.org/video/distance-formula">Distance Formula</a> on Khan Academy.</em> Finding the actual real distance uses a square root and calculating a square root is an expensive operation that&#8217;s best to avoid whenever you can.</p>
+
+<p>We can bypass the need by working with the distance&sup2; (hence the variable name <code>d2</code>). We compare this against the hard-coded value of 16 (that&#8217;s 4&sup2;). In other words, if the distance between the ship and its target is less than 4 units we find a new target.</p>
+
+<pre><code>if (d2 &lt; 16) {
+    target = findNewTarget();
+}
+</code></pre>
+
+<p>Once we&#8217;ve established what the ship&#8217;s target should be, we want the ship to move toward the target. As I&#8217;ve just mentioned, I&#8217;ve chosen to have the ship move at a constant speed. This means that it does not slow down or speed up. The only thing it can do is to change the direction it&#8217;s facing (<code>orientation</code>). These sort of constraints determine the personality and character of your game. Bear in mind, you don&#8217;t need to simulate the physics to have a fun game. Instead, you need to establish behaviors for your game entities that are merely fun. Fortunately, fun behaviors can often be easier to implement that the actual physics. I recommend taking a look at <a href="http://jsfiddle.net/bennage/HqYeD/18/">the demo</a> and tweaking the <code>turnSpeed</code> and <code>speed</code> values to get a small taste for how the behavior can affect the game&#8217;s character.</p>
+
+<p><img class="right" src="/images/posts/game-dev-move-03.png" title="[what's the delta between the angles?]" ></p>
+
+<p>In order to change the ship&#8217;s orientation we need to first determine where the ship <em>ought</em> to be facing. The values of <code>x</code> and <code>y</code> we just calculated can be interpreted as a <a href="http://en.wikipedia.org/wiki/Euclidean_vector">vector</a>. Meaning, it represents the direction and distance (magnitude) from the ship to the current target. To extract the actual angle (in radian) we use <code>Math.atan2(x,y)</code>.</p>
+
+<pre><code>var angle = Math.atan2(y, x);
+var delta = angle - orientation;
+</code></pre>
+
+<p>So now we have the direction the ship <em>wants</em> to face, <code>angle</code>, and the direction that it <em>is</em> facing, <code>orientation</code>. We calculate the difference between them and store it as <code>delta</code>.</p>
+
+<p><img class="right" src="/images/posts/game-dev-move-04.png" title="[turning the wrong way]" ></p>
+
+<p>The basic idea is that add the value of <code>turnSpeed</code> to <code>orientation</code> once each invocation of <code>udpate</code> until <code>delta</code> is 0 (meaning that the ship is flying directly at the target). However, some values of <code>delta</code> will cause the ship to &#8220;turn the wrong way&#8221;. For example, imagine that the ship is facing the top of the screen and that we&#8217;ve defined that as <code>orientation === 0</code>. Now, imagine that the target is directly to its right. The value of <code>angle</code> would be &pi;/2 (or 90&deg;). Adding <code>turnSpeed</code> to <code>orientation</code> each frame increments the value from 0 to &pi;/2. However, if the target is directly to the left, then the value of <code>angle</code> would be 3&pi;/2 (or 270&deg;). Simply incrementing <code>orientation</code> would cause the ship to turn right and keep turning right. This is unintuitive behavior; we expect the ship to turn the shorted distance. In order to accomplish this, we translate any value of <code>delta</code> higher than &pi; (180&deg;) by subtracting <code>fullCircle</code>. This normalizes the value of <code>delta</code> between -&pi; and &pi; (or between -180&deg; and 180&deg;).</p>
+
+<pre><code>var delta_abs = Math.abs(delta);
+if (delta_abs &gt; Math.PI) {
+    delta = delta_abs - fullCircle;
+}
+</code></pre>
+
+<p>We take the absolute value of <code>delta</code> because otherwise we&#8217;d have to check for <code>delta &lt; -Math.PI</code> as well. Also, we&#8217;ll use <code>delta_abs</code> again.</p>
+
+<p>If <code>delta</code> is 0, we don&#8217;t need to change <code>orientation</code>. When it is different we need to modify the value of <code>orientation</code>.</p>
+
+<pre><code>if (delta !== 0) {
+    var direction = delta / delta_abs;
+    orientation += (direction * Math.min(turnSpeed, delta_abs));
+    orientation %= fullCircle;
+}
+</code></pre>
+
+<p>First, we decide <em>how much</em> to change it using <code>Math.min(turnSpeed, delta_abs)</code>. We could just use <code>turnSpeed</code>. However if we did it&#8217;s likely that <code>delta</code> would never quite be 0 and (depending on the size of <code>turnSpeed</code>) it could result is jittery motion. Secondly, we want to decided which <em>direction</em> to turn: positive values to the right and negative values to the left. We multiply the amount <code>direction</code> to change the sign, because <code>direction</code> will only ever be 1 or -1. Finally, we modulo <code>orientation</code> to ensure that it stays within a range of -2&pi; to 2&pi;. Otherwise, the calculation of <code>delta</code> would be off.</p>
+
+<p>Our last step in <code>update</code> is to modifiy the actual position using the latest <code>orientation</code> and <code>speed</code>.</p>
+
+<pre><code>position.x += Math.cos(orientation) * speed;
+position.y += Math.sin(orientation) * speed;
+</code></pre>
+
+<p><em>Some basic trigonometry is fairly fundamental for most game development. If you&#8217;re mathematically lost at this point, I recommend <a href="https://www.khanacademy.org/math/trigonometry/basic-trigonometry">reviewing over at Khan Academey</a>.</em></p>
+
+<p>Here&#8217;s the geometric interpretation of the code. We want the ship to move a distance of <code>speed</code> in the direction of <code>orientation</code>. To do this, we need to project this vector (distance and direction) on the x and y axises. Since the distance is the length of the hypothenuse of right triangle, cosine gives us the x part and sine gives us the y part. We can then add these values to the current position.</p>
+
+<h4>Draw</h4>
+
+<p>Drawing the ship to the screen is a bit easier to follow. Here&#8217;s the flow of the logic:</p>
+
+<ul>
+<li>Save the state of the drawing context.</li>
+<li>Transform the context to make it easier to draw our ship.</li>
+<li>Draw the ship.</li>
+<li>Restore the context back to its original state.</li>
+<li><p>Draw the target</p>
+
+<pre><code>  function draw(ctx) {
+
+      ctx.save();
+
+      ctx.translate(position.x, position.y);
+      ctx.rotate(orientation);
+
+      ctx.fillStyle = 'yellow';
+      ctx.fillRect(-3, -1, 6, 2);
+
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,0,0,0.5)';
+      ctx.arc(target.x, target.y, 2, 0, Math.PI * 2, true);
+      ctx.fill();
+  }
+</code></pre></li>
+</ul>
+
+
+<p>Recall that <code>ctx</code> is the drawing context for the canvas. The context provide a useful API that allows us to move it around before we draw on it. This is analgous to having a sheet of paper that you might shift and rotate in order to make it easier to draw something complicated. This is the purpose of the <code>translate</code> and <code>rotate</code> methods.</p>
+
+<p>First, we use &#8216;save&#8217; to establishing a checkpoint for the drawing context that we can easily revert back to using &#8216;restore.&#8217; The calls to <code>translate</code> and <code>rotate</code> modify the state of the drawing context. This modified state is very specific to the drawing of our enemy ship. If we didn&#8217;t translate and rotate the canvas, we&#8217;d have to do a lot more work to figure out where to draw the four corners of the rectangle.</p>
+
+<p>I decided that I want my ship to be 6px long and 2px wide. Since I want the middle of the middle of my ship to be the point where it rotates, I shift by half the length and half the width. Hence, the values passed to <code>ctx.fillRect(-3, -1, 6, 2)</code>. This point the new origin (0,0) at the middle of the rectangle, and it makes our call to <code>rotate</code> behave intuitively. If we used <code>ctx.fillRect(0, 0, 6, 2)</code> instead, then the ship would appear to rotate around its upper left corner. We&#8217;ll use these same techniques once we switch to using <em>sprites</em>.</p>
+
+<p>After we restore the context&#8217;s state, we draw the target. We don&#8217;t bother using <code>rotate</code> because it&#8217;s meaningless to rotate a simple circle. Likewise, we don&#8217;t bother <code>translate</code> since the drawing logic is so simple.</p>
+
+<p><em>The canvas is a broad topic in itself. I recommend taking a look at the tutorials over at <a href="https://developer.mozilla.org/en-US/docs/HTML/Canvas">MDN</a>. A handy reference for the APIs themselves can be found on <a href="http://msdn.microsoft.com/en-us/library/ff975057">MSDN</a>.</em></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Christopher Bennage</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-05T21:12:00-08:00" pubdate data-updated="true">Mar 5<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/html/'>HTML</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/game-development/'>game development</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://dev.bennage.com/blog/2013/03/05/game-dev-03/" data-via="bennage" data-counturl="http://dev.bennage.com/blog/2013/03/05/game-dev-03/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/01/11/game-dev-02/" title="Previous Post: Building a Game with JavaScript: Start Screen">&laquo; Building a Game with JavaScript: Start Screen</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/05/20/game-dev-03b/" title="Next Post: Couple of JavaScript Questions">Couple of JavaScript Questions &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Christopher</h1>
+
+<img class="bio" src="http://gravatar.com/avatar/0128fa0de6a321d6e3766ae3fa06b9c2?s=80">
+
+<ul><li>
+<p>
+Christopher is a developer on the <a href="http://msdn.microsoft.com/practices">patterns & practices</a> team at Microsoft.
+</p>
+
+
+<p>
+He considers sidewalks to merely be suggestions and frequently falls under the influence of G. K. Chesterton.
+</p><p>
+He thinks agile software principles and open source software are pretty cool; especially if JavaScript is involved.
+</p>
+</li>
+</ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/game-dev-03b/">Couple of JavaScript Questions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/05/game-dev-03/">Building a Game with JavaScript: Making Things Move</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/11/game-dev-02/">Building a Game with JavaScript: Start Screen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/game-dev-01/">Building a Game with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">a n00b's look at HTML5 game development</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+<div id="recentcomments" class="dsq-widget">
+<h1 class="dsq-widget-title">Recent Comments</h1>
+<script type="text/javascript" src="http://bennage.disqus.com/recent_comments_widget.js?num_items=&hide_avatars=1&avatar_size=18&excerpt_length="></script>
+</div>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("bennage", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/bennage" class="twitter-follow-button" data-show-count="false">Follow @bennage</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/bennage">@bennage</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bennage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Christopher Bennage -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bennage';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://dev.bennage.com/blog/2013/03/05/game-dev-03/';
+        var disqus_url = 'http://dev.bennage.com/blog/2013/03/05/game-dev-03/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/bennage.js"></script>
+<script src="/javascripts/newhope.js"></script>
+
+</body>
+</html>

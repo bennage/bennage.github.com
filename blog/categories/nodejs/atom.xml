@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: nodejs | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/nodejs/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Restarting Node.js When Your Source Changes]]></title>
+    <link href="http://dev.bennage.com/blog/2011/08/09/restarting-node-when-your-source-changes/"/>
+    <updated>2011-08-09T04:47:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2011/08/09/restarting-node-when-your-source-changes</id>
+    <content type="html"><![CDATA[<p>I’m lazy. I remember reading somewhere that that was a desirable trait to have in a developer. I’m not sure where though, and honestly it’s just too much effort to bingle it. This laziness came to the forefront recently as I was playing with Node.</p>
+
+<p>In my last post, I showed you how to spin up a quick web app using Node. As I was playing with this app, I found that I had to restart Node every time I made a change to the source. This meant I had to switch to the console, stop the process, start the process and THEN refresh my page to see the effect of my change. Too much work I say.</p>
+
+<!--more-->
+
+
+<p>So I wondered if Node had something built-in for monitoring changes to the file. I didn’t see anything useful from <code>node.exe –help</code> and researching it on the Web is just so tedious, so I decided to write my own solution.</p>
+
+<h2>Looking for Some Change</h2>
+
+<p>In .NET, there is a class <code>System.IO.FileSystemWatcher</code>. With an instance of this class you can monitor the files in a directory for changes. I set it up like this:</p>
+
+<pre><code>var watcher = new FileSystemWatcher(); 
+watcher.Path = @"C:\node.js\stuff"; 
+watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName; 
+watcher.Filter = "*.js"; 
+
+watcher.Changed += Changed; 
+watcher.Created += Changed; 
+watcher.Deleted += Changed; 
+watcher.Renamed += Renamed; 
+
+// Begin watching 
+watcher.EnableRaisingEvents = true;
+</code></pre>
+
+<p>The <code>NotifyFilter</code> property allows you to specify the sort of changes you are interested in. You can check out the full list here. You’ll also notice that I used the <code>Filter</code> property to narrow it down just to js files.</p>
+
+<p>Next, there are a number of events to wire to respond to changes. I reused the same handler as much as I could because I always want to do the same thing: restart Node. It’s also not entirely obvious how these events relate to <code>NotifyFilter</code>, but I didn’t dig too deep into that. (I’m lazy remember.)</p>
+
+<p>It’s also important to set <code>EnableRaisingEvents</code>. If you don’t, then the (guess what) no event are raised.</p>
+
+<h2>Kill, Kill, Kill</h2>
+
+<p>Now whenever a significant change occurs, it’ll be time to restart Node. For this I used <code>System.Diagnostics.Process</code>. This is a bit of a tricky classs, with a number of not-so-obvious knobs to turn.</p>
+
+<p>First, I’ll need to get a reference to the Node process. I noticed in Task Manager that the process name was “node”. So I used <code>Process.GetProcessesByName("node")</code>.</p>
+
+<p>This returns an array of processes, and so I did this:</p>
+
+<pre><code>var matches = Process.GetProcessesByName("node");  
+
+matches.ToList().ForEach(match =&gt; {  
+    Console.WriteLine("attempting to close node.js [" + match.Id + "]");  
+    match.Kill();  
+    match.WaitForExit(300); // it shouldn’t take this long, we’re just being cautious  
+    Console.WriteLine("successfully closed");  
+});
+</code></pre>
+
+<p>Admittedly, this is hitting it with a hammer. It’s okay, because this is just a quick and dirty helper tool for me and not a production application.</p>
+
+<p>After killing the process, I’ll want to start another one. Now, I don’t care for another console window to pop up each time I restart, instead I’d like to simply redirect the input and output to my little helper app. This can be a little tricky, and I had to do some experimentation to find the right combination in order keep things from hanging. If you find it misbehaving, I recommend searching StackOverflow. I found several useful questions there. One of the keys that came up more than once was capturing and closing the stream for the standard input.</p>
+
+<pre><code>var start = new ProcessStartInfo();  
+start.FileName = @"C:\node.js\node.exe";  
+// start the process directly, as opposed to going thu the shell  
+start.UseShellExecute = false; 
+// we don’t want a new window  
+start.CreateNoWindow = true; 
+start.RedirectStandardOutput = true;  
+start.RedirectStandardInput = true;  
+start.Arguments = Path.Combine(@"C:\node.js\stuff", @"server.js");  
+
+var node = new Process();  
+node.EnableRaisingEvents = true;  
+node.OutputDataReceived += OutputHandler;  
+node.StartInfo = start;  
+node.Start();  
+
+// refresh the metadata stored in the instance of Process   
+node.Refresh();
+Console.WriteLine(node.ProcessName);  
+Console.WriteLine("[" + node.Id + "] node.exe started");  
+
+// close the input, we won't use it  
+var input = node.StandardInput;  
+input.Close();  
+
+// and now for the output  
+node.BeginOutputReadLine();  
+</code></pre>
+
+<p>First we create an object that contains the configuration for starting an instance of Node. Notice that we are passing in the server.js file as an argument.</p>
+
+<p>Also note that after starting the process, I call <code>Refresh</code>. I need to do this so that I’ll have the correct info to write out to the console. This data is not captured automatically.</p>
+
+<p>Finally, I handled the redirection of the input and output.</p>
+
+<p>The complete code for the app is available at <a href="https://gist.github.com/1108727">https://gist.github.com/1108727</a>.</p>
+
+<h2>Epilogue</h2>
+
+<p>This is very much a hack and I am not an expert on the proper usage of these classes. Please feel free to offer improvements.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Node.js on Windows (or JavaScript for the backend)]]></title>
+    <link href="http://dev.bennage.com/blog/2011/07/28/node-js-on-windows/"/>
+    <updated>2011-07-28T16:04:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2011/07/28/node-js-on-windows</id>
+    <content type="html"><![CDATA[<h2>What is Node?</h2>
+
+<p>The simplest answer, albeit a <em>simplistic</em> answer, is that Node (or Node.js) is JavaScript on the server. Actually, it’s a more than just that, but you can read about the <em>more</em> in <a href="http://www.nodejs.org/#about" title="Official NodeJS site">other places</a>. This is a good enough answer for us n00bs.</p>
+
+<p>Unless you’ve been living in in cave, you might have noticed that JavaScript is all the rage now. It’s the new <a href="http://www.hanselman.com/blog/JavaScriptIsAssemblyLanguageForTheWebPart2MadnessOrJustInsanity.aspx" title="the assorted ramblings of Hanselman">assembly language</a> of the Web. (It’s even for the <a href="http://enterprise-js.com/" title="this isn't serious btw">enterprise</a>.) With Node, you can now take that webby clienty goodness to your server applications.</p>
+
+<!--more-->
+
+
+<p>The reason I’m brining all this up is because there’s now a version of Node.js for Windows. It’s currently the unstable release only, but it’s a sign of coolness to come. Furthermore, Microsoft has partnered with Joyent and Rackspace to make it happen. You can read about it <a href="http://blogs.msdn.com/b/interoperability/archive/2011/06/23/microsoft-working-with-joyent-and-the-node-community-to-bring-node-js-to-windows.aspx" title="Microsoft and Node">here</a> and <a href="http://blog.nodejs.org/2011/06/23/porting-node-to-windows-with-microsoft%E2%80%99s-help/" title="More about Node and Windows">here</a>. The ultimate goal (according to the posts) is for Node.js to run on both Windows and Azure.</p>
+
+<p>Now, I want to be clear too, since I have been <a href="http://devlicious.com/blogs/christopher_bennage/archive/2011/04/06/a-punctuated-life.aspx" title="moving to Microsoft">newly assimilated</a>, Node is not a Microsoft product..</p>
+
+<h2>Tutorial</h2>
+
+<p>I want to show you how easy it is to try out Node.</p>
+
+<p>First, <a href="http://www.nodejs.org/#download">download the exe</a>. I grabbed v0.5.2.</p>
+
+<p>Next, run it. Yeah, it’s that easy. It used to be <a href="http://www.lazycoder.com/weblog/2010/03/18/getting-started-with-node-js-on-windows/" title="Scott's just this guy you know">way harder</a>.</p>
+
+<p>You’ll be presented with a prompt and you can start writing JavaScript in paradigm-shifting <a href="http://en.wikipedia.org/wiki/REPL" title="read-eval-print loop">REPL</a>.</p>
+
+<p><img class="screenie" src="/images/posts/node-repl.png"></p>
+
+<p>Now, let’s say you want to create a web server. We’ll begin by yanking the ‘hello world’ snippet from <a href="http://www.nodejs.org/" title="hello world!">nodejs.org</a>.</p>
+
+<pre><code>var http = require('http');  
+http.createServer(function (req, res) {  
+  res.writeHead(200, {'Content-Type': 'text/plain'});  
+  res.end('Hello World\n');  
+}).listen(8124, "127.0.0.1");  
+console.log('Server running at &lt;a href="http://127.0.0.1:8124/'"&gt;http://127.0.0.1:8124/'&lt;/a&gt;);  
+</code></pre>
+
+<p>I saved this snippet into a file named <code>server.js</code>. Then from a PowerShell prompt, I ran</p>
+
+<pre><code>.node.exe .\server.js
+</code></pre>
+
+<p><img class="screenie" src="/images/posts/node-server.png"></p>
+
+<p>Next, I hit http://localhost:8124 with a browser and I got exactly what you’d expect.</p>
+
+<p><img class="screenie" src="/images/posts/hello-world-node.png"></p>
+
+<p>Now you know enough to be dangerous.</p>
+
+<p>Of course, you have to restart Node when you make changes to the file (use Ctrl + C). I’ll show you how I got around that in another post.</p>
+
+<p>Have fun!</p>
+]]></content>
+  </entry>
+  
+</feed>

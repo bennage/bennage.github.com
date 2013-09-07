@@ -1,0 +1,455 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Render Action - Christopher Bennage</title>
+  <meta name="author" content="Christopher Bennage">
+
+  
+  <meta name="description" content="It&#8217;s common for a single web page to include data from many sources. Consider this screen shot from Project Silk. There are four separate items &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dev.bennage.com/blog/2012/04/27/render-action/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/ChristopherBennage" rel="alternate" title="Christopher Bennage" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26126539-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Christopher Bennage</a></h1>
+  
+    <h2>not all who wander are lost</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/ChristopherBennage" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:dev.bennage.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Render Action</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-27T14:21:00-07:00" pubdate data-updated="true">Apr 27<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>It&#8217;s common for a single web page to include data from many sources. Consider this screen shot from <a href="http://silk.codeplex.com/">Project Silk</a>. There are four separate items displayed.</p>
+
+<p><img class="right" src="/images/posts/many-concerns.png"></p>
+
+<p>The primary concern of the page is displaying a list of vehicles. However it also displays some statistics and a set of reminders. I labeled the stats and reminders as orthogonal because they are (in a sense) independent of the primary concern. Finally, there is the ambient data of the currently logged in user. I call this data ambient because we expect it to be present on all the pages in the application.</p>
+
+<p>It&#8217;s a common practice in MVC-style applications to map a single controller action to a view. That is, it is the responsibility of a single action to produce everything that is needed to render a particular web page.</p>
+
+<p>The difficulty with this approach is that <em>other pages</em> often need to render the same orthogonal data. Let&#8217;s examine the code for the action invoked by <code>\vehicle\list</code>.</p>
+
+<pre><code>public ActionResult List()
+{
+    AddCountryListToViewBag();
+
+    var vehicles = Using&lt;GetVehicleListForUser&gt;()
+        .Execute(CurrentUserId);
+
+    var imminentReminders = Using&lt;GetImminentRemindersForUser&gt;()
+        .Execute(CurrentUserId, DateTime.UtcNow);
+
+    var statistics = Using&lt;GetFleetSummaryStatistics&gt;()
+        .Execute(CurrentUserId);
+
+    var model = new DashboardViewModel
+                    {
+                        User = CurrentUser,
+                        VehicleListViewModel = new VehicleListViewModel(vehicles),
+                        ImminentReminders = imminentReminders,
+                        FleetSummaryStatistics = statistics
+                    };
+
+    return View(model);
+}
+</code></pre>
+
+<p>Disregarding how you might feel about the <code>Using&lt;T&gt;</code> method to invoke commands and other such details, I want you to focus on the fact that the controller is <em>composing</em> a model. We generate a number of smaller viewmodels and then compose them into an instance of <code>DashboardViewModel</code>. The class <code>DashboardViewModel</code> only exists to tie together the four, otherwise independent data.</p>
+
+<p><aside></p>
+
+<p>Personally, I prefer to avoid classes like <code>DashboardViewModel</code> and simply rely on dynamic typing in the view. However, others feel strongly about having IntelliSense support in the view.</p>
+
+<p></aside></p>
+
+<p>Project Silk had separate actions just to serve up JSON:</p>
+
+<pre><code>public JsonResult JsonList()
+    {
+        var list = Using&lt;GetVehicleListForUser&gt;()
+            .Execute(CurrentUserId)
+            .Select(x =&gt; ToJsonVehicleViewModel(x))
+            .ToList();
+
+        return Json(list);
+    }
+</code></pre>
+
+<p>You&#8217;ll notice that both <code>JsonList</code> and <code>List</code> use the same <code>GetVehicleListForUser</code> command for retrieving their data. <code>JsonList</code> also projected the data to a slightly different viewmodel.</p>
+
+<h2>Reducing the Code</h2>
+
+<p>While reevaluating this code for <a href="https://github.com/liike/">Project Liike</a>, we decided to employ <a href="http://en.wikipedia.org/wiki/Content_negotiation">content negotiation</a>. That is, we wanted a single endpoint, such as <code>\vehicle\list</code>, to return different representations of the data based upon a requested format. If the browser requested JSON, then <code>\vehicle\list</code> should return a list of the vehicles in JSON. If the browser requested markup, then the same endpoint should return HTML.</p>
+
+<p>First, we needed to eliminate the differences between the JSON viewmodel and the HTML viewmodel. Without going deep into details, this wasn&#8217;t hard to do. In fact, it revealed that we had some presentation logic in the view that should not have been there. The real problem was that I wanted the action to look more like this:</p>
+
+<pre><code>public ActionResult List()
+{
+    var vehicles = Using&lt;GetVehicleListForUser&gt;()
+        .Execute(CurrentUserId);
+
+    return new ContentTypeAwareResult(vehicles);
+}
+</code></pre>
+
+<p>Only, the view still needed the additional data of statistics and reminders. How should the view get it?</p>
+
+<p>We decided to use <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.html.childactionextensions.renderaction.aspx">RenderAction</a>. RenderAction allows a view to invoke another action and render the results into the current view.</p>
+
+<p>We needed to break out the other concerns into their own actions. For the sake of example, we&#8217;ll assume they are both on the <code>VehicleController</code> and named <code>Reminders</code> and <code>Statistics</code>. Each of these action would be responsible for getting a focused set of data. Then in the (imaginary) view for <code>List</code> we could invoke the actions like so:</p>
+
+<pre><code>// List.cshtml 
+&lt;ul&gt;
+@foreach (var vehicle in Model)
+{
+    &lt;li&gt;@vehicle.Name&lt;/li&gt;
+}
+&lt;/ul&gt;
+
+&lt;section role="reminders"&gt;
+@{ Html.RenderAction( "Reminders", "Vehicle") }
+&lt;/section&gt;
+
+&lt;section role="statistics"&gt;
+@{ Html.RenderAction( "Statistics", "Vehicle") }
+&lt;/section&gt;
+</code></pre>
+
+<p><aside></p>
+
+<p>Note that each action has it&#8217;s on associated view.</p>
+
+<p></aside></p>
+
+<p>The value of using RenderAction is that we where able to create very simple actions on our controllers. We were also able to reuse the actions for rendering both markup and JSON.</p>
+
+<p>A secondary benefit is the separation of concerns. For example, because we moved the responsibility of composition from the controller into the view, a designer could now revise the view for the <code>\vehicle\list</code> without needing to touch the code. They could remove any of the orthogonal concerns or even add new ones without introducing any breaking changes.</p>
+
+<h2>The Downside</h2>
+
+<p>There are a few caveats with this approach.</p>
+
+<p>First, don&#8217;t confuse RenderAction with <a href="http://msdn.microsoft.com/en-us/library/system.web.mvc.html.renderpartialextensions.renderpartial.aspx">RenderPartial</a>. RenderAction is for invoking a completely independent action, with its own view and model. RenderPartial is simply for renders a view based on a model passed to it (generally derived from the main viewmodel).</p>
+
+<p>Secondly, avoid using RenderAction to render a form. It&#8217;s likely won&#8217;t work the way you&#8217;d expect.This means that any form rendering will need to occur in your primary view.</p>
+
+<p>Thirdly, using RenderAction breaks the <a href="http://en.wikipedia.org/wiki/Model-view-controller#Overview">model-view-controller</a> pattern. What I mean is that, in MVC, it&#8217;s assumed that the view does nothing more than render a model. Controllers invoke a view, and not vice versa. Using RenderAction breaks this rule. Personally, I have no problem breaking the rule when it results in code that is more simple and more easily maintained. Isn&#8217;t that the whole <a href="/blog/2008/03/30/the-roots-of-best-practices/">point of best practices</a> anyway?</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Christopher Bennage</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-27T14:21:00-07:00" pubdate data-updated="true">Apr 27<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/asp-net-mvc/'>asp.net mvc</a>, <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://dev.bennage.com/blog/2012/04/27/render-action/" data-via="bennage" data-counturl="http://dev.bennage.com/blog/2012/04/27/render-action/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/02/08/finding-stuff-in-your-git-repo-3/" title="Previous Post: Finding Out When Something Happened in Your Git Repo">&laquo; Finding Out When Something Happened in Your Git Repo</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/08/01/a-brief-introduction-to-winjs/" title="Next Post: A Brief Introduction to WinJS">A Brief Introduction to WinJS &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Christopher</h1>
+
+<img class="bio" src="http://gravatar.com/avatar/0128fa0de6a321d6e3766ae3fa06b9c2?s=80">
+
+<ul><li>
+<p>
+Christopher is a developer on the <a href="http://msdn.microsoft.com/practices">patterns & practices</a> team at Microsoft.
+</p>
+
+
+<p>
+He considers sidewalks to merely be suggestions and frequently falls under the influence of G. K. Chesterton.
+</p><p>
+He thinks agile software principles and open source software are pretty cool; especially if JavaScript is involved.
+</p>
+</li>
+</ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/game-dev-03b/">Couple of JavaScript Questions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/05/game-dev-03/">Building a Game with JavaScript: Making Things Move</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/11/game-dev-02/">Building a Game with JavaScript: Start Screen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/game-dev-01/">Building a Game with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">a n00b's look at HTML5 game development</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+<div id="recentcomments" class="dsq-widget">
+<h1 class="dsq-widget-title">Recent Comments</h1>
+<script type="text/javascript" src="http://bennage.disqus.com/recent_comments_widget.js?num_items=&hide_avatars=1&avatar_size=18&excerpt_length="></script>
+</div>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("bennage", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/bennage" class="twitter-follow-button" data-show-count="false">Follow @bennage</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/bennage">@bennage</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bennage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Christopher Bennage -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bennage';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://dev.bennage.com/blog/2012/04/27/render-action/';
+        var disqus_url = 'http://dev.bennage.com/blog/2012/04/27/render-action/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/bennage.js"></script>
+<script src="/javascripts/newhope.js"></script>
+
+</body>
+</html>

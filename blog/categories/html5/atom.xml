@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: html5 | Christopher Bennage]]></title>
+  <link href="http://dev.bennage.com/blog/categories/html5/atom.xml" rel="self"/>
+  <link href="http://dev.bennage.com/"/>
+  <updated>2013-09-07T14:14:12-07:00</updated>
+  <id>http://dev.bennage.com/</id>
+  <author>
+    <name><![CDATA[Christopher Bennage]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Being a New Kid on the Mobile Block]]></title>
+    <link href="http://dev.bennage.com/blog/2011/10/10/being-a-new-kid-on-the-mobile-block/"/>
+    <updated>2011-10-10T14:58:00-07:00</updated>
+    <id>http://dev.bennage.com/blog/2011/10/10/being-a-new-kid-on-the-mobile-block</id>
+    <content type="html"><![CDATA[<p>The last few weeks I've been trying get a finger on the pulse of <em>mobile web development</em>. I wanted to identify the thought leaders, understand the big questions, and (perhaps mostly importantly) begin cataloging the practical considerations for building mobile experiences today.</p>
+
+<p>Here's where I'm at so far...</p>
+
+<!-- more -->
+
+
+<h2>What is 'the mobile web'?</h2>
+
+<p><span class='pullquote-right' data-pullquote='I think the distinction between mobile and desktop is fading more and more everyday.'>
+The definition of <em>mobile web</em> is quickly evolving. Devices are varied and the distinctions are blurring. If you think it's as simple as iOS, Android, <em>and Windows</em> then you'll be surprised. (I do genuinely love my WP7). Personally, I think the distinction between mobile and desktop is fading more and more everyday. When I say <em>mobile web</em> I am talking about HTML-based applications and not applications that are built natively for their respective platforms. Of course, there is debate over native apps versus web apps: when is one appropriate over the over? etc, etc. This is a question when intend to address in <a href="http://liike.github.com/">Project Liike</a>.
+</span></p>
+
+<h2>Who to follow?</h2>
+
+<p>I've been following a mishmash of people, and I must confess that my process of qualifying them has been some haphazard.
+I'm compiling a <a href="http://twitter.com/#!/bennage/mobile-web" title="membership subject to change">list on twitter</a>. A number of folks on this list are signatories of <a href="http://futurefriend.ly/" title="advocates of standards based mobile web development">future friend.ly</a>.</p>
+
+<p>Other sources I've been paying attention to are:</p>
+
+<ul>
+<li><a href="http://www.alistapart.com/">A List Apart</a> – "For people who make websites."</li>
+<li><a href="http://www.smashingmagazine.com/">Smashing Magainze</a> – Lots of articles on design, web, and of course mobile.</li>
+<li><a href="http://www.cloudfour.com/blog/">Cloud Four</a> – Many recent and thorough posts exploring some of the big questions in mobile.</li>
+<li><a href="http://www.yiibu.com/">Yiibu</a> – They have a lot of interesting ideas, and they've done some <a href="http://www.yiibu.com/articles/practical-guide-to-nokia-browsers/">impressive work</a> for Nokia.</li>
+</ul>
+
+
+<p>I've also been reading through <a href="http://shop.oreilly.com/product/9780596807795.do"><em>Programming the Mobile Web</em></a> by <a href="http://twitter.com/#!/firt">Maximiliano Firtman</a>. The first few chapters are pretty scary for someone like myself who did not understand how diverse and scattered the mobile world is. (It's also funny to see how much has changed since the book was published in 2010.)</p>
+
+<p>Anything you'd recommend?</p>
+
+<h2>The state of things</h2>
+
+<p><em>Caveat</em>: <em>This is just Christopher's brain dump. Consider it merely food for thought.</em></p>
+
+<ul>
+<li>There are many <a href="http://techcrunch.com/2011/02/09/html5-versus-native-apps/">compeling</a> <a href="http://www.html5rocks.com/en/mobile/nativedebate.html">reasons</a> for developing mobile web apps. Not to the complete exclusion of <a href="http://www.webmonkey.com/2010/08/how-do-native-apps-and-web-apps-compare/">native apps</a>, but <a href="http://www.phonegap.com/">maybe?</a></li>
+<li>You need to understand your target market and the devices that it uses. Don't make assumptions. You might be <a href="http://gs.statcounter.com/#mobile_os-ww-monthly-201009-201109">surprised</a>.</li>
+<li>The space is changing, standards are evolving, solutions are being formulated. However, if you need to you need build an app today, there is still plently of <a href="http://www.w3.org/TR/mobile-bp/" title="Yes, it's a little old but still mostly good.">pragmatic</a> <a href="http://mobilewebbestpractices.com/">advice</a>.</li>
+</ul>
+
+
+<p>One more thought: don't jump to conclusions. You might read about something cool like <a href="http://www.alistapart.com/articles/responsive-web-design/"><em>Responsive Web Design</em></a>, but such cool and innovative techniques can be <a href="http://www.cloudfour.com/css-media-query-for-mobile-is-fools-gold/" title="CSS Media Query for Mobile is Fool’s Gold">deceptive</a>. Research and testing is your friend.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,489 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Building a Game with JavaScript: Start Screen - Christopher Bennage</title>
+  <meta name="author" content="Christopher Bennage">
+
+  
+  <meta name="description" content="This is a continuation from the previous post. Specification Many games have a start screen or main menu of some sort. (Though I love games like &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dev.bennage.com/blog/2013/01/11/game-dev-02/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/ChristopherBennage" rel="alternate" title="Christopher Bennage" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26126539-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Christopher Bennage</a></h1>
+  
+    <h2>not all who wander are lost</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/ChristopherBennage" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:dev.bennage.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Building a Game With JavaScript: Start Screen</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-11T17:05:00-08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This is a continuation from the <a href="/blog/2012/12/07/game-dev-01/">previous post</a>.</p>
+
+<h2>Specification</h2>
+
+<p>Many games have a start screen or main menu of some sort. (Though I love games like <a href="http://www.braid-game.com/">Braid</a> that bypass the whole notion.) Let&#8217;s begin by designing our start screen.</p>
+
+<p><img class="right" src="/images/posts/game-dev-startscreen-01.png" title="[our simple start screen]" ></p>
+
+<p>We&#8217;ll have a solid color background. Perhaps the ever lovely cornflower blue. Then we&#8217;ll draw the name of our game and provide an instruction to the player. In order to make sure we have the player&#8217;s attention, we&#8217;ll animate the color of the instruction. It will morph from black to red and back again.</p>
+
+<p>Finally, when the player clicks the screen we&#8217;ll transition to the main game. Or at least we&#8217;ll stub out the transition.</p>
+
+<p>Here&#8217;s a <a href="http://jsfiddle.net/bennage/HqYeD/2/">demo</a> based on the code we&#8217;ll cover later in this post (as well as that from the previous post.)</p>
+
+<h2>Implementation</h2>
+
+<p>Here&#8217;s the code to implement our start screen.</p>
+
+<script src="https://gist.github.com/4371311.js"></script>
+
+
+<h2>Explanation</h2>
+
+<p>Recall that our start screen is meant to be invoked by our game loop. The game loop doesn&#8217;t know about the specifics of the start screen, but it does expect it to have a <em>certain shape</em>. This enables us to swap out screen objects without having to modify the game loop itself. The shape that the game loop expects is this:</p>
+
+<pre><code>{
+    update: function(timeElapsedSinceLastFrame) { },
+    draw: function(drawingContext) { }
+}
+</code></pre>
+
+<h3>Update</h3>
+
+<p>Let&#8217;s begin with the start screen&#8217;s <code>update</code> function. The first bit of logic is this:</p>
+
+<pre><code>hue += 1 * direction;
+if (hue &gt; 255) direction = -1;
+if (hue &lt; 0) direction = 1;
+</code></pre>
+
+<p>Perhaps <code>hue</code> is not the best choice of variable names. It represents the red component for an <a href="http://en.wikipedia.org/wiki/RGB_color_model">RGB color</a> value. The range of values for this component is <code>0</code> (no red) to <code>255</code> (all the reds!). On each iteration of our loop we &#8220;move&#8221; the hue towards either the red or black.</p>
+
+<p>The variable <code>direction</code> can be either <code>1</code> or <code>-1</code>. A value of <code>1</code> means we are moving towards <code>255</code> and a value of <code>-1</code> means we are moving towards <code>0</code>. When we cross a boundary, we flip the direction.</p>
+
+<p>Keen observers will ask why we bother with <code>1 * direction</code>. In our current logic, it&#8217;s an unnecessary step and unnecessary steps in game development are generally bad. In this case, I wanted to separate the rate of change from the direction. In order words, you could modify that expression to <code>2 * direction</code> and the color would change twice as fast.</p>
+
+<p>This leads us to another important point. Our rate of change is tied to how quickly our loop iterates; most likely 60fps. However, it&#8217;s not guaranteed to be 60fps and that makes this approach a dangerous practice. Once way to detach ourselves from the loop&#8217;s speed would be to use the elapsed time that is being passed into our <code>update</code> function.</p>
+
+<p>Let&#8217;s say that we want to it to take 2 full seconds to go from red to black regardless of how often the <code>update</code> function is called. There&#8217;s a span of 256 discrete values between red and black. To make our calculations clear, let&#8217;s say there are 256 units and we&#8217;ll label these units <strong>R</strong>. Also, the elapsed time will be in milliseconds (ms). For a given frame, if were are given a slice of elapsed time in ms, we&#8217;ll want to calculate how many <strong>R</strong> units to increase (or decrease) <code>hue</code> by for that slice. Our rate of change can be defined as <code>256 **R** / 2000 **ms**</code> or 0.128 <strong>R/ms</strong>. (You can read that as &#8220;0.128 units of red per millisecond&#8221;.) This rate of change is a constant for our start screen and as such we can define it once (as opposed to calculating it inside the <code>update</code> function).</p>
+
+<p>Now that we have the rate of change , we only need to multiply it by the elapsed time received in <code>update</code> to determine how many <strong>R</strong>s we want. A revised version of the function would look like this:</p>
+
+<pre><code>var rate = 0.128; // R/ms
+
+function update(elapsed) {
+    var amount = rate * elapsed;
+    hue += amount * direction;
+    if (hue &gt; 255) direction = -1;
+    if (hue &lt; 0) direction = 1;
+}
+</code></pre>
+
+<p>One consequence of this change is that hue will no longer be integral values (as much as that can be said in JavaScript.) This means that we&#8217;d really want to have two values for the hue: an actual value and a rounded value. This is because the RBG model requires an integral value for each color component.</p>
+
+<pre><code>function update(elapsed) {
+    var amount = rate * elapsed;
+    hue += amount * direction;
+    if (hue &gt; 255) direction = -1;
+    if (hue &lt; 0) direction = 1;
+
+    rounded_hue = Math.round(hue);
+}
+</code></pre>
+
+<h3>Draw</h3>
+
+<p>Let&#8217;s turn our attention to <code>draw</code> for a moment. One of the first things you <em>generally</em> do is to clear the entire screen. This is simple to do with the canvas API&#8217;s <code>clearRect</code> method.</p>
+
+<pre><code>ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+</code></pre>
+
+<p>Notice that <code>ctx</code> is an instance of <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#canvasrenderingcontext2d">CanvasRenderingContext2D</a> and not a <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#the-canvas-element">HTMLCanvasElement</a>. However, there is a handy back reference to the canvas element that we use to grab the actual width and height.</p>
+
+<p>There are other options other than clearing the entire canvas, but I&#8217;m not going to address this in this post. Also, there are some performance considerations. See the article listed under references.</p>
+
+<p>After clearing the screen, we want to draw something new. In this case, the game title and the instructions. In both cases I want to center the text horizontally. I created a helper function that I can provide with the text to render as well as the vertical position (y).</p>
+
+<pre><code>function centerText(ctx, text, y) {
+    var measurement = ctx.measureText(text);
+    var x = (ctx.canvas.width - measurement.width) / 2;
+    ctx.fillText(text, x, y);
+}
+</code></pre>
+
+<p><code>measureText</code> returns the width in pixels that the rendered text will take up. We use this in combination with the canvas element&#8217;s width to determine the x position for the text. <code>fillText</code> is responsible for actually drawing the text.</p>
+
+<p>The rendering context <code>ctx</code> is stateful. Meaning that, what happens when you call methods like <code>measureText</code> or <code>fillText</code> depends on the state of the rendering context. The state can be modified by setting its properties.</p>
+
+<pre><code>var y = ctx.canvas.height / 2;
+ctx.fillStyle = 'white';
+ctx.font = '48px monospace';
+centerText(ctx, 'My Awesome Game', y);
+</code></pre>
+
+<p>The properties <code>fillStyle</code> and <code>font</code> change the state of the rendering context and hence affect the methods calls inside of <code>centerText</code>. This state applies to all future methods calls. This means that all calls to <code>fillText</code> will use the color white until you can the <code>fillStyle</code>.</p>
+
+<p>Notice too that we are calculating the x and y values for the text on every frame. This is potentially wasteful since these values are unlikely to change. However, if we want to respond to changes in canvas size (or even changes to the text itself) then we&#8217;d want to continue calculating these on every frame. Otherwise, if we were confident that we didn&#8217;t need to do this, we could calculate these values once and cache them.</p>
+
+<p>Now let&#8217;s use the red component calculated in <code>update</code> to render the instructional text.</p>
+
+<pre><code>var color = 'rgb(' + hue + ',0,0)';
+
+ctx.fillStyle = color;
+ctx.font = '24px monospace';
+centerText(ctx, 'click to begin', y + 30);
+</code></pre>
+
+<p><code>fillStyle</code> can be set in a number of ways. Earlier, we used the simple value <code>white</code>. Here were are using <code>rgb()</code> to set the individual components explicitly. Any <a href="https://developer.mozilla.org/en-US/docs/CSS/color">CSS color</a> <em>should</em> work with <code>fillStyle</code>.  (I won&#8217;t be too surprised if some don&#8217;t though.)</p>
+
+<p>Now you might be wondering why we bothered calculating <code>hue</code> inside <code>update</code> since <code>hue</code> is all about what to draw on the screen. The reason is that <code>draw</code> is concerned with the <em>mechanics</em> of rendering. Anything that is modeling the game state should live in <code>update</code>. The tell in this example is that <code>hue</code> is dependent on elapsed time and the <code>draw</code> doesn&#8217;t know anything about that.</p>
+
+<h3>Update (again)</h3>
+
+<p>Moving back to <code>update</code>, the next bit deals with input from the player. In the sample code I&#8217;ve extracted the input logic away. The key thing here is that we are not relying on events to tell us about input from the player. Instead we have some helper, <code>input</code> in this case, that gives us the current state of the input. If event-driven logic says &#8220;tell me when this happens&#8221; then our game logic says &#8220;tell me if this is happening now&#8221;. The primary reason for this is to be deterministic. We can establish at the beginning of our <code>update</code> what the current input state is and that it won&#8217;t change before the next invocation of the function. In simple games this might be inconsequential, but in others it can be a subtle source of bugs.</p>
+
+<pre><code>var isButtonDown = input.isButtonDown();
+
+var mouseJustClicked = !isButtonDown &amp;&amp; wasButtonDown;
+
+if (mouseJustClicked &amp;&amp; !transitioning) {
+    transitioning = true;
+    // do something here to transition to the actual game
+}
+
+wasButtonDown = isButtonDown;
+</code></pre>
+
+<p>We only want transition when the mouse button has been released. In this case, &#8220;released&#8221; is defined as &#8220;down on the last frame but up on this one&#8221;. Hence, we need to track what the mouse button&#8217;s state was on the <em>last</em> frame. That&#8217;s <code>wasButtonDown</code> and it lives outside of <code>update</code>.</p>
+
+<p>Secondly, we don&#8217;t want to trigger multiple transitions. That is, if our transition takes some time (perhaps due to animation) then we want to ignore subsequent clicks. We have our <code>transitioning</code> variable outside of <code>update</code> to track that for us.</p>
+
+<p><a href="/blog/2013/03/05/game-dev-03/">next »</a></p>
+
+<h2>Reference</h2>
+
+<ul>
+<li><a href="http://www.html5rocks.com/en/tutorials/canvas/performance/">Canvas Performace</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Christopher Bennage</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-11T17:05:00-08:00" pubdate data-updated="true">Jan 11<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/html/'>HTML</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/game-development/'>game development</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://dev.bennage.com/blog/2013/01/11/game-dev-02/" data-via="bennage" data-counturl="http://dev.bennage.com/blog/2013/01/11/game-dev-02/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/12/07/game-dev-01/" title="Previous Post: Building a Game with JavaScript">&laquo; Building a Game with JavaScript</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/03/05/game-dev-03/" title="Next Post: Building a Game with JavaScript: Making Things Move">Building a Game with JavaScript: Making Things Move &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+<h1>About Christopher</h1>
+
+<img class="bio" src="http://gravatar.com/avatar/0128fa0de6a321d6e3766ae3fa06b9c2?s=80">
+
+<ul><li>
+<p>
+Christopher is a developer on the <a href="http://msdn.microsoft.com/practices">patterns & practices</a> team at Microsoft.
+</p>
+
+
+<p>
+He considers sidewalks to merely be suggestions and frequently falls under the influence of G. K. Chesterton.
+</p><p>
+He thinks agile software principles and open source software are pretty cool; especially if JavaScript is involved.
+</p>
+</li>
+</ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/05/20/game-dev-03b/">Couple of JavaScript Questions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/05/game-dev-03/">Building a Game with JavaScript: Making Things Move</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/11/game-dev-02/">Building a Game with JavaScript: Start Screen</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/game-dev-01/">Building a Game with JavaScript</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/07/a-n00bs-look-at-html5-game-development/">a n00b's look at HTML5 game development</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+<div id="recentcomments" class="dsq-widget">
+<h1 class="dsq-widget-title">Recent Comments</h1>
+<script type="text/javascript" src="http://bennage.disqus.com/recent_comments_widget.js?num_items=&hide_avatars=1&avatar_size=18&excerpt_length="></script>
+</div>
+</section>
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("bennage", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/bennage" class="twitter-follow-button" data-show-count="false">Follow @bennage</a>
+  
+</section>
+
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/bennage">@bennage</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'bennage',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Christopher Bennage -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bennage';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://dev.bennage.com/blog/2013/01/11/game-dev-02/';
+        var disqus_url = 'http://dev.bennage.com/blog/2013/01/11/game-dev-02/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+<script src="/javascripts/bennage.js"></script>
+<script src="/javascripts/newhope.js"></script>
+
+</body>
+</html>
