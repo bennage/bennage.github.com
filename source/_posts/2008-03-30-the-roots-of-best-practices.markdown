@@ -30,7 +30,7 @@ The advantage of following the Law of Demeter is that the resulting software ten
 
 </blockquote>
 
-Now we are approaching the real heart of the matter, we want software that is easy to maintainable, and easy to extend. LoD promotes those values. In facts, most of the generally accepted principles are meant to produce software that is _maintainable and extensible_. Here is my [Grand Unification Theory](http://en.wikipedia.org/wiki/Grand_unification_theory) of software best practices: the guiding, or root, principles are **Maintainability** and **Extensibility**. (These two are close cousins, and you might arguably combine them.)
+Now we are approaching the real heart of the matter, we want software that is easy to maintain and easy to extend. LoD promotes those values. In facts, most of the generally accepted principles are meant to produce software that is _maintainable and extensible_. Here is my [Grand Unification Theory](http://en.wikipedia.org/wiki/Grand_unification_theory) of software best practices: the guiding, or root, principles are **Maintainability** and **Extensibility**. (These two are close cousins, and you might arguably combine them.)
 
 Okay, so maybe there are other guiding principles as well, such as **Scalability** and **Performance**. I'd even add that the most important root principle is **Value**. By Value, I mean that the software needs to do _what the user wants done_.  So maybe, Maintainability and Extensibility are just like electromagnetism and the weak nuclear force of good software design.
 
